@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/img_bg"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:background="@color/boxing_gray"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/img_head"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:src="@mipmap/ic_launcher"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="运维中心工程巡检A"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/img_head" />
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:text="登录时间:2018/09/20  16:20:21"
+        android:textColor="#D3D3D3"
+        android:textSize="13sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tv_name" />
+
+    <View
+        android:id="@+id/view_one"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="24dp"
+        android:background="@color/trans"
+        app:layout_constraintTop_toBottomOf="@+id/tv_date" />
+
+    <LinearLayout
+        android:id="@+id/ll_one"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="13dp"
+        android:paddingRight="13dp"
+        app:layout_constraintTop_toBottomOf="@+id/view_one">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@mipmap/mine_icn_phone"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="巡查记录"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/add_more" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_two"
+        style="@style/line"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_one" />
+
+    <LinearLayout
+        android:id="@+id/ll_two"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="13dp"
+        android:paddingRight="13dp"
+        app:layout_constraintTop_toBottomOf="@+id/view_two">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@mipmap/mine_icn_phone"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="险情上报记录"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/add_more" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_three"
+        style="@style/line"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_two" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_three"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="13dp"
+        android:paddingRight="13dp"
+        app:layout_constraintTop_toBottomOf="@+id/view_three">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@mipmap/mine_icn_phone"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="设置"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/add_more" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view_four"
+        style="@style/line"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_three" />
+
+
+    <LinearLayout
+        android:id="@+id/ll_four"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="13dp"
+        android:paddingRight="13dp"
+        app:layout_constraintTop_toBottomOf="@+id/view_four">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:drawableLeft="@mipmap/mine_icn_phone"
+            android:drawablePadding="10dp"
+            android:gravity="center_vertical"
+            android:text="退出登录"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/add_more" />
+    </LinearLayout>
+
+    <View
+        style="@style/line"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        app:layout_constraintStart_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ll_four" />
+
+
+</android.support.constraint.ConstraintLayout>

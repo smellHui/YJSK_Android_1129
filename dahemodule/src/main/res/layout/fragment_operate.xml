@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/tv_tab"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="@color/boxing_gray"
+        android:gravity="center"
+        android:text="运维"
+        android:textColor="@color/white"
+        android:textSize="21sp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/ll_one"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="13dp"
+        android:background="@color/boxing_gray"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/tv_tab">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="定期巡检"
+                android:textColor="@color/white"
+                android:textSize="21sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="ReGULAR InSPECTION"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="开始巡检"
+                android:textColor="@color/white"
+                android:textSize="21sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_two"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="13dp"
+        android:background="@color/boxing_gray"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/ll_one">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="日常巡检"
+                android:textColor="@color/white"
+                android:textSize="21sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Routine InSPECTION"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="开始巡检"
+                android:textColor="@color/white"
+                android:textSize="21sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_three"
+        android:layout_width="match_parent"
+        android:layout_height="135dp"
+        android:layout_marginLeft="13dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="13dp"
+        android:background="@color/boxing_gray"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="30dp"
+        android:paddingRight="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/ll_two">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="特别巡检"
+                android:textColor="@color/white"
+                android:textSize="21sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="SPECIAL InSPECTION"
+                android:textColor="@color/white"
+                android:textSize="13sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="开始巡检"
+                android:textColor="@color/white"
+                android:textSize="21sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_launcher" />
+    </LinearLayout>
+
+</android.support.constraint.ConstraintLayout>

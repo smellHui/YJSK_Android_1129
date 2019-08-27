@@ -35,7 +35,7 @@ ext {
             //图片加载
             glide                        : "com.github.bumptech.glide:glide:4.0.0",
             //突破64k,使用 Dalvik 可执行文件分包支持库
-            multidex                     : "com.android.support:multidex:1.0.1",
+            multidex                     : "com.android.support:multidex:1.0.2",
             //多渠道打包
             walle                        : "com.meituan.android.walle:library:1.1.4",
             //沉浸式状态栏
