@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:drawableLeft="@mipmap/mine_icn_phone"
+        android:drawableLeft="@mipmap/icon_files"
         android:drawablePadding="10dp"
         android:gravity="center_vertical"
         android:text="基本信息"

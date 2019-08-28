@@ -7,8 +7,8 @@
     <TextView
         android:id="@+id/tv_tab"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:background="@color/boxing_gray"
+        android:layout_height="85dp"
+        android:background="@mipmap/bg_patrol"
         android:gravity="center"
         android:text="运维"
         android:textColor="@color/white"
@@ -22,7 +22,7 @@
         android:layout_marginLeft="13dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="13dp"
-        android:background="@color/boxing_gray"
+        android:background="@mipmap/btn_1"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="30dp"
@@ -33,6 +33,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginBottom="5dp"
             android:orientation="vertical">
 
             <TextView
@@ -45,7 +46,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="6dp"
                 android:text="ReGULAR InSPECTION"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
@@ -53,7 +54,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="开始巡检"
                 android:textColor="@color/white"
                 android:textSize="21sp" />
@@ -62,7 +63,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/btn_cir_1" />
     </LinearLayout>
 
     <LinearLayout
@@ -72,7 +73,7 @@
         android:layout_marginLeft="13dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="13dp"
-        android:background="@color/boxing_gray"
+        android:background="@mipmap/btn_2"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="30dp"
@@ -83,6 +84,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginBottom="5dp"
             android:orientation="vertical">
 
             <TextView
@@ -95,7 +97,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="6dp"
                 android:text="Routine InSPECTION"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
@@ -103,7 +105,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="开始巡检"
                 android:textColor="@color/white"
                 android:textSize="21sp" />
@@ -112,7 +114,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/btn_cir_2" />
     </LinearLayout>
 
     <LinearLayout
@@ -122,7 +124,7 @@
         android:layout_marginLeft="13dp"
         android:layout_marginTop="20dp"
         android:layout_marginRight="13dp"
-        android:background="@color/boxing_gray"
+        android:background="@mipmap/btn_3"
         android:gravity="center_vertical"
         android:orientation="horizontal"
         android:paddingLeft="30dp"
@@ -133,6 +135,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:layout_marginBottom="5dp"
             android:orientation="vertical">
 
             <TextView
@@ -145,7 +148,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="6dp"
                 android:text="SPECIAL InSPECTION"
                 android:textColor="@color/white"
                 android:textSize="13sp" />
@@ -153,7 +156,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:text="开始巡检"
                 android:textColor="@color/white"
                 android:textSize="21sp" />
@@ -162,7 +165,7 @@
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/btn_cir_3" />
     </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -11,33 +11,33 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="212dp"
-            android:background="@color/white">
+            android:background="@mipmap/bg_home">
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:src="@color/boxing_gray" />
+            <!--<ImageView-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:src="@mipmap/bg_home" />-->
 
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_centerHorizontal="true"
-                android:orientation="horizontal">
+            <!--<LinearLayout-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_centerHorizontal="true"-->
+                <!--android:orientation="horizontal">-->
 
-                <Button
-                    android:layout_width="95dp"
-                    android:layout_height="25dp"
-                    android:text="天气查询"
-                    android:textSize="12sp" />
+                <!--<Button-->
+                    <!--android:layout_width="95dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:text="天气查询"-->
+                    <!--android:textSize="12sp" />-->
 
-                <Button
-                    android:layout_width="95dp"
-                    android:layout_height="25dp"
-                    android:layout_marginLeft="40dp"
-                    android:text="险情上报"
-                    android:textSize="12sp" />
-            </LinearLayout>
+                <!--<Button-->
+                    <!--android:layout_width="95dp"-->
+                    <!--android:layout_height="25dp"-->
+                    <!--android:layout_marginLeft="40dp"-->
+                    <!--android:text="险情上报"-->
+                    <!--android:textSize="12sp" />-->
+            <!--</LinearLayout>-->
         </RelativeLayout>
 
         <com.yangj.dahemodule.view.BasicInfoView

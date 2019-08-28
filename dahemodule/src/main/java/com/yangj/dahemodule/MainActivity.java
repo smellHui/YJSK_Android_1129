@@ -73,9 +73,9 @@ public class MainActivity extends BaseActivity {
                 .setInActiveColor("#a9adb4")
                 //默认背景色
                 .setBarBackgroundColor("#ffffff")
-                .addItem(new BottomNavigationItem(R.mipmap.tab_icon_home_selected, "首页").setInactiveIconResource(R.mipmap.tab_icon_home_normal))
-                .addItem(new BottomNavigationItem(R.mipmap.tab_icon_safeguard_selected, "运维").setInactiveIconResource(R.mipmap.tab_icon_safeguard_normal))
-                .addItem(new BottomNavigationItem(R.mipmap.tab_icon_user_selected, "我的").setInactiveIconResource(R.mipmap.tab_icon_user_normal))
+                .addItem(new BottomNavigationItem(R.mipmap.icon_home_blue, "首页").setInactiveIconResource(R.mipmap.icon_home_blue))
+                .addItem(new BottomNavigationItem(R.mipmap.icon_patrol_gray, "运维").setInactiveIconResource(R.mipmap.icon_patrol_gray))
+                .addItem(new BottomNavigationItem(R.mipmap.icon_my_gray, "我的").setInactiveIconResource(R.mipmap.icon_my_gray))
                 .setFirstSelectedPosition(0) //设置默认选中位置
                 .initialise(); // 提交初始化（完成配置）
 

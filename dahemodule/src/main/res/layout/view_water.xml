@@ -15,7 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableLeft="@mipmap/mine_icn_phone"
+            android:drawableLeft="@mipmap/icon_water"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
             android:text="水位"
@@ -41,7 +41,7 @@
             android:layout_width="0dp"
             android:layout_height="83dp"
             android:layout_weight="1"
-            android:background="@color/boxing_gray"
+            android:background="@mipmap/shuiwei_1"
             android:gravity="center_horizontal"
             android:orientation="vertical">
 
@@ -67,7 +67,7 @@
             android:layout_height="83dp"
             android:layout_marginLeft="15dp"
             android:layout_weight="1"
-            android:background="@color/boxing_gray"
+            android:background="@mipmap/shuiwei_2"
             android:orientation="vertical"
             android:padding="10dp">
 

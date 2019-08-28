@@ -15,7 +15,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:drawableLeft="@mipmap/mine_icn_phone"
+            android:drawableLeft="@mipmap/icon_rain"
             android:drawablePadding="5dp"
             android:gravity="center_vertical"
             android:text="雨量"
@@ -43,16 +43,17 @@
 
             <LinearLayout
                 android:layout_width="125dp"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:background="@color/theam_red"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
                 android:padding="10dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/boxing_gray"
+                    android:layout_width="37dp"
+                    android:layout_height="41dp"
+                    android:background="@mipmap/rain_ball_3"
+                    android:gravity="center"
                     android:text="1h"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
@@ -68,7 +69,7 @@
 
             <LinearLayout
                 android:layout_width="125dp"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:background="@color/theam_red"
                 android:gravity="center_vertical"
@@ -76,9 +77,10 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/boxing_gray"
+                    android:layout_width="37dp"
+                    android:layout_height="41dp"
+                    android:background="@mipmap/rain_ball_2"
+                    android:gravity="center"
                     android:text="1h"
                     android:textColor="@color/white"
                     android:textSize="15sp" />
@@ -94,7 +96,7 @@
 
             <LinearLayout
                 android:layout_width="125dp"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:layout_marginLeft="15dp"
                 android:background="@color/theam_red"
                 android:gravity="center_vertical"
@@ -102,9 +104,10 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="@color/boxing_gray"
+                    android:layout_width="37dp"
+                    android:layout_height="41dp"
+                    android:background="@mipmap/rain_ball_1"
+                    android:gravity="center"
                     android:text="1h"
                     android:textColor="@color/white"
                     android:textSize="15sp" />

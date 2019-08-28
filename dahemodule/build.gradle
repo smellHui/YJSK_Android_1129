@@ -77,6 +77,7 @@ dependencies {
     implementation rootProject.ext.dependencies.cardview
     implementation rootProject.ext.dependencies.design
 
+    implementation rootProject.ext.dependencies.FlycoTabLayout
     // json 解析.
     implementation rootProject.ext.dependencies.gson
     implementation rootProject.ext.dependencies.barlibrary
@@ -116,6 +117,7 @@ dependencies {
 
     implementation project(':photopicker')
     implementation project(':base')
+    implementation project(':picktime')
 
     implementation 'com.github.BLiYing:GaodeLiabrary:v2.0.0'
 
@@ -134,6 +136,8 @@ dependencies {
 
     implementation 'com.bilibili:boxing-impl:1.0.4'
 
+    implementation rootProject.ext.dependencies.xpopup
+
     //arcgis
     implementation rootProject.ext.dependencies.arcgisandroid
     //下载
@@ -141,5 +145,7 @@ dependencies {
     annotationProcessor rootProject.ext.dependencies.ariaCompiler
     implementation rootProject.ext.dependencies.MVVM2
     implementation rootProject.ext.dependencies.MPAndroidChart
+
+    api rootProject.ext.dependencies.guava
 
 }
