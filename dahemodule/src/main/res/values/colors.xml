@@ -9,6 +9,9 @@
     <!--文字颜色-->
     <color name="color_white">#FFFFFF</color>
 
+
+    <color name="blue">#1785F8</color>
+
     <!--综合监控模块相关颜色-->
     <!--首页tablayout未选中字体颜色-->
     <!--背景页面-->
