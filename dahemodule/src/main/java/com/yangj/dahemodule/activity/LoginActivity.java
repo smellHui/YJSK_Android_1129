@@ -9,6 +9,7 @@ import com.yangj.dahemodule.R;
  * Description:
  */
 public class LoginActivity extends BaseActivity {
+
     @Override
     public int getLayoutId() {
         return R.layout.activity_login;

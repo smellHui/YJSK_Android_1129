@@ -12,6 +12,7 @@
         </activity>
 
         <activity android:name=".activity.OperatesActivity" />
+        <activity android:name=".activity.LoginActivity"/>
     </application>
 
 </manifest>
