@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/lo_toolbar_common"
     android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:background="@color/white">
+    android:layout_height="48dp"
+    android:background="@color/colorPrimary"
+    app:contentInsetLeft="0dp"
+    app:contentInsetStart="0dp"
+    app:popupTheme="@style/AppTheme.PopupOverlay"
+    app:titleTextAppearance="@style/Toolbar">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,10 +20,11 @@
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
             android:src="@mipmap/btn_back" />
 
-        <EditText
-            android:id="@+id/et_data"
+        <TextView
+            android:id="@+id/tv_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="20dp"

@@ -6,6 +6,7 @@
     android:orientation="vertical">
 
     <com.yangj.dahemodule.view.SearchToolBar
+        android:id="@+id/view_search_tool_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 

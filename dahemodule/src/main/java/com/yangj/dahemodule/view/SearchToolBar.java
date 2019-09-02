@@ -2,9 +2,12 @@ package com.yangj.dahemodule.view;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.gyf.barlibrary.ImmersionBar;
 import com.lxj.xpopup.XPopup;
 import com.yangj.dahemodule.R;
 
@@ -15,7 +18,8 @@ import com.yangj.dahemodule.R;
  */
 public class SearchToolBar extends ViewBase implements SelectDataView.onDataSelectPickListener {
 
-    private EditText dataEt;
+    private TextView dateTv;
+    private Toolbar toolbar;
     private SelectDataView selectDataView;
 
     public SearchToolBar(Context context) {
@@ -37,10 +41,10 @@ public class SearchToolBar extends ViewBase implements SelectDataView.onDataSele
 
     @Override
     public void initData() {
-        dataEt = findViewById(R.id.et_data);
-
+        dateTv = findViewById(R.id.tv_date);
+        toolbar = findViewById(R.id.lo_toolbar_common);
         selectDataView = new SelectDataView(mContext, this);
-        dataEt.setOnClickListener(v ->
+        dateTv.setOnClickListener(v ->
                 showChoiceDateDialog()
         );
     }
@@ -51,6 +55,10 @@ public class SearchToolBar extends ViewBase implements SelectDataView.onDataSele
                 .dismissOnTouchOutside(false)
                 .asCustom(selectDataView)
                 .show();
+    }
+
+    public void setImmersionBar(ImmersionBar mImmersionBar) {
+        mImmersionBar.titleBar(toolbar).init();
     }
 
     @Override

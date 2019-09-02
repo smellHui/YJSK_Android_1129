@@ -67,12 +67,6 @@ public abstract class BaseActivity extends AppCompatActivity {
 
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-
-    }
-
     /**
      * 将状态栏 文字 设为 暗色
      */
@@ -97,6 +91,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         }
     }
 
+    public ImmersionBar getmImmersionBar() {
+        return mImmersionBar;
+    }
 
     /**
      * 初始化导航栏

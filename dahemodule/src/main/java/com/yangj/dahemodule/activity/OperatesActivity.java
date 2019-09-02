@@ -12,6 +12,7 @@ import com.tepia.base.mvp.BaseActivity;
 import com.yangj.dahemodule.R;
 import com.yangj.dahemodule.fragment.OperatesFragment;
 import com.yangj.dahemodule.model.TabEntity;
+import com.yangj.dahemodule.view.SearchToolBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ public class OperatesActivity extends BaseActivity {
     private ArrayList<CustomTabEntity> tabEntities;
     private ArrayList<Fragment> mFragments = new ArrayList<>();
 
+    private SearchToolBar searchToolBar;
     private CommonTabLayout mTabLayout;
     private ViewPager viewPager;
 
@@ -43,6 +45,7 @@ public class OperatesActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        searchToolBar = findViewById(R.id.view_search_tool_bar);
         mTabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.vp);
 
@@ -80,6 +83,12 @@ public class OperatesActivity extends BaseActivity {
 
             }
         });
+    }
+
+    @Override
+    public void setStatusBarTextDark() {
+        searchToolBar.setImmersionBar(getmImmersionBar());
+        super.setStatusBarTextDark();
     }
 
     @Override
