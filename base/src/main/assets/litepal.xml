@@ -14,20 +14,20 @@
 
 
         <!--巡查app数据库表-->
-        <mapping class="com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean"/>
-        <mapping class="com.tepia.guangdong_module.amainguangdong.route.TaskBean"/>
-        <mapping class="com.tepia.guangdong_module.amainguangdong.route.TaskItemBean"/>
-        <mapping class="com.tepia.guangdong_module.amainguangdong.route.ImageInfoBean"/>
-        <mapping class="com.tepia.guangdong_module.amainguangdong.route.BizPlanInfoBean"/>
-        <mapping class="com.tepia.guangdong_module.amainguangdong.route.RoutepointDataBean"/>
+        <mapping class="com.yangj.dahemodule.model.xuncha.ReservoirBean"/>
+        <mapping class="com.yangj.dahemodule.model.route.TaskBean"/>
+        <mapping class="com.yangj.dahemodule.model.route.TaskItemBean"/>
+        <!--<mapping class="com.yangj.dahemodule.model.route.ImageInfoBean"/>-->
+        <!--<mapping class="com.yangj.dahemodule.model.route.BizPlanInfoBean"/>-->
+        <!--<mapping class="com.yangj.dahemodule.model.route.RoutepointDataBean"/>-->
 
 
 
-        <mapping class="com.tepia.guangdong_module.amainguangdong.model.xuncha.DangerBean"/>
-        <mapping class="com.tepia.guangdong_module.amainguangdong.model.xuncha.RouteListBean"/>
-        <mapping class="com.tepia.guangdong_module.amainguangdong.model.xuncha.RoutePosition"/>
-        <mapping class="com.tepia.guangdong_module.amainguangdong.model.xuncha.DataBeanOflistReservoirRoute"/>
-        <mapping class="com.tepia.guangdong_module.amainguangdong.model.xuncha.SpecialNoticeBean"/>
+        <mapping class="com.yangj.dahemodule.model.xuncha.DangerBean"/>
+        <mapping class="com.yangj.dahemodule.model.xuncha.RouteListBean"/>
+        <mapping class="com.yangj.dahemodule.model.xuncha.RoutePosition"/>
+        <mapping class="com.yangj.dahemodule.model.xuncha.DataBeanOflistReservoirRoute"/>
+        <mapping class="com.yangj.dahemodule.model.xuncha.SpecialNoticeBean"/>
 
 
 

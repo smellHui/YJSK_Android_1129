@@ -7,6 +7,7 @@ import com.tepia.base.mvp.BaseCommonFragment;
 import com.yangj.dahemodule.R;
 import com.yangj.dahemodule.activity.LoginActivity;
 import com.yangj.dahemodule.activity.OperatesActivity;
+import com.yangj.dahemodule.activity.VersionActivity;
 
 /**
  * Author:xch
@@ -29,6 +30,9 @@ public class MineFragment extends BaseCommonFragment {
     protected void initView(View view) {
         findView(R.id.ll_one).setOnClickListener(v -> {
             startActivity(new Intent(getContext(), OperatesActivity.class));
+        });
+        findView(R.id.ll_three).setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), VersionActivity.class));
         });
         findView(R.id.ll_four).setOnClickListener(v -> {
             startActivity(new Intent(getContext(), LoginActivity.class));
