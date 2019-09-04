@@ -1,7 +1,5 @@
 package com.yangj.dahemodule.model;
 
-import com.tepia.base.http.BaseResponse;
-
 import java.util.List;
 
 /**
@@ -9,45 +7,13 @@ import java.util.List;
  * Date:2019/4/4
  * Do:
  */
-public class PageBean<T> extends BaseResponse {
+public class PageBean<T> {
 
-    private int pageIndex;
-    private int pageSize;
-    private int totals;
-    private List<T> data;
     private int total;
-
-    public int getPageIndex() {
-        return pageIndex;
-    }
-
-    public void setPageIndex(int pageIndex) {
-        this.pageIndex = pageIndex;
-    }
-
-    public int getPageSize() {
-        return pageSize;
-    }
-
-    public void setPageSize(int pageSize) {
-        this.pageSize = pageSize;
-    }
-
-    public int getTotals() {
-        return totals;
-    }
-
-    public void setTotals(int totals) {
-        this.totals = totals;
-    }
-
-    public List<T> getResult() {
-        return data;
-    }
-
-    public void setResult(List<T> data) {
-        this.data = data;
-    }
+    private int size;
+    private int current;
+    private List<T> records;
+    private int pages;
 
     public int getTotal() {
         return total;
@@ -57,14 +23,46 @@ public class PageBean<T> extends BaseResponse {
         this.total = total;
     }
 
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public int getCurrent() {
+        return current;
+    }
+
+    public void setCurrent(int current) {
+        this.current = current;
+    }
+
+    public List<T> getRecords() {
+        return records;
+    }
+
+    public void setRecords(List<T> records) {
+        this.records = records;
+    }
+
+    public int getPages() {
+        return pages;
+    }
+
+    public void setPages(int pages) {
+        this.pages = pages;
+    }
+
     @Override
     public String toString() {
         return "PageBean{" +
-                "pageIndex=" + pageIndex +
-                ", pageSize=" + pageSize +
-                ", totals=" + totals +
-                ", data=" + data +
-                ", total=" + total +
+                "total=" + total +
+                ", size=" + size +
+                ", current=" + current +
+                ", records=" + records +
+                ", pages=" + pages +
                 '}';
     }
 }

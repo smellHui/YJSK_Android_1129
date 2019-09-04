@@ -24,6 +24,17 @@ public class UserLoginResponse extends BaseResponse {
      * address :
      */
 
+    /**
+     * {
+     * "access_token":"4e0c0564-5ae0-4048-8b56-6248d2a8f16d",
+     * "token_type":"bearer",
+     * "refresh_token":"ec584730-2a5d-4cfe-b07d-0f125ff4f082",
+     * "expires_in":42652,
+     * "scope":"server",
+     * "license":"made by Tepia"
+     * }
+     */
+
     private String data;
     private String userName;
     private String userPass;
@@ -113,5 +124,21 @@ public class UserLoginResponse extends BaseResponse {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "UserLoginResponse{" +
+                "data='" + data + '\'' +
+                ", userName='" + userName + '\'' +
+                ", userPass='" + userPass + '\'' +
+                ", userId='" + userId + '\'' +
+                ", sparent='" + sparent + '\'' +
+                ", orgId=" + orgId +
+                ", name='" + name + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                '}';
     }
 }

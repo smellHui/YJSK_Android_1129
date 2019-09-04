@@ -17,6 +17,9 @@ import com.yangj.dahemodule.view.SearchToolBar;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.yangj.dahemodule.fragment.OperatesFragment.ALL_OPERATE;
+import static com.yangj.dahemodule.fragment.OperatesFragment.MINE_OPERATE;
+
 /**
  * Author:xch
  * Date:2019/8/27
@@ -27,7 +30,6 @@ public class OperatesActivity extends BaseActivity {
     public final static int FAULT_SITE = REPORT_SITE >> 1;//全部巡查
     private String[] mTitles_2 = {"我的巡查", "全部巡查"};
     private ArrayList<CustomTabEntity> tabEntities;
-    private ArrayList<Fragment> mFragments = new ArrayList<>();
 
     private SearchToolBar searchToolBar;
     private CommonTabLayout mTabLayout;
@@ -49,13 +51,14 @@ public class OperatesActivity extends BaseActivity {
         mTabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.vp);
 
-        mFragments.add(OperatesFragment.launch(0));
-        mFragments.add(OperatesFragment.launch(1));
         tabEntities = new ArrayList<>();
         tabEntities.add(new TabEntity("我的巡查"));
         tabEntities.add(new TabEntity("全部巡查"));
         mTabLayout.setTabData(tabEntities);
-        viewPager.setAdapter(new CommonFragmentPagerAdapter(getSupportFragmentManager()));
+        CommonFragmentPagerAdapter pagerAdapter = new CommonFragmentPagerAdapter(getSupportFragmentManager());
+        pagerAdapter.addFragment(OperatesFragment.launch(MINE_OPERATE));
+        pagerAdapter.addFragment(OperatesFragment.launch(ALL_OPERATE));
+        viewPager.setAdapter(pagerAdapter);
         mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
             public void onTabSelect(int position) {

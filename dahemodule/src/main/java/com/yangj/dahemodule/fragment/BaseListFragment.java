@@ -109,7 +109,7 @@ public abstract class BaseListFragment<K> extends BaseCommonFragment
     @Override
     public void success(PageBean<K> k) {
         if (k != null) {
-            List<K> list = k.getResult();
+            List<K> list = k.getRecords();
             if (list != null) {
                 if (page == 1 && list.isEmpty()) {
                     getList().clear();

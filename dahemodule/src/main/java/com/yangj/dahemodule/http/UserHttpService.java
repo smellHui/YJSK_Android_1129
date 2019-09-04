@@ -3,20 +3,29 @@ package com.yangj.dahemodule.http;
 import com.tepia.base.http.BaseResponse;
 import com.yangj.dahemodule.model.JsonBean;
 import com.yangj.dahemodule.model.NewNoticeBean;
+import com.yangj.dahemodule.model.UserDataBean;
 import com.yangj.dahemodule.model.UserInfoBean;
-import com.yangj.dahemodule.model.UserLoginResponse;
 import com.yangj.dahemodule.model.WeatherWarnBean;
+import com.yangj.dahemodule.model.main.MainDataBean;
+import com.yangj.dahemodule.model.user.SysUserDataBean;
 import com.yangj.dahemodule.model.xuncha.AreaBean;
+import com.yangj.dahemodule.model.xuncha.RecordDataBean;
 import com.yangj.dahemodule.model.xuncha.ReservoirListResponse;
 import com.yangj.dahemodule.model.xuncha.ReservoirOfflineResponse;
 
+import java.util.Map;
+
 import io.reactivex.Observable;
+import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 import retrofit2.http.Query;
+import retrofit2.http.QueryMap;
 
 /**
  * Author:xch
@@ -25,14 +34,51 @@ import retrofit2.http.Query;
  */
 public interface UserHttpService {
 
-    @FormUrlEncoded
-    @POST("jwt/app/getToken")
-    Observable<UserLoginResponse> login(@Field("logincode") String name,
-                                        @Field("password") String password,
-                                        @Field("registId") String deviceId);
+    @POST("oauth/token")
+    @Headers({
+            "Content-Type:application/x-www-form-urlencoded",
+            "Authorization:Basic c2stYXBwOnNrLWFwcA=="
+    })
+    Observable<UserDataBean> login(@Body RequestBody requestBody);
 
-    ;
+    /**
+     * 【查询】巡检记录列表
+     *
+     * @param token
+     * @param requestBody
+     * @return
+     */
+    @GET("app/patrol/listAll")
+    Observable<RecordDataBean> getRecordList(@Header("Authorization") String token, @QueryMap Map<String, String> requestBody);
 
+    /**
+     * 【查询】我的巡检列表
+     *
+     * @param token
+     * @param requestBody
+     * @return
+     */
+    @GET("/app/patrol/list4Me")
+    Observable<RecordDataBean> getRecordListByMe(@Header("Authorization") String token, @QueryMap Map<String, String> requestBody);
+
+    /**
+     * 【查询】加载数据接口
+     *
+     * @param token
+     * @param reservoirCode
+     * @return
+     */
+    @GET("app/patrol/loadData")
+    Observable<MainDataBean> loadData(@Header("Authorization") String token, @Query("reservoirCode") String reservoirCode);
+
+    /**
+     * 【查询】用户信息
+     *
+     * @param token
+     * @return
+     */
+    @GET("app/user/info")
+    Observable<SysUserDataBean> getUserInfo(@Header("Authorization") String token);
 
     /**
      * 获取用户登录信息
@@ -44,6 +90,7 @@ public interface UserHttpService {
      */
     @GET("app/appSysUser/getLoginUserInfo")
     Observable<UserInfoBean> getLoginUser(@Header("Authorization") String token);
+
 
     /**
      * @param token
@@ -95,6 +142,7 @@ public interface UserHttpService {
 
     /**
      * 人员位置上报接口
+     *
      * @param token
      * @param reservoirId
      * @param longitude

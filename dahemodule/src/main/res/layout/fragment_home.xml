@@ -42,6 +42,7 @@
         </RelativeLayout>
 
         <com.yangj.dahemodule.view.BasicInfoView
+            android:id="@+id/view_basic_info"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 

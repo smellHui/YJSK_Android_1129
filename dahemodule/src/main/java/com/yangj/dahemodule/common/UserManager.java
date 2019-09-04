@@ -20,11 +20,15 @@ import com.yangj.dahemodule.APPCostant;
 import com.yangj.dahemodule.http.UserHttpService;
 import com.yangj.dahemodule.model.JsonBean;
 import com.yangj.dahemodule.model.NewNoticeBean;
+import com.yangj.dahemodule.model.UserDataBean;
 import com.yangj.dahemodule.model.UserInfoBean;
 import com.yangj.dahemodule.model.UserLoginResponse;
 import com.yangj.dahemodule.model.WeatherWarnBean;
+import com.yangj.dahemodule.model.main.MainDataBean;
+import com.yangj.dahemodule.model.user.SysUserDataBean;
 import com.yangj.dahemodule.model.xuncha.AreaBean;
 import com.yangj.dahemodule.model.xuncha.DataBeanOflistReservoirRoute;
+import com.yangj.dahemodule.model.xuncha.RecordDataBean;
 import com.yangj.dahemodule.model.xuncha.ReservoirBean;
 import com.yangj.dahemodule.model.xuncha.ReservoirListResponse;
 import com.yangj.dahemodule.model.xuncha.ReservoirOfflineResponse;
@@ -32,11 +36,19 @@ import com.yangj.dahemodule.model.xuncha.ReservoirOfflineResponse;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+import okhttp3.MediaType;
+import okhttp3.RequestBody;
+
+import static com.yangj.dahemodule.fragment.OperatesFragment.ALL_OPERATE;
+import static com.yangj.dahemodule.fragment.OperatesFragment.MINE_OPERATE;
 
 /**
  * Created by Joeshould on 2018/5/22.
@@ -74,7 +86,7 @@ public class UserManager {
     }
 
     private UserManager() {
-        this.mRetrofitService = RetrofitManager.getRetrofit(APPCostant.API_SERVER_URL + APPCostant.API_SERVER_USER_AREA).create(UserHttpService.class);
+        this.mRetrofitService = RetrofitManager.getRetrofit(APPCostant.API_SERVER_URL).create(UserHttpService.class);
     }
 
     private UserManager(String adminstr) {
@@ -88,15 +100,94 @@ public class UserManager {
     /**
      * 登录
      *
-     * @param logincode
+     * @param username
      * @param password
      * @return
      */
-    public Observable<UserLoginResponse> login(String logincode, String password, String registId, String deviceId) {
-        return mRetrofitService.login(logincode, password, deviceId)
+    public Observable<UserDataBean> login(String username, String password) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("username", username);
+        hashMap.put("password", password);
+        hashMap.put("randomStr", "");
+        hashMap.put("grant_type", "password");
+        hashMap.put("scope", "server");
+        return mRetrofitService.login(getRequestBody(hashMap))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    private RequestBody getRequestBody(HashMap<String, String> hashMap) {
+        StringBuffer data = new StringBuffer();
+        if (hashMap != null && hashMap.size() > 0) {
+            Iterator iter = hashMap.entrySet().iterator();
+            while (iter.hasNext()) {
+                Map.Entry entry = (Map.Entry) iter.next();
+                Object key = entry.getKey();
+                Object val = entry.getValue();
+                data.append(key).append("=").append(val).append("&");
+            }
+        }
+        String jso = data.substring(0, data.length() - 1);
+        RequestBody requestBody =
+                RequestBody.create(MediaType.parse("application/x-www-form-urlencoded; charset=utf-8"), jso);
+
+        return requestBody;
+    }
+
+    /**
+     * 【查询】巡检记录列表
+     *
+     * @param pageType
+     * @param reservoirCode
+     * @param pageNum
+     * @param pageSize
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    public Observable<RecordDataBean> getRecordList(int pageType, String reservoirCode, int pageNum, int pageSize, String startDate, String endDate) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("reservoirCode", reservoirCode);
+        hashMap.put("pageNum", pageNum + "");
+        hashMap.put("pageSize", pageSize + "");
+        hashMap.put("startDate", startDate);
+        hashMap.put("endDate", endDate);
+        if (pageType == MINE_OPERATE) {
+            return mRetrofitService.getRecordListByMe("Bearer 95e8a444-33d0-4fa9-be46-6127ead69664", hashMap)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+        if (pageType == ALL_OPERATE) {
+            return mRetrofitService.getRecordList("Bearer 95e8a444-33d0-4fa9-be46-6127ead69664", hashMap)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+        return null;
+    }
+
+    /**
+     * 【查询】加载数据接口
+     *
+     * @param reservoirCode
+     * @return
+     */
+    public Observable<MainDataBean> loadData(String reservoirCode) {
+        return mRetrofitService.loadData("Bearer 95e8a444-33d0-4fa9-be46-6127ead69664", reservoirCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 【查询】用户信息
+     *
+     * @return
+     */
+    public Observable<SysUserDataBean> getUserInfo() {
+        return mRetrofitService.getUserInfo("Bearer 95e8a444-33d0-4fa9-be46-6127ead69664")
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 
     /**
      * @return

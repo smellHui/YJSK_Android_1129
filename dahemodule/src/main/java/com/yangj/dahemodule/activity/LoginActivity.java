@@ -1,7 +1,17 @@
 package com.yangj.dahemodule.activity;
 
+import android.widget.Button;
+import android.widget.EditText;
+
+import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseActivity;
+import com.tepia.base.utils.LogUtil;
 import com.yangj.dahemodule.R;
+import com.yangj.dahemodule.common.UserManager;
+import com.yangj.dahemodule.model.UserBean;
+import com.yangj.dahemodule.model.UserDataBean;
+import com.yangj.dahemodule.model.UserLoginResponse;
+import com.yangj.dahemodule.util.AesUtils;
 
 /**
  * Author:xch
@@ -9,6 +19,9 @@ import com.yangj.dahemodule.R;
  * Description:
  */
 public class LoginActivity extends BaseActivity {
+    private EditText phoneEt;
+    private EditText passwordEt;
+    private Button loginBtn;
 
     @Override
     public int getLayoutId() {
@@ -22,7 +35,32 @@ public class LoginActivity extends BaseActivity {
 
     @Override
     public void initView() {
+        phoneEt = findViewById(R.id.et_phone);
+        passwordEt = findViewById(R.id.et_password);
+        loginBtn = findViewById(R.id.btn_login);
 
+        phoneEt.setText("dhxc");
+        passwordEt.setText("123456");
+        loginBtn.setOnClickListener(v -> {
+            String phone = phoneEt.getText().toString().trim();
+            String password = passwordEt.getText().toString().trim();
+            try {
+                UserManager.getInstance().login(phone, AesUtils.encrypt(password))
+                        .subscribe(new LoadingSubject<UserDataBean>(true, "正在登录...") {
+                            @Override
+                            protected void _onNext(UserDataBean userLoginResponse) {
+                                LogUtil.v("userLoginResponse--->" + userLoginResponse.toString());
+                            }
+
+                            @Override
+                            protected void _onError(String message) {
+                                LogUtil.e("userLoginResponse--->" + message);
+                            }
+                        });
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     @Override

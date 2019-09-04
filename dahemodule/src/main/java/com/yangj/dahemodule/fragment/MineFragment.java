@@ -2,12 +2,19 @@ package com.yangj.dahemodule.fragment;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.TextView;
 
+import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseCommonFragment;
 import com.yangj.dahemodule.R;
 import com.yangj.dahemodule.activity.LoginActivity;
 import com.yangj.dahemodule.activity.OperatesActivity;
 import com.yangj.dahemodule.activity.VersionActivity;
+import com.yangj.dahemodule.common.UserManager;
+import com.yangj.dahemodule.model.main.MainDataBean;
+import com.yangj.dahemodule.model.user.SysUser;
+import com.yangj.dahemodule.model.user.SysUserBean;
+import com.yangj.dahemodule.model.user.SysUserDataBean;
 
 /**
  * Author:xch
@@ -15,6 +22,9 @@ import com.yangj.dahemodule.activity.VersionActivity;
  * Description:我的
  */
 public class MineFragment extends BaseCommonFragment {
+
+    private TextView nameTv;
+    private TextView dateTv;
 
     @Override
     protected int getLayoutId() {
@@ -28,6 +38,8 @@ public class MineFragment extends BaseCommonFragment {
 
     @Override
     protected void initView(View view) {
+        nameTv = findView(R.id.tv_name);
+        dateTv = findView(R.id.tv_date);
         findView(R.id.ll_one).setOnClickListener(v -> {
             startActivity(new Intent(getContext(), OperatesActivity.class));
         });
@@ -41,6 +53,26 @@ public class MineFragment extends BaseCommonFragment {
 
     @Override
     protected void initRequestData() {
+        getUserInfo();
+    }
 
+    public void getUserInfo() {
+        UserManager.getInstance().getUserInfo()
+                .subscribe(new LoadingSubject<SysUserDataBean>() {
+
+                    @Override
+                    protected void _onNext(SysUserDataBean sysUserDataBean) {
+                        SysUserBean sysUserBean = sysUserDataBean.getData();
+                        if (sysUserBean == null) return;
+                        SysUser sysUser = sysUserBean.getSysUser();
+                        nameTv.setText(sysUser.getUsername());
+                        dateTv.setText("登录时间：" + sysUser.getUpdateTime());
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
+
+                    }
+                });
     }
 }
