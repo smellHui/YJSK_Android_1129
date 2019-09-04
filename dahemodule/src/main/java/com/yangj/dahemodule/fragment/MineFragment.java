@@ -7,6 +7,7 @@ import android.widget.TextView;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseCommonFragment;
 import com.yangj.dahemodule.R;
+import com.yangj.dahemodule.activity.DangerReportListActivity;
 import com.yangj.dahemodule.activity.LoginActivity;
 import com.yangj.dahemodule.activity.OperatesActivity;
 import com.yangj.dahemodule.activity.VersionActivity;
@@ -42,6 +43,9 @@ public class MineFragment extends BaseCommonFragment {
         dateTv = findView(R.id.tv_date);
         findView(R.id.ll_one).setOnClickListener(v -> {
             startActivity(new Intent(getContext(), OperatesActivity.class));
+        });
+        findView(R.id.ll_two).setOnClickListener(v -> {
+            startActivity(new Intent(getContext(), DangerReportListActivity.class));
         });
         findView(R.id.ll_three).setOnClickListener(v -> {
             startActivity(new Intent(getContext(), VersionActivity.class));

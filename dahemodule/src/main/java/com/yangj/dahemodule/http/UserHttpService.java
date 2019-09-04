@@ -3,6 +3,7 @@ package com.yangj.dahemodule.http;
 import com.tepia.base.http.BaseResponse;
 import com.yangj.dahemodule.model.JsonBean;
 import com.yangj.dahemodule.model.NewNoticeBean;
+import com.yangj.dahemodule.model.Report.ReportDataBean;
 import com.yangj.dahemodule.model.UserDataBean;
 import com.yangj.dahemodule.model.UserInfoBean;
 import com.yangj.dahemodule.model.WeatherWarnBean;
@@ -58,8 +59,17 @@ public interface UserHttpService {
      * @param requestBody
      * @return
      */
-    @GET("/app/patrol/list4Me")
+    @GET("app/patrol/list4Me")
     Observable<RecordDataBean> getRecordListByMe(@Header("Authorization") String token, @QueryMap Map<String, String> requestBody);
+
+    /**
+     * 【查询】我上报的险情
+     * @param token
+     * @param requestBody
+     * @return
+     */
+    @GET("app/problem/list4Me")
+    Observable<ReportDataBean> getReportList(@Header("Authorization") String token, @QueryMap Map<String, String> requestBody);
 
     /**
      * 【查询】加载数据接口

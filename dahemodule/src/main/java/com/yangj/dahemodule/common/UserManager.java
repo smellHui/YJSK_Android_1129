@@ -20,6 +20,7 @@ import com.yangj.dahemodule.APPCostant;
 import com.yangj.dahemodule.http.UserHttpService;
 import com.yangj.dahemodule.model.JsonBean;
 import com.yangj.dahemodule.model.NewNoticeBean;
+import com.yangj.dahemodule.model.Report.ReportDataBean;
 import com.yangj.dahemodule.model.UserDataBean;
 import com.yangj.dahemodule.model.UserInfoBean;
 import com.yangj.dahemodule.model.UserLoginResponse;
@@ -164,6 +165,28 @@ public class UserManager {
         }
         return null;
     }
+
+    /**
+     * 【查询】我上报的险情
+     * @param reservoirCode
+     * @param pageNum
+     * @param pageSize
+     * @param startDate
+     * @param endDate
+     * @return
+     */
+    public Observable<ReportDataBean> getReportList(String reservoirCode, int pageNum, int pageSize, String startDate, String endDate) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        hashMap.put("reservoirCode", reservoirCode);
+        hashMap.put("pageNum", pageNum + "");
+        hashMap.put("pageSize", pageSize + "");
+        hashMap.put("startDate", startDate);
+        hashMap.put("endDate", endDate);
+        return mRetrofitService.getReportList("Bearer 95e8a444-33d0-4fa9-be46-6127ead69664", hashMap)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
 
     /**
      * 【查询】加载数据接口
