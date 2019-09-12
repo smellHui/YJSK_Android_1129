@@ -499,7 +499,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
     }
 
     private void startLocation(){
-//        getGaoDeLocation();
+        getGaoDeLocation();
         //android 6.0动态申请权限
         if (ContextCompat.checkSelfPermission(getContext(),
                 Manifest.permission.ACCESS_FINE_LOCATION)

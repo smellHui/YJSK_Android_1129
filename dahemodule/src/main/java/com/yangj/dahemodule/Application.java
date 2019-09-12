@@ -1,5 +1,6 @@
 package com.yangj.dahemodule;
 
+import com.example.gaodelibrary.UtilsContextOfGaode;
 import com.tepia.base.BaseApplication;
 
 /**
@@ -12,5 +13,6 @@ public class Application extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
+        UtilsContextOfGaode.init(this);
     }
 }

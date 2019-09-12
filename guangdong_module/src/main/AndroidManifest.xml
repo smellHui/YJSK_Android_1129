@@ -159,7 +159,7 @@
         -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="71acc21a6a6d338b5fc6c2df35658448" />
+            android:value="565f6c6ecbe77c2f281334c0f686b0e7" />
 
         <service
             android:name="com.example.gaodelibrary.GaodeLibraryService"
