@@ -3,6 +3,7 @@ package com.yangj.dahemodule.activity;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.alibaba.fastjson.JSON;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseActivity;
 import com.tepia.base.utils.LogUtil;
@@ -50,6 +51,10 @@ public class LoginActivity extends BaseActivity {
                             @Override
                             protected void _onNext(UserDataBean userLoginResponse) {
                                 LogUtil.v("userLoginResponse--->" + userLoginResponse.toString());
+                                if (userLoginResponse == null) return;
+                                UserBean userBean = userLoginResponse.getData();
+                                if (userBean == null) return;
+                                UserManager.getInstance().saveUser(JSON.toJSONString(userBean));
                             }
 
                             @Override

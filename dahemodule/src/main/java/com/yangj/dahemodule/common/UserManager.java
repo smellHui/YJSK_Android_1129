@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pgyersdk.update.PgyUpdateManager;
@@ -15,24 +16,29 @@ import com.tepia.base.CacheConsts;
 import com.tepia.base.http.BaseResponse;
 import com.tepia.base.http.RetrofitManager;
 import com.tepia.base.utils.Utils;
+import com.tepia.guangdong_module.amainguangdong.model.UserInfoBean;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.AreaBean;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.DataBeanOflistReservoirRoute;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirListResponse;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirOfflineResponse;
 import com.tepia.photo_picker.utils.SPUtils;
 import com.yangj.dahemodule.APPCostant;
 import com.yangj.dahemodule.http.UserHttpService;
 import com.yangj.dahemodule.model.JsonBean;
 import com.yangj.dahemodule.model.NewNoticeBean;
 import com.yangj.dahemodule.model.Report.ReportDataBean;
+import com.yangj.dahemodule.model.UserBean;
 import com.yangj.dahemodule.model.UserDataBean;
-import com.yangj.dahemodule.model.UserInfoBean;
 import com.yangj.dahemodule.model.UserLoginResponse;
 import com.yangj.dahemodule.model.WeatherWarnBean;
+import com.yangj.dahemodule.model.main.DangerousPosition;
 import com.yangj.dahemodule.model.main.MainDataBean;
+import com.yangj.dahemodule.model.main.ReservoirInfo;
+import com.yangj.dahemodule.model.main.Route;
+import com.yangj.dahemodule.model.main.UserInfo;
 import com.yangj.dahemodule.model.user.SysUserDataBean;
-import com.yangj.dahemodule.model.xuncha.AreaBean;
-import com.yangj.dahemodule.model.xuncha.DataBeanOflistReservoirRoute;
 import com.yangj.dahemodule.model.xuncha.RecordDataBean;
-import com.yangj.dahemodule.model.xuncha.ReservoirBean;
-import com.yangj.dahemodule.model.xuncha.ReservoirListResponse;
-import com.yangj.dahemodule.model.xuncha.ReservoirOfflineResponse;
 
 import org.litepal.crud.DataSupport;
 
@@ -65,6 +71,8 @@ public class UserManager {
     public static final String USERINFO = "USERINFO";
     private static final String TOKEN = "TOKEN";
     private static final String DEFAULT_RES = "DEFAULT_RES";
+
+    private String token;
 
     public static UserManager getInstance() {
         return ourInstance;
@@ -135,6 +143,10 @@ public class UserManager {
         return requestBody;
     }
 
+    private String makeToken(){
+        return "Bearer " + getToken();
+    }
+
     /**
      * 【查询】巡检记录列表
      *
@@ -154,12 +166,12 @@ public class UserManager {
         hashMap.put("startDate", startDate);
         hashMap.put("endDate", endDate);
         if (pageType == MINE_OPERATE) {
-            return mRetrofitService.getRecordListByMe("Bearer 95e8a444-33d0-4fa9-be46-6127ead69664", hashMap)
+            return mRetrofitService.getRecordListByMe(makeToken(), hashMap)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
         }
         if (pageType == ALL_OPERATE) {
-            return mRetrofitService.getRecordList("Bearer 95e8a444-33d0-4fa9-be46-6127ead69664", hashMap)
+            return mRetrofitService.getRecordList(makeToken(), hashMap)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread());
         }
@@ -168,6 +180,7 @@ public class UserManager {
 
     /**
      * 【查询】我上报的险情
+     *
      * @param reservoirCode
      * @param pageNum
      * @param pageSize
@@ -182,7 +195,7 @@ public class UserManager {
         hashMap.put("pageSize", pageSize + "");
         hashMap.put("startDate", startDate);
         hashMap.put("endDate", endDate);
-        return mRetrofitService.getReportList("Bearer 95e8a444-33d0-4fa9-be46-6127ead69664", hashMap)
+        return mRetrofitService.getReportList(makeToken(), hashMap)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -195,7 +208,7 @@ public class UserManager {
      * @return
      */
     public Observable<MainDataBean> loadData(String reservoirCode) {
-        return mRetrofitService.loadData("Bearer 95e8a444-33d0-4fa9-be46-6127ead69664", reservoirCode)
+        return mRetrofitService.loadData(makeToken(), reservoirCode)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -206,7 +219,7 @@ public class UserManager {
      * @return
      */
     public Observable<SysUserDataBean> getUserInfo() {
-        return mRetrofitService.getUserInfo("Bearer 95e8a444-33d0-4fa9-be46-6127ead69664")
+        return mRetrofitService.getUserInfo(makeToken())
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -318,10 +331,10 @@ public class UserManager {
      *
      * @return
      */
-    public String getToken() {
-        String temp = SPUtils.getInstance(Utils.getContext()).getString("TOKEN", "");
-        return temp;
-    }
+//    public String getToken() {
+//        String temp = SPUtils.getInstance(Utils.getContext()).getString("TOKEN", "");
+//        return temp;
+//    }
 
 
     /**
@@ -485,6 +498,56 @@ public class UserManager {
         return SPUtils.getInstance().getString(DEFAULT_RES, "");
     }
 
+    public void saveReservoirInfo(String str) {
+        SPUtils.getInstance().putString("ReservoirInfo", str);
+    }
+
+    public ReservoirInfo getReservoirInfo() {
+        String str = SPUtils.getInstance().getString("ReservoirInfo", "");
+        return JSON.parseObject(str, ReservoirInfo.class);
+    }
+
+    public void saveRoutes(String str) {
+        SPUtils.getInstance().putString("Routes", str);
+    }
+
+    public List<Route> getRoutes() {
+        String str = SPUtils.getInstance().getString("Routes", "");
+        return JSON.parseArray(str, Route.class);
+    }
+
+    public void saveUserInfos(String str) {
+        SPUtils.getInstance().putString("UserInfos", str);
+    }
+
+    public List<UserInfo> getUserInfos() {
+        String str = SPUtils.getInstance().getString("UserInfos", "");
+        return JSON.parseArray(str, UserInfo.class);
+    }
+
+    public void saveUser(String str) {
+        SPUtils.getInstance().putString("Userbean", str);
+    }
+
+    public UserBean getUser() {
+        String str = SPUtils.getInstance().getString("Userbean", "");
+        return JSON.parseObject(str, UserBean.class);
+    }
+
+    public String getToken() {
+        UserBean userBean = getUser();
+        if (userBean == null) return null;
+        return userBean.getAccess_token();
+    }
+
+    public void saveDangerousPositions(String str) {
+        SPUtils.getInstance().putString("DangerousPositions", str);
+    }
+
+    public List<DangerousPosition> getDangerousPositions() {
+        String str = SPUtils.getInstance().getString("DangerousPositions", "");
+        return JSON.parseArray(str, DangerousPosition.class);
+    }
 
     /**
      * 根据水库id 查询离线数据实体

@@ -118,11 +118,14 @@ dependencies {
     implementation project(':photopicker')
     implementation project(':base')
     implementation project(':picktime')
+    implementation project(':guangdong_module')
 
     implementation 'com.github.BLiYing:GaodeLiabrary:v2.0.0'
 
 
     implementation rootProject.ext.dependencies.TimePickerDialog
+
+    implementation rootProject.ext.dependencies.fastjson
 
     //状态栏
     implementation rootProject.ext.dependencies.statusbaruitl

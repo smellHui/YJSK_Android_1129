@@ -1,7 +1,7 @@
 package com.yangj.dahemodule.model;
 
 import com.tepia.base.http.BaseResponse;
-import com.yangj.dahemodule.model.xuncha.SpecialNoticeBean;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.SpecialNoticeBean;
 
 import java.io.Serializable;
 import java.util.List;

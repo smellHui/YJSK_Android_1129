@@ -6,8 +6,8 @@ import android.text.TextUtils;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.PersonDutyBean;
 import com.yangj.dahemodule.databinding.LvTabMainWorkerItemBinding;
-import com.yangj.dahemodule.model.xuncha.PersonDutyBean;
 
 import java.util.List;
 

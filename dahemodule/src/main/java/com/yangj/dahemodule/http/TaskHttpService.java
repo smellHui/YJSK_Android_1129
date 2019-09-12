@@ -1,10 +1,10 @@
 package com.yangj.dahemodule.http;
 
 import com.tepia.base.http.BaseResponse;
-import com.yangj.dahemodule.model.route.TaskBeanFromNet;
-import com.yangj.dahemodule.model.route.TaskDetailResponse;
-import com.yangj.dahemodule.model.route.TaskItemBeanFromNet;
-import com.yangj.dahemodule.model.xuncha.WaterPptnPictureBean;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.WaterPptnPictureBean;
+import com.tepia.guangdong_module.amainguangdong.route.TaskBeanFromNet;
+import com.tepia.guangdong_module.amainguangdong.route.TaskDetailResponse;
+import com.tepia.guangdong_module.amainguangdong.route.TaskItemBeanFromNet;
 
 import java.util.List;
 import java.util.Map;

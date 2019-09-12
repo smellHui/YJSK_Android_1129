@@ -3,14 +3,14 @@ package com.yangj.dahemodule.common;
 
 import com.tepia.base.http.BaseResponse;
 import com.tepia.base.http.RetrofitManager;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.DangerBean;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.WaterPptnPictureBean;
+import com.tepia.guangdong_module.amainguangdong.route.TaskBeanFromNet;
+import com.tepia.guangdong_module.amainguangdong.route.TaskDetailResponse;
+import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
+import com.tepia.guangdong_module.amainguangdong.route.TaskItemBeanFromNet;
 import com.yangj.dahemodule.APPCostant;
 import com.yangj.dahemodule.http.TaskHttpService;
-import com.yangj.dahemodule.model.route.TaskBeanFromNet;
-import com.yangj.dahemodule.model.route.TaskDetailResponse;
-import com.yangj.dahemodule.model.route.TaskItemBean;
-import com.yangj.dahemodule.model.route.TaskItemBeanFromNet;
-import com.yangj.dahemodule.model.xuncha.DangerBean;
-import com.yangj.dahemodule.model.xuncha.WaterPptnPictureBean;
 
 import java.io.File;
 import java.util.ArrayList;

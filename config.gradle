@@ -98,9 +98,9 @@ ext {
             androidWeakhandler           : 'com.badoo.mobile:android-weak-handler:1.1',
 //            GaodeLiabrary           : 'com.github.BLiYing:GaodeLiabrary:v1.0.0'
 
-            //极光推送相关
-            jpush                        : 'cn.jiguang.sdk:jpush:3.1.1',
-            jcore                        : 'cn.jiguang.sdk:jcore:1.1.9',
+//            //极光推送相关
+//            jpush                        : 'cn.jiguang.sdk:jpush:3.1.1',
+//            jcore                        : 'cn.jiguang.sdk:jcore:1.1.9',
 
             //下载
             aria                         : 'com.arialyy.aria:aria-core:3.6.5_beta_1',
@@ -130,6 +130,8 @@ ext {
 
             //guava
             guava                   : "com.google.guava:guava:26.0-android",
+
+            fastjson : 'com.alibaba:fastjson:1.1.71.android',
 
     ]
 }

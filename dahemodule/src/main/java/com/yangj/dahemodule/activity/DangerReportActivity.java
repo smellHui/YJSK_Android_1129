@@ -24,6 +24,11 @@ import com.tepia.base.utils.Utils;
 import com.tepia.base.view.dialog.basedailog.ActionSheetDialog;
 import com.tepia.base.view.dialog.basedailog.OnOpenItemClick;
 import com.tepia.base.view.floatview.CollectionsUtil;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.DangerBean;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.DataBeanOflistReservoirRoute;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.PersonDutyBean;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
+import com.tepia.guangdong_module.amainguangdong.utils.EmptyLayoutUtil;
 import com.tepia.photo_picker.PhotoPicker;
 import com.tepia.photo_picker.PhotoPreview;
 import com.tepia.photo_picker.entity.CheckTaskPicturesBean;
@@ -36,11 +41,6 @@ import com.yangj.dahemodule.common.TaskManager;
 import com.yangj.dahemodule.common.UserManager;
 import com.yangj.dahemodule.common.UtilDataBaseOfGD;
 import com.yangj.dahemodule.databinding.ActivityDangerReportBinding;
-import com.yangj.dahemodule.model.xuncha.DangerBean;
-import com.yangj.dahemodule.model.xuncha.DataBeanOflistReservoirRoute;
-import com.yangj.dahemodule.model.xuncha.PersonDutyBean;
-import com.yangj.dahemodule.model.xuncha.ReservoirBean;
-import com.yangj.dahemodule.util.EmptyLayoutUtil;
 
 import org.litepal.crud.DataSupport;
 

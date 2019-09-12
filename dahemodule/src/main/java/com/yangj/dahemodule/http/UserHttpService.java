@@ -1,18 +1,18 @@
 package com.yangj.dahemodule.http;
 
 import com.tepia.base.http.BaseResponse;
+import com.tepia.guangdong_module.amainguangdong.model.UserInfoBean;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.AreaBean;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirListResponse;
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirOfflineResponse;
 import com.yangj.dahemodule.model.JsonBean;
 import com.yangj.dahemodule.model.NewNoticeBean;
 import com.yangj.dahemodule.model.Report.ReportDataBean;
 import com.yangj.dahemodule.model.UserDataBean;
-import com.yangj.dahemodule.model.UserInfoBean;
 import com.yangj.dahemodule.model.WeatherWarnBean;
 import com.yangj.dahemodule.model.main.MainDataBean;
 import com.yangj.dahemodule.model.user.SysUserDataBean;
-import com.yangj.dahemodule.model.xuncha.AreaBean;
 import com.yangj.dahemodule.model.xuncha.RecordDataBean;
-import com.yangj.dahemodule.model.xuncha.ReservoirListResponse;
-import com.yangj.dahemodule.model.xuncha.ReservoirOfflineResponse;
 
 import java.util.Map;
 
@@ -35,7 +35,7 @@ import retrofit2.http.QueryMap;
  */
 public interface UserHttpService {
 
-    @POST("oauth/token")
+    @POST("oauth/login")
     @Headers({
             "Content-Type:application/x-www-form-urlencoded",
             "Authorization:Basic c2stYXBwOnNrLWFwcA=="
@@ -64,6 +64,7 @@ public interface UserHttpService {
 
     /**
      * 【查询】我上报的险情
+     *
      * @param token
      * @param requestBody
      * @return

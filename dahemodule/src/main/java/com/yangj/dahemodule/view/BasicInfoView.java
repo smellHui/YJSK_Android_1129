@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
 import com.yangj.dahemodule.R;
 import com.yangj.dahemodule.model.main.ReservoirInfo;
 
