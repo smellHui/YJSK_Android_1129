@@ -138,8 +138,7 @@ public class OperateFragment extends BaseCommonFragment {
                         UiHelper.goToStartInspectionView(getBaseActivity(), workOrderId);
                     }
                 }
-                UiHelper.goToStartInspectionView(getBaseActivity(), workOrderId);
-
+//                UiHelper.goToStartInspectionView(getBaseActivity(), workOrderId);
 
             }
         }

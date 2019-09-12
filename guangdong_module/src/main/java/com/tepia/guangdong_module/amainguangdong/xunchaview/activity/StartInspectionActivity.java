@@ -1807,8 +1807,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                 Intent intent = new Intent();
                 StartInspectionActivity.this.setResult(YunweiFragment.resultCode, intent);
             }
-            finish();
-            return true;
         }
         return super.onKeyDown(keyCode, event);
     }
