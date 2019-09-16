@@ -2,7 +2,6 @@ package com.tepia.guangdong_module.amainguangdong;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -66,12 +65,11 @@ public class SplashOfGDActivity extends Activity {
                 finish();*/
 
                 if (!TextUtils.isEmpty(UserManager.getInstance().getToken())
-                        ) {
-                    ARouter.getInstance().build(AppRoutePath.appMainGuangdong).navigation();
+                ) {
+                    ARouter.getInstance().build(AppRoutePath.app_dahe_main).navigation();
                     finish();
                 } else {
-                    ARouter.getInstance().build(AppRoutePath.applogin_guangdong).navigation();
-
+                    ARouter.getInstance().build(AppRoutePath.app_dahe_login).navigation();
                     finish();
                 }
             }
@@ -100,7 +98,7 @@ public class SplashOfGDActivity extends Activity {
 
     }
 
-    private String[] permassion = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA,Manifest.permission.ACCESS_FINE_LOCATION,Manifest.permission.READ_PHONE_STATE};
+    private String[] permassion = {Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.CAMERA, Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.READ_PHONE_STATE};
 
     private Rationale ration;
 

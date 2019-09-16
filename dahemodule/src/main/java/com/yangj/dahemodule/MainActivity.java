@@ -5,9 +5,11 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
 import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.ashokvarma.bottomnavigation.TextBadgeItem;
+import com.tepia.base.AppRoutePath;
 import com.tepia.base.common.CommonFragmentPagerAdapter;
 import com.tepia.base.common.HorizontalViewPager;
 import com.tepia.base.mvp.BaseActivity;
@@ -15,6 +17,7 @@ import com.yangj.dahemodule.fragment.HomeFragment;
 import com.yangj.dahemodule.fragment.MineFragment;
 import com.yangj.dahemodule.fragment.OperateFragment;
 
+@Route(path = AppRoutePath.app_dahe_main)
 public class MainActivity extends BaseActivity {
 
     private BottomNavigationBar mBottomNavigation;

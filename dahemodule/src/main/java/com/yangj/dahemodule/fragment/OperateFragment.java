@@ -98,6 +98,9 @@ public class OperateFragment extends BaseCommonFragment {
                         TaskItemBean taskItemBean = new TaskItemBean();
                         taskItemBean.setWorkOrderId(workOrderId);
                         taskItemBean.setUserCode(userCode);
+                        taskItemBean.setPositionTreeNames(omltem.getOmItemName());
+                        taskItemBean.setSuperviseItemName(omltem.getOmItemContent());
+                        taskItemBean.setOperationLevel(omltem.getOmItemLevel());
                         taskItemBean.setReservoirId(reservoirBean.getReservoirId());
                         taskItemBean.setPositionId(omltem.getOmItemId());
                         taskItemBean.setSuperviseItemName(omltem.getOmItemName());

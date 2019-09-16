@@ -48,7 +48,7 @@ public class UserManager {
     private static final UserManager ourInstance_admin = new UserManager(APPCostant.API_SERVER_USER_ADMIN);
     private static final UserManager ourInstance_works = new UserManager(APPCostant.API_SERVER_TASK_AREA);
     private static final UserManager ourInstance_monitor = new UserManager(APPCostant.API_SERVER_MONITOR_AREA);
-    private static final UserManager ourInstance_json = new UserManager("http://202.98.201.103:7000/",true);
+    private static final UserManager ourInstance_json = new UserManager("http://202.98.201.103:7000/", true);
     public static final String USERINFO = "USERINFO";
     private static final String TOKEN = "TOKEN";
     private static final String DEFAULT_RES = "DEFAULT_RES";
@@ -61,15 +61,17 @@ public class UserManager {
         return ourInstance_admin;
     }
 
-    public static UserManager getInstance_Works(){
+    public static UserManager getInstance_Works() {
         return ourInstance_works;
     }
 
-    public static UserManager getInstance_Monitor(){
+    public static UserManager getInstance_Monitor() {
         return ourInstance_monitor;
     }
 
-    public static UserManager getInstance_Json(){return ourInstance_json;}
+    public static UserManager getInstance_Json() {
+        return ourInstance_json;
+    }
 
     private UserManager() {
         this.mRetrofitService = RetrofitManager.getRetrofit(APPCostant.API_SERVER_URL + APPCostant.API_SERVER_USER_AREA).create(UserHttpService.class);
@@ -79,7 +81,7 @@ public class UserManager {
         this.mRetrofitService = RetrofitManager.getRetrofit(APPCostant.API_SERVER_URL + adminstr).create(UserHttpService.class);
     }
 
-    private UserManager(String str,boolean distinct){
+    private UserManager(String str, boolean distinct) {
         this.mRetrofitService = RetrofitManager.getRetrofit(str).create(UserHttpService.class);
     }
 
@@ -90,7 +92,7 @@ public class UserManager {
      * @param password
      * @return
      */
-    public Observable<UserLoginResponse> login(String logincode, String password, String registId,String deviceId) {
+    public Observable<UserLoginResponse> login(String logincode, String password, String registId, String deviceId) {
         return mRetrofitService.login(logincode, password, deviceId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -109,32 +111,35 @@ public class UserManager {
 
     /**
      * APP查询某个水库全部信息
+     *
      * @param reservoirId
      * @return
      */
     public Observable<ReservoirOfflineResponse> getAllReservoirData(String reservoirId) {
         String token = getToken();
 
-        return mRetrofitService.getAllReservoirData(token,reservoirId)
+        return mRetrofitService.getAllReservoirData(token, reservoirId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
      * 查询水库最新通知
+     *
      * @param reservoirId
      * @return
      */
     public Observable<NewNoticeBean> getNewNotice(String reservoirId) {
         String token = getToken();
 
-        return mRetrofitService.getNewNotice(token,reservoirId)
+        return mRetrofitService.getNewNotice(token, reservoirId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
      * 天气预警
+     *
      * @return
      */
     public Observable<WeatherWarnBean> getWeatherWarn() {
@@ -147,6 +152,7 @@ public class UserManager {
 
     /**
      * 获取当前用户行政区划下拉(省市三级联动)
+     *
      * @return
      */
     public Observable<AreaBean> getAreaSelect() {
@@ -162,10 +168,10 @@ public class UserManager {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<BaseResponse> updateNotice(String id,String workOrderId) {
+    public Observable<BaseResponse> updateNotice(String id, String workOrderId) {
         String token = getToken();
 
-        return mRetrofitService.updateNotice(token,id,workOrderId)
+        return mRetrofitService.updateNotice(token, id, workOrderId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -187,10 +193,13 @@ public class UserManager {
     public void saveToken(UserLoginResponse userBean) {
         if (userBean != null) {
             SPUtils.getInstance(Utils.getContext()).putString(TOKEN, userBean.getData());
-            SPUtils.getInstance(Utils.getContext()).putString(USERINFO,new Gson().toJson(userBean));
-
+            SPUtils.getInstance(Utils.getContext()).putString(USERINFO, new Gson().toJson(userBean));
         }
+    }
 
+    public void saveToken(String token) {
+        if (TextUtils.isEmpty(token)) return;
+        SPUtils.getInstance(Utils.getContext()).putString(TOKEN, token);
     }
 
     /**
@@ -257,7 +266,7 @@ public class UserManager {
                 } else {
                     return userBean;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 
@@ -289,24 +298,25 @@ public class UserManager {
         return "";
     }
 
-    public void savaArea(ArrayList<AreaBean.DataBeanX.DataBean> jsonBean){
-        com.tepia.base.utils.SPUtils.getInstance().putString(CacheConsts.AREA,new Gson().toJson(jsonBean));
+    public void savaArea(ArrayList<AreaBean.DataBeanX.DataBean> jsonBean) {
+        com.tepia.base.utils.SPUtils.getInstance().putString(CacheConsts.AREA, new Gson().toJson(jsonBean));
 
     }
 
     public ArrayList<AreaBean.DataBeanX.DataBean> getArea() {
 
-            try {
-                String temp = SPUtils.getInstance(Utils.getContext()).getString(CacheConsts.AREA, "");
-                if (!TextUtils.isEmpty(temp)) {
-                    ArrayList<AreaBean.DataBeanX.DataBean> dataBeans = new Gson().fromJson(temp, new TypeToken<ArrayList<AreaBean.DataBeanX.DataBean>>(){}.getType());
-                    return dataBeans;
-                } else {
-                    return null;
-                }
-            }catch (Exception e){
-
+        try {
+            String temp = SPUtils.getInstance(Utils.getContext()).getString(CacheConsts.AREA, "");
+            if (!TextUtils.isEmpty(temp)) {
+                ArrayList<AreaBean.DataBeanX.DataBean> dataBeans = new Gson().fromJson(temp, new TypeToken<ArrayList<AreaBean.DataBeanX.DataBean>>() {
+                }.getType());
+                return dataBeans;
+            } else {
+                return null;
             }
+        } catch (Exception e) {
+
+        }
 
 
         return null;
@@ -355,24 +365,25 @@ public class UserManager {
     }
 
 
-    public void saveReservoir(String res){
-        SPUtils.getInstance().putString(DEFAULT_RES,res);
+    public void saveReservoir(String res) {
+        SPUtils.getInstance().putString(DEFAULT_RES, res);
     }
 
-    public String getReservoir(){
+    public String getReservoir() {
 
-        return SPUtils.getInstance().getString(DEFAULT_RES,"");
+        return SPUtils.getInstance().getString(DEFAULT_RES, "");
     }
 
 
     /**
      * 根据水库id 查询离线数据实体
+     *
      * @param reservoirId
      * @return
      */
-    public DataBeanOflistReservoirRoute getOfflineReservoir(String reservoirId, String userCode, Context context){
+    public DataBeanOflistReservoirRoute getOfflineReservoir(String reservoirId, String userCode, Context context) {
         DataBeanOflistReservoirRoute dataBeanList = null;
-        ReservoirBean reservoirBean = DataSupport.where("reservoirId = ? and userCode=?",reservoirId,userCode).findFirst(ReservoirBean.class);
+        ReservoirBean reservoirBean = DataSupport.where("reservoirId = ? and userCode=?", reservoirId, userCode).findFirst(ReservoirBean.class);
         if (reservoirBean != null) {
             String jsonAboutInfo = reservoirBean.getJsonAboutInfo();
             if (TextUtils.isEmpty(jsonAboutInfo)) {
@@ -380,8 +391,8 @@ public class UserManager {
                 showOffine(context);
                 return dataBeanList;
             }
-            ReservoirOfflineResponse reservoirOfflineResponse = new Gson().fromJson(jsonAboutInfo,ReservoirOfflineResponse.class);
-            if (reservoirOfflineResponse  != null) {
+            ReservoirOfflineResponse reservoirOfflineResponse = new Gson().fromJson(jsonAboutInfo, ReservoirOfflineResponse.class);
+            if (reservoirOfflineResponse != null) {
                 dataBeanList = reservoirOfflineResponse.getData();
 
             }
@@ -394,20 +405,20 @@ public class UserManager {
      */
     private void showOffine(Context context) {
         ReservoirBean reservoirBean = getDefaultReservoir();
-        if (context != null && !((Activity)context).isFinishing()) {
+        if (context != null && !((Activity) context).isFinishing()) {
             String reservori = "";
             if (reservoirBean != null) {
                 reservori = reservoirBean.getReservoir();
             }
             new AlertDialog.Builder(context)
-                    .setMessage("请先下载"+reservori+"的基本信息离线包")
+                    .setMessage("请先下载" + reservori + "的基本信息离线包")
                     .setCancelable(true)
                     .setPositiveButton("去下载", new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             SPUtils.getInstance().putBoolean(CacheConsts.HAS_ASK, true);
                             ARouter.getInstance().build(AppRoutePath.app_select_reservor_downoffline)
-                                    .withSerializable("selectedResrvoir",reservoirBean)
+                                    .withSerializable("selectedResrvoir", reservoirBean)
                                     //flag为10表示 离线数据包管理 为"0" 表示选择水库
                                     .withString("offlineFlag", "10")
                                     .navigation();
@@ -420,22 +431,24 @@ public class UserManager {
     }
 
     /**
-     *人员位置上报接口
+     * 人员位置上报接口
+     *
      * @param reservoirId
      * @param longitude
      * @param latitude
      * @return
      */
-    public Observable<BaseResponse> uploadCheckManLocation(String reservoirId,String longitude,String latitude) {
+    public Observable<BaseResponse> uploadCheckManLocation(String reservoirId, String longitude, String latitude) {
         String token = getToken();
 
-        return mRetrofitService.uploadCheckManLocation(token,reservoirId,longitude,latitude)
+        return mRetrofitService.uploadCheckManLocation(token, reservoirId, longitude, latitude)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
      * 获取登录界面json
+     *
      * @return
      */
     public Observable<JsonBean> getJson() {

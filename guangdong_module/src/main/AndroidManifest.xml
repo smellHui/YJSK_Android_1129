@@ -45,11 +45,11 @@
             android:configChanges="orientation|screenSize|uiMode|keyboardHidden"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity> <!-- 登录页 -->
         <activity
             android:name="com.tepia.guangdong_module.amainguangdong.LoginOfGDActivity"

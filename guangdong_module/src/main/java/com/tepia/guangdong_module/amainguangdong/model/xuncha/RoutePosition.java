@@ -1,16 +1,21 @@
 package com.tepia.guangdong_module.amainguangdong.model.xuncha;
 
+import android.text.TextUtils;
+
+import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReference;
+
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
 
 /**
-  * Created by      Android studio
-  *
-  * @author :wwj (from Center Of Wuhan)
-  * Date    :2019/5/7
-  * Version :1.0
-  * 功能描述 : 巡查点
+ * Created by      Android studio
+ *
+ * @author :wwj (from Center Of Wuhan)
+ * Date    :2019/5/7
+ * Version :1.0
+ * 功能描述 : 巡查点
  **/
 public class RoutePosition extends DataSupport implements Serializable {
     @Override
@@ -69,6 +74,7 @@ public class RoutePosition extends DataSupport implements Serializable {
     public void setWorkOrderId(String workOrderId) {
         this.workOrderId = workOrderId;
     }
+
     private double distance;
 
     public double getDistance() {
@@ -101,5 +107,13 @@ public class RoutePosition extends DataSupport implements Serializable {
 
     public void setPositionLgtd(String positionLgtd) {
         this.positionLgtd = positionLgtd;
+    }
+
+    public Point parasePoint() {
+        try {
+            return new Point(Double.parseDouble(positionLgtd), Double.parseDouble(positionLttd), SpatialReference.create(4326));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

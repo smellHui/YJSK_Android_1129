@@ -3,57 +3,43 @@ package com.tepia.guangdong_module.amainguangdong.xunchaview.activity;
 import android.Manifest;
 import android.animation.ObjectAnimator;
 import android.content.ContentValues;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextUtils;
 import android.text.style.ForegroundColorSpan;
-import android.util.Log;
 import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
-import android.widget.CompoundButton;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.alibaba.android.arouter.launcher.ARouter;
-import com.amap.api.location.AMapLocation;
+import com.alibaba.fastjson.JSON;
 import com.amap.api.location.AMapLocationClientOption;
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
-import com.esri.arcgisruntime.data.TileCache;
 import com.esri.arcgisruntime.geometry.Envelope;
 import com.esri.arcgisruntime.geometry.GeometryEngine;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReference;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
-import com.esri.arcgisruntime.layers.ArcGISTiledLayer;
 import com.esri.arcgisruntime.layers.WebTiledLayer;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
@@ -61,52 +47,41 @@ import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
 import com.esri.arcgisruntime.mapping.view.IdentifyGraphicsOverlayResult;
-import com.esri.arcgisruntime.mapping.view.LocationDisplay;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.util.ListenableList;
 import com.example.gaodelibrary.GPSUtil;
 import com.example.gaodelibrary.GaodeEntity;
-import com.example.gaodelibrary.OnGaodeLibraryListen;
 import com.example.guangdong_module.R;
 import com.example.guangdong_module.databinding.ActivityStartInspectionBinding;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.tepia.base.AppRoutePath;
+import com.tepia.base.CacheConsts;
 import com.tepia.base.ConfigConsts;
-import com.tepia.base.http.BaseResponse;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.MVPBaseActivity;
-import com.tepia.base.utils.AppManager;
 import com.tepia.base.utils.DoubleClickUtil;
 import com.tepia.base.utils.LogUtil;
 import com.tepia.base.utils.NetUtil;
 import com.tepia.base.utils.OSUtils;
 import com.tepia.base.utils.ResUtils;
 import com.tepia.base.utils.ScreenUtil;
-import com.tepia.base.utils.TimeFormatUtils;
 import com.tepia.base.utils.ToastUtils;
-import com.tepia.base.utils.UUIDUtil;
 import com.tepia.base.utils.Utils;
 import com.tepia.base.utils.XiaomiDeviceUtil;
-import com.tepia.base.view.arcgisLayout.ArcgisGpsUtils;
 import com.tepia.base.view.arcgisLayout.ArcgisLayout;
 import com.tepia.base.view.arcgisLayout.GoogleMapLayer;
 import com.tepia.base.view.customScrollView.ContentRecyclerView;
 import com.tepia.base.view.customScrollView.ScrollLayout;
-import com.tepia.base.view.dialog.loading.SimpleLoadDialog;
 import com.tepia.base.view.dialog.permissiondialog.Px2dpUtils;
 import com.tepia.base.view.floatview.CollectionsUtil;
-import com.tepia.base.CacheConsts;
 import com.tepia.guangdong_module.amainguangdong.common.CrashHandler;
 import com.tepia.guangdong_module.amainguangdong.common.TjDialogFragment;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
-import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirOfflineResponse;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.RouteListBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.RoutePosition;
-import com.tepia.guangdong_module.amainguangdong.model.xuncha.SpecialNoticeBean;
 import com.tepia.guangdong_module.amainguangdong.mvp.taskdetail.TaskDetailContract;
 import com.tepia.guangdong_module.amainguangdong.mvp.taskdetail.TaskDetailPresenter;
 import com.tepia.guangdong_module.amainguangdong.mvp.taskdetail.TaskManager;
@@ -738,11 +713,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                                 for (RoutePosition routePosition : routePositions) {
                                     String positionId1 = routePosition.getPositionId();
                                     if (positionId.equals(positionId1)) {
-                                        String positionLgtd = routePosition.getPositionLgtd();
-                                        String positionLttd = routePosition.getPositionLttd();
-                                        double lgtd = Double.parseDouble(positionLgtd);
-                                        double lttd = Double.parseDouble(positionLttd);
-                                        locationPoint = new Point(lgtd, lttd, SpatialReference.create(4326));
+                                        locationPoint = routePosition.parasePoint();
                                         searchNearbyRoutePosition(routePositions, locationPoint);
                                     }
                                 }
@@ -770,18 +741,11 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             String routeContent = routeListBean.getRouteContent();
             List<Point> result = new ArrayList();
             try {
-                String replace = routeContent.replace("[", "").replace("]", "").replace("{", "").replace("}", "");
-                String[] p = replace.split(",");
-                for (int t = 0; t < p.length / 2; t++) {
-                    int j = t * 2;
-                    double[] doubles = {Double.parseDouble(p[j]), Double.parseDouble(p[j + 1])};
-                    Map map = new HashMap();
-                    map.put("lgtd", doubles[0]);
-                    map.put("lttd", doubles[1]);
-                    Point point = new Point(doubles[0], doubles[1], SpatialReference.create(4326));
+                List<Double[]> routes = JSON.parseArray(routeContent.replaceAll("\\{", "[").replaceAll("\\}", "]"), Double[].class);
+                for (Double[] route : routes) {
+                    Point point = new Point(route[0], route[1], SpatialReference.create(4326));
                     result.add(point);
                 }
-                int size = result.size();
 //                mBinding.alMapview.addPolyline(exeline2, SimpleLineSymbol.Style.SOLID, Color.RED, 6);
                 int color = ContextCompat.getColor(getContext(), R.color.route_color_one);
                 alMapview.addPolylineToGraphicsOverlay(standardRouteOverlay, result, SimpleLineSymbol.Style.SOLID, color, 4);
@@ -804,18 +768,12 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             //            searchNearbyRoutePosition(routePositions,locationPoint);
             //巡查点添加文字
             if (routePositions != null && routePositions.size() > 0) {
-                for (int i = 0; i < routePositions.size(); i++) {
+                for (RoutePosition routePosition : routePositions) {
                     try {
-                        RoutePosition routePosition = routePositions.get(i);
-                        String positionLgtd = routePosition.getPositionLgtd();
-                        String positionLttd = routePosition.getPositionLttd();
                         String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
                         List<TaskItemBean> itemList = DataSupport.where("usercode=? and reservoirid=? and workorderid=? and positionid=?"
                                 , userCode, reservoirId, workOrderId, routePosition.getPositionId()).find(TaskItemBean.class);
-
-                        double lgtd = Double.parseDouble(positionLgtd);
-                        double lttd = Double.parseDouble(positionLttd);
-                        Point point = new Point(lgtd, lttd, SpatialReference.create(4326));
+                        Point point = routePosition.parasePoint();
                         int color = ContextCompat.getColor(getContext(), R.color.text_map_bg);
                         if (itemList != null && itemList.size() > 0) {
                             TaskItemBean taskItemBean = itemList.get(0);
@@ -875,14 +833,9 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
     private void setRoutePosition(List<RoutePosition> mRoutePosition, int pid, GraphicsOverlay overlay) {
         overlay.getGraphics().clear();
         if (mRoutePosition != null && mRoutePosition.size() > 0) {
-            for (int i = 0; i < mRoutePosition.size(); i++) {
+            for (RoutePosition routePosition : mRoutePosition) {
                 try {
-                    RoutePosition routePosition = mRoutePosition.get(i);
-                    String positionLgtd = routePosition.getPositionLgtd();
-                    String positionLttd = routePosition.getPositionLttd();
-                    double lgtd = Double.parseDouble(positionLgtd);
-                    double lttd = Double.parseDouble(positionLttd);
-                    Point point = new Point(lgtd, lttd, SpatialReference.create(4326));
+                    Point point = routePosition.parasePoint();
                     Map<String, Object> attrs = new HashMap<>();
                     attrs.put("positionId", routePosition.getPositionId());
                     alMapview.addPicToGraphicsOverlay(overlay, pid, point, attrs);
@@ -891,6 +844,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                 }
             }
         }
+
     }
 
     private String nearDxcPositionStr = "";
@@ -904,17 +858,11 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
     private void searchNearbyRoutePosition(List<RoutePosition> mRoutePosition, Point mPoint) {
         List<Double> distanceList = new ArrayList<>();
         if (mPoint != null) {
-
             if (mRoutePosition != null && mRoutePosition.size() > 0 && mPoint != null) {
                 distanceList.clear();
-                for (int i = 0; i < mRoutePosition.size(); i++) {
-                    RoutePosition routePosition = mRoutePosition.get(i);
+                for (RoutePosition routePosition : mRoutePosition) {
                     try {
-                        String positionLgtd = routePosition.getPositionLgtd();
-                        String positionLttd = routePosition.getPositionLttd();
-                        double lgtd = Double.parseDouble(positionLgtd);
-                        double lttd = Double.parseDouble(positionLttd);
-                        Point point = new Point(lgtd, lttd, SpatialReference.create(4326));
+                        Point point = routePosition.parasePoint();
                         double distance = ArcgisUtils.distancePoints(point, mPoint);
                         routePosition.setDistance(distance);
                         distanceList.add(distance);
@@ -937,11 +885,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                 }
             }
             if (nearbyRoutePosition != null) {
-                String positionLgtd = nearbyRoutePosition.getPositionLgtd();
-                String positionLttd = nearbyRoutePosition.getPositionLttd();
-                double lgtd = Double.parseDouble(positionLgtd);
-                double lttd = Double.parseDouble(positionLttd);
-                Point point = new Point(lgtd, lttd, SpatialReference.create(4326));
+                Point point = nearbyRoutePosition.parasePoint();
                 Map<String, Object> attrs = new HashMap<>();
                 attrs.put("positionId", nearbyRoutePosition.getPositionId());
 //            ToastUtils.longToast("最近点距离:"+nearbyRoutePosition.getDistance()*1000+"米");
@@ -958,14 +902,9 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             //靠近最近的待巡查点震动
             if (dxcRoutePositions != null && dxcRoutePositions.size() > 0 && mPoint != null) {
                 dcxDistanceList.clear();
-                for (int i = 0; i < dxcRoutePositions.size(); i++) {
-                    RoutePosition routePosition = dxcRoutePositions.get(i);
+                for (RoutePosition routePosition : dxcRoutePositions) {
                     try {
-                        String positionLgtd = routePosition.getPositionLgtd();
-                        String positionLttd = routePosition.getPositionLttd();
-                        double lgtd = Double.parseDouble(positionLgtd);
-                        double lttd = Double.parseDouble(positionLttd);
-                        Point point = new Point(lgtd, lttd, SpatialReference.create(4326));
+                        Point point = routePosition.parasePoint();
                         double distance = ArcgisUtils.distancePoints(point, mPoint);
                         routePosition.setDistance(distance);
                         dcxDistanceList.add(distance);
@@ -1330,11 +1269,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                     //默认第一个巡查点
                     if (routePositions != null && routePositions.size() > 0) {
                         RoutePosition routePosition = routePositions.get(0);
-                        String positionLgtd = routePosition.getPositionLgtd();
-                        String positionLttd = routePosition.getPositionLttd();
-                        double lgtd = Double.parseDouble(positionLgtd);
-                        double lttd = Double.parseDouble(positionLttd);
-                        Point locationPoint = new Point(lgtd, lttd, SpatialReference.create(4326));
+                        Point locationPoint = routePosition.parasePoint();
                         searchNearbyRoutePosition(routePositions, locationPoint);
                     }
                 } else {
@@ -1358,36 +1293,22 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         if (TextUtils.isEmpty(workOrderRoute)) {
             return;
         }
-        String temp = workOrderRoute.replace("{", "[");
-        temp = temp.replace("}", "]");
-        try {
-            List<List<Double>> list = new Gson().fromJson(temp, new TypeToken<List<List<Double>>>() {
-            }.getType());
-            if (list != null && list.size() >= 2) {
-                ArrayList<Point> exeline = new ArrayList();
-                for (List<Double> bean : list) {
-                    if (bean == null || bean.size() < 2) {
-                        continue;
-                    }
-                    double longitude = bean.get(0);
-                    double Latitude = bean.get(1);
-                    Point point1 = new Point(longitude, Latitude, SpatialReference.create(4326));
-//                    Point point = (Point) GeometryEngine.project(point1, SpatialReferences.getWebMercator());
-                    exeline.add(point1);
-                }
-                int color = ContextCompat.getColor(getContext(), R.color.route_color_two);
-                mBinding.alMapview.addPolyline(exeline, SimpleLineSymbol.Style.SOLID, color, 4);
-                if (exeline != null && exeline.size() > 0) {
-                    mBinding.alMapview.setMapViewVisibleExtent(exeline);
-                    mBinding.alMapview.addPic(R.mipmap.ic_me_history_startpoint, exeline.get(0), new HashMap<>());
-                    mBinding.alMapview.addPic(R.mipmap.ic_me_history_finishpoint, exeline.get(exeline.size() - 1), new HashMap<>());
-                }
-            } else {
-
+        String temp = workOrderRoute.replaceAll("\\{", "[").replaceAll("\\}", "]");
+        List<Double[]> list = JSON.parseArray(temp, Double[].class);
+        if (list != null && list.size() >= 2) {
+            ArrayList<Point> exeline = new ArrayList();
+            for (Double[] bean : list) {
+                Point point1 = new Point(bean[0], bean[1], SpatialReference.create(4326));
+                exeline.add(point1);
             }
-        } catch (Exception e) {
+            int color = ContextCompat.getColor(getContext(), R.color.route_color_two);
+            mBinding.alMapview.addPolyline(exeline, SimpleLineSymbol.Style.SOLID, color, 4);
+            if (exeline != null && exeline.size() > 0) {
+                mBinding.alMapview.setMapViewVisibleExtent(exeline);
+                mBinding.alMapview.addPic(R.mipmap.ic_me_history_startpoint, exeline.get(0), new HashMap<>());
+                mBinding.alMapview.addPic(R.mipmap.ic_me_history_finishpoint, exeline.get(exeline.size() - 1), new HashMap<>());
+            }
         }
-
     }
 
     /**
@@ -1398,10 +1319,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         if (list != null && list.size() >= 2) {
             exeline2 = new ArrayList();
             for (RoutepointDataBean bean : list) {
-                double longitude = Double.parseDouble(bean.getLgtd());
-                double Latitude = Double.parseDouble(bean.getLttd());
-                Point point1 = new Point(longitude, Latitude, SpatialReference.create(4326));
-//                Point point = (Point) GeometryEngine.project(point1, SpatialReferences.getWebMercator());
+                Point point1 = bean.parasePoint();
                 exeline2.add(point1);
             }
             try {

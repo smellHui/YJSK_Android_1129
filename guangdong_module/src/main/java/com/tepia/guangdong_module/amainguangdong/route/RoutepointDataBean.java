@@ -1,5 +1,8 @@
 package com.tepia.guangdong_module.amainguangdong.route;
 
+import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReference;
+
 import org.litepal.crud.DataSupport;
 
 /**
@@ -58,5 +61,13 @@ public class RoutepointDataBean extends DataSupport {
     @Override
     public boolean equals(Object obj) {
         return this.getBaseObjId() == ((RoutepointDataBean)obj).getBaseObjId();
+    }
+
+    public Point parasePoint() {
+        try {
+            return new Point(Double.parseDouble(lgtd), Double.parseDouble(lttd), SpatialReference.create(4326));
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

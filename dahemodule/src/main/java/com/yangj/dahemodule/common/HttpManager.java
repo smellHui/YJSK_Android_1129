@@ -424,31 +424,4 @@ public class HttpManager {
 
     }
 
-    /**
-     * 人员位置上报接口
-     *
-     * @param reservoirId
-     * @param longitude
-     * @param latitude
-     * @return
-     */
-    public Observable<BaseResponse> uploadCheckManLocation(String reservoirId, String longitude, String latitude) {
-        String token = getToken();
-
-        return mRetrofitService.uploadCheckManLocation(token, reservoirId, longitude, latitude)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-    /**
-     * 获取登录界面json
-     *
-     * @return
-     */
-    public Observable<JsonBean> getJson() {
-
-        return mRetrofitService.getJson()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
 }

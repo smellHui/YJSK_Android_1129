@@ -3,7 +3,10 @@ package com.yangj.dahemodule.activity;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.alibaba.android.arouter.facade.annotation.Route;
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
+import com.tepia.base.AppRoutePath;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseActivity;
 import com.tepia.base.utils.LogUtil;
@@ -19,6 +22,7 @@ import com.yangj.dahemodule.util.AesUtils;
  * Date:2019/8/29
  * Description:
  */
+@Route(path = AppRoutePath.app_dahe_login)
 public class LoginActivity extends BaseActivity {
     private EditText phoneEt;
     private EditText passwordEt;
@@ -55,12 +59,21 @@ public class LoginActivity extends BaseActivity {
                                 UserBean userBean = userLoginResponse.getData();
                                 if (userBean == null) return;
                                 HttpManager.getInstance().saveUser(JSON.toJSONString(userBean));
+                                UserManager.getInstance().saveToken(userBean.getAccess_token());
                                 UserManager.getInstance().saveUserCode(phone);
+                                ARouter.getInstance().build(AppRoutePath.app_dahe_main).navigation();
                             }
 
                             @Override
                             protected void _onError(String message) {
                                 LogUtil.e("userLoginResponse--->" + message);
+                                finish();
+                            }
+
+                            @Override
+                            public void onComplete() {
+                                super.onComplete();
+                                finish();
                             }
                         });
             } catch (Exception e) {
