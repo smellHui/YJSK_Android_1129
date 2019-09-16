@@ -17,6 +17,7 @@ import com.chad.library.adapter.base.BaseViewHolder;
 import com.example.guangdong_module.R;
 import com.tepia.base.utils.TimeFormatUtils;
 import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
+import com.tepia.guangdong_module.amainguangdong.xunchaview.activity.DangerReportActivity;
 import com.tepia.guangdong_module.amainguangdong.xunchaview.activity.StartInspectionActivity;
 import com.tepia.guangdong_module.amainguangdong.xunchaview.activity.TroubleRecordActivity;
 import com.tepia.photo_picker.entity.CheckTaskPicturesBean;
@@ -311,7 +312,8 @@ public class AdapterTaskItemListNew extends BaseQuickAdapter<TaskItemBean, BaseV
 
             refresh(item);
             Intent intent = new Intent();
-            intent.setClass(mContext, TroubleRecordActivity.class);
+//            intent.setClass(mContext, TroubleRecordActivity.class);
+            intent.setClass(mContext, DangerReportActivity.class);
             intent.putExtra("item",item.getItemId());
             intent.putExtra("executeResultType","1");
             mContext.startActivity(intent);

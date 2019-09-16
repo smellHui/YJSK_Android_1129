@@ -444,4 +444,13 @@ public class UserManager {
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
+
+    public void saveUserCode(String userCode) {
+        SPUtils.getInstance().putString(CacheConsts.userCode, userCode);
+    }
+
+    public String getUserCode() {
+        return SPUtils.getInstance().getString(CacheConsts.userCode, "");
+    }
+
 }

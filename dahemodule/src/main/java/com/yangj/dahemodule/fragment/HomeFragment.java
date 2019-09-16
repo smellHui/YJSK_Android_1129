@@ -7,10 +7,11 @@ import com.alibaba.fastjson.JSON;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseCommonFragment;
 import com.tepia.base.view.floatview.CollectionsUtil;
+import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
+import com.tepia.guangdong_module.amainguangdong.xunchaview.activity.DangerReportActivity;
 import com.yangj.dahemodule.R;
-import com.yangj.dahemodule.activity.DangerReportActivity;
-import com.yangj.dahemodule.common.UserManager;
+import com.yangj.dahemodule.common.HttpManager;
 import com.yangj.dahemodule.model.main.DangerousPosition;
 import com.yangj.dahemodule.model.main.MainBean;
 import com.yangj.dahemodule.model.main.MainDataBean;
@@ -55,7 +56,7 @@ public class HomeFragment extends BaseCommonFragment {
     }
 
     private void loadData() {
-        UserManager.getInstance().loadData("")
+        HttpManager.getInstance().loadData("")
                 .subscribe(new LoadingSubject<MainDataBean>() {
 
                     @Override
@@ -64,15 +65,15 @@ public class HomeFragment extends BaseCommonFragment {
                         if (mainBean == null) return;
                         List<Route> routeList = mainBean.getRouteList();
                         if (!CollectionsUtil.isEmpty(routeList)) {
-                            UserManager.getInstance().saveRoutes(JSON.toJSONString(routeList));
+                            HttpManager.getInstance().saveRoutes(JSON.toJSONString(routeList));
                         }
                         List<UserInfo> userInfos = mainBean.getUserList();
                         if (!CollectionsUtil.isEmpty(userInfos)) {
-                            UserManager.getInstance().saveUserInfos(JSON.toJSONString(userInfos));
+                            HttpManager.getInstance().saveUserInfos(JSON.toJSONString(userInfos));
                         }
                         List<DangerousPosition> dangerousPositions = mainBean.getDangerousPositionList();
                         if (!CollectionsUtil.isEmpty(dangerousPositions)) {
-                            UserManager.getInstance().saveDangerousPositions(JSON.toJSONString(dangerousPositions));
+                            HttpManager.getInstance().saveDangerousPositions(JSON.toJSONString(dangerousPositions));
                         }
                         ReservoirInfo reservoirInfo = mainBean.getReservoirInfo();
                         if (reservoirInfo != null) {

@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout>
-
     <data></data>
-
     <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -12,9 +10,9 @@
         <include layout="@layout/toolbar" />
 
         <!--复用布局-->
+
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
-
             android:layout_height="wrap_content"
             android:layout_marginTop="1dp">
 
@@ -24,10 +22,10 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
 
-
                 <FrameLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:visibility="gone"
                     android:background="@color/white_my">
 
                     <include
@@ -54,6 +52,7 @@
 
                 <TextView
                     android:id="@+id/reportTv"
+
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:layout_marginLeft="20dp"

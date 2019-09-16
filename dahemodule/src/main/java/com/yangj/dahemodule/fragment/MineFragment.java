@@ -11,8 +11,7 @@ import com.yangj.dahemodule.activity.DangerReportListActivity;
 import com.yangj.dahemodule.activity.LoginActivity;
 import com.yangj.dahemodule.activity.OperatesActivity;
 import com.yangj.dahemodule.activity.VersionActivity;
-import com.yangj.dahemodule.common.UserManager;
-import com.yangj.dahemodule.model.main.MainDataBean;
+import com.yangj.dahemodule.common.HttpManager;
 import com.yangj.dahemodule.model.user.SysUser;
 import com.yangj.dahemodule.model.user.SysUserBean;
 import com.yangj.dahemodule.model.user.SysUserDataBean;
@@ -61,7 +60,7 @@ public class MineFragment extends BaseCommonFragment {
     }
 
     public void getUserInfo() {
-        UserManager.getInstance().getUserInfo()
+        HttpManager.getInstance().getUserInfo()
                 .subscribe(new LoadingSubject<SysUserDataBean>() {
 
                     @Override

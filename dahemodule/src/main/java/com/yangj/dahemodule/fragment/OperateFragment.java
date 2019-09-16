@@ -10,7 +10,7 @@ import com.tepia.base.utils.TimeFormatUtils;
 import com.tepia.base.utils.ToastUtils;
 import com.tepia.base.utils.UUIDUtil;
 import com.tepia.base.view.floatview.CollectionsUtil;
-import com.tepia.guangdong_module.amainguangdong.model.UserInfoBean;
+import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.RouteListBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.RoutePosition;
@@ -20,10 +20,9 @@ import com.tepia.guangdong_module.amainguangdong.xunchaview.fragment.MainFragmen
 import com.tepia.photo_picker.entity.CheckTaskPicturesBean;
 import com.tepia.photo_picker.utils.SPUtils;
 import com.yangj.dahemodule.R;
-import com.yangj.dahemodule.common.UserManager;
+import com.yangj.dahemodule.common.HttpManager;
 import com.yangj.dahemodule.model.UserBean;
 import com.yangj.dahemodule.model.main.Omltem;
-import com.yangj.dahemodule.model.main.ReservoirInfo;
 import com.yangj.dahemodule.model.main.ReservoirStructure;
 import com.yangj.dahemodule.model.main.Route;
 import com.yangj.dahemodule.util.UiHelper;
@@ -71,8 +70,9 @@ public class OperateFragment extends BaseCommonFragment {
     private void createWorkOrder() {
         String workOrderId = UUIDUtil.getUUID32();
         reservoirBean = UserManager.getInstance().getDefaultReservoir();
+        String userCode = UserManager.getInstance().getUserCode();
         if (reservoirBean != null) {
-            List<Route> routes = UserManager.getInstance().getRoutes();
+            List<Route> routes = HttpManager.getInstance().getRoutes();
             if (!CollectionsUtil.isEmpty(routes)) {
                 Route route = routes.get(0);
                 if (route == null) {
@@ -97,6 +97,9 @@ public class OperateFragment extends BaseCommonFragment {
                     for (Omltem omltem : omltems) {
                         TaskItemBean taskItemBean = new TaskItemBean();
                         taskItemBean.setWorkOrderId(workOrderId);
+                        taskItemBean.setUserCode(userCode);
+                        taskItemBean.setReservoirId(reservoirBean.getReservoirId());
+                        taskItemBean.setPositionId(omltem.getOmItemId());
                         taskItemBean.setSuperviseItemName(omltem.getOmItemName());
                         itemList.add(taskItemBean);
                     }
@@ -105,7 +108,7 @@ public class OperateFragment extends BaseCommonFragment {
                 RouteListBean routeListBeanNew = new RouteListBean();
                 routeListBeanNew.setWorkOrderId(workOrderId);
                 routeListBeanNew.setId(route.getId());
-//                routeListBeanNew.setRouteContent(route.getRouteContent());
+                routeListBeanNew.setRouteContent(route.getPath());
 //                routeListBeanNew.setUserCode(userCode);
                 routeListBeanNew.setReservoirId(reservoirBean.getReservoirId());
                 routeListBeanNew.setItemList(itemList);
@@ -118,9 +121,9 @@ public class OperateFragment extends BaseCommonFragment {
                 taskBean.setWorkOrderId(workOrderId);
                 taskBean.setRouteId(routeListBeanNew.getId());
                 taskBean.setReservoirId(reservoirBean.getReservoirId());
-//                taskBean.setReservoir(selectedResrvoir.getReservoir());
+                taskBean.setReservoir(reservoirBean.getReservoir());
 //                taskBean.setUserCode(userCode);
-                UserBean userBean = UserManager.getInstance().getUser();
+                UserBean userBean = HttpManager.getInstance().getUser();
 //            taskBean.setRoleName(userInfoBean.getData().getOfficeName());
                 if (userBean != null) {
                     taskBean.setExecutorName(userBean.getAccess_token());
@@ -130,8 +133,6 @@ public class OperateFragment extends BaseCommonFragment {
                 taskBean.setRouteName(routeListBeanNew.getRouteName());
                 RouteListBean routeListBean_a = taskBean.getRouteListBeanByWorkId(workOrderId);
                 if (save && routeListBean_a != null) {
-                    String userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
-
                     saveOther(workOrderId, routeListBeanNew, "0", userCode);
                     boolean issave = taskBean.save();
                     if (issave) {

@@ -13,6 +13,8 @@ import android.widget.AdapterView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.guangdong_module.R;
 import com.example.guangdong_module.databinding.ActivityDangerReportBinding;
+import com.tepia.base.CacheConsts;
+import com.tepia.base.ConfigConsts;
 import com.tepia.base.http.BaseResponse;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseActivity;
@@ -24,8 +26,6 @@ import com.tepia.base.utils.Utils;
 import com.tepia.base.view.dialog.basedailog.ActionSheetDialog;
 import com.tepia.base.view.dialog.basedailog.OnOpenItemClick;
 import com.tepia.base.view.floatview.CollectionsUtil;
-import com.tepia.base.CacheConsts;
-import com.tepia.base.ConfigConsts;
 import com.tepia.guangdong_module.amainguangdong.common.PhotoSelectAdapter;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.common.pickview.OnItemClickListener;
@@ -35,7 +35,6 @@ import com.tepia.guangdong_module.amainguangdong.model.xuncha.DangerBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.DataBeanOflistReservoirRoute;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.PersonDutyBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
-import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirOfflineResponse;
 import com.tepia.guangdong_module.amainguangdong.mvp.taskdetail.TaskManager;
 import com.tepia.guangdong_module.amainguangdong.utils.EmptyLayoutUtil;
 import com.tepia.guangdong_module.amainguangdong.xunchaview.adapter.AdapterWorker;
@@ -91,7 +90,7 @@ public class DangerReportActivity extends BaseActivity {
         reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
         dangerBean = DataSupport.where("userCode=? and reservoirId=?", userCode, reservoirId).findFirst(DangerBean.class);
 
-        offlineDataBean = UserManager.getInstance().getOfflineReservoir(reservoirId,userCode,this);
+        offlineDataBean = UserManager.getInstance().getOfflineReservoir(reservoirId, userCode, this);
         if (offlineDataBean != null) {
             List<DataBeanOflistReservoirRoute.DangerWarnPageBean.PositionsBean> positionsBeanList = offlineDataBean.getDangerWarnPage().getPositions();
             items = new String[positionsBeanList.size()];
@@ -126,7 +125,7 @@ public class DangerReportActivity extends BaseActivity {
             mBinding.layoutDes.selectTv.setText(dangerBean.getPositionName());
             mBinding.layoutDes.desEt.setText(dangerBean.getProblemDescription());
         }
-        String contentOfwater = SPUtils.getInstance().getString(CacheConsts.tianqiAndwaterlevel,"");
+        String contentOfwater = SPUtils.getInstance().getString(CacheConsts.tianqiAndwaterlevel, "");
         if (TextUtils.isEmpty(contentOfwater)) {
             mBinding.layoutDes.tianqiDesTv.setVisibility(View.GONE);
         }
@@ -155,7 +154,7 @@ public class DangerReportActivity extends BaseActivity {
                 if (dangerBean == null) {
                     dangerBean = new DangerBean();
                     dangerBean.setPositionName(positionName);
-                    dangerBean.setProblemDescription(problemDescription+"\n"+problemDescriTianqi);
+                    dangerBean.setProblemDescription(problemDescription + "\n" + problemDescriTianqi);
                     dangerBean.setReservoir(reservoirBean.getReservoir());
                     dangerBean.setReservoirId(reservoirId);
                     dangerBean.setUserCode(userCode);
@@ -175,8 +174,8 @@ public class DangerReportActivity extends BaseActivity {
                                         if (dangerBean.isSaved()) {
                                             dangerBean.delete();
                                         }
-                                        DataSupport.deleteAll(CheckTaskPicturesBean.class,"bizType=? and userCode=? and reservoirId=?",
-                                                ConfigConsts.picType_danger,userCode,reservoirId);
+                                        DataSupport.deleteAll(CheckTaskPicturesBean.class, "bizType=? and userCode=? and reservoirId=?",
+                                                ConfigConsts.picType_danger, userCode, reservoirId);
                                         finish();
                                     }
                                 }
@@ -184,7 +183,7 @@ public class DangerReportActivity extends BaseActivity {
 
                             @Override
                             protected void _onError(String message) {
-                                LogUtil.e(message+" ");
+                                LogUtil.e(message + " ");
                                 dangerBean.setHasReport("1");
                                 dangerBean.save();
                                 if (!NetUtil.isNetworkConnected(Utils.getContext())) {
@@ -192,9 +191,8 @@ public class DangerReportActivity extends BaseActivity {
                                     finish();
                                     return;
                                 }
-                                ToastUtils.shortToast(message+" 数据已保存，连网时将自动上传");
+                                ToastUtils.shortToast(message + " 数据已保存，连网时将自动上传");
                                 finish();
-
 
 
                             }
@@ -241,7 +239,7 @@ public class DangerReportActivity extends BaseActivity {
 
     private void initPhotoListView() {
         {
-            photoRecycleViewAdapterBefore = new PhotoSelectAdapter(getContext(),false);
+            photoRecycleViewAdapterBefore = new PhotoSelectAdapter(getContext(), false);
             mBinding.layoutPic.rvAddPhotoBefore.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
             mBinding.layoutPic.rvAddPhotoBefore.setAdapter(photoRecycleViewAdapterBefore);
 
@@ -365,7 +363,6 @@ public class DangerReportActivity extends BaseActivity {
             }
         });
     }
-
 
 
 }

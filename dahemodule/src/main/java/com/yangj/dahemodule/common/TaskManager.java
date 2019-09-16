@@ -50,7 +50,7 @@ public class TaskManager {
      * @return
      */
     public Observable<BaseResponse> startExecute(String workOrderId, String positionStr) {
-        String token = UserManager.getInstance().getToken();
+        String token = HttpManager.getInstance().getToken();
         return mRetrofitService.startExecute(token, workOrderId, positionStr)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -65,7 +65,7 @@ public class TaskManager {
      * @return
      */
     public Observable<BaseResponse> endExecute(String workOrderId, String positionStr) {
-        String token = UserManager.getInstance().getToken();
+        String token = HttpManager.getInstance().getToken();
         return mRetrofitService.endExecute(token, workOrderId, positionStr)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -81,7 +81,7 @@ public class TaskManager {
     public Observable<BaseResponse> appReservoirWorkOrderItemCommitOne(TaskItemBean taskItemBean,
                                                                        List<String> files
                                                                        ) {
-        String token = UserManager.getInstance().getToken();
+        String token = HttpManager.getInstance().getToken();
         Map<String, RequestBody> params = new HashMap<>();
         params.put("workOrderId", RetrofitManager.convertToRequestBody(taskItemBean.getWorkOrderId()));
         params.put("itemId", RetrofitManager.convertToRequestBody(taskItemBean.getItemId()));
@@ -125,7 +125,7 @@ public class TaskManager {
      * @return
      */
     public Observable<TaskDetailResponse> newStartExecute(String workOrderId, String routeId, String reservoirId, String reservoir, String startTime) {
-        String token = UserManager.getInstance().getToken();
+        String token = HttpManager.getInstance().getToken();
         return mRetrofitService.newStartExecute(token, workOrderId, routeId, reservoirId, reservoir, startTime)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -145,7 +145,7 @@ public class TaskManager {
         String reservoir = dangerBean.getReservoir();
         String positionName = dangerBean.getPositionName();
         String problemDescription = dangerBean.getProblemDescription();
-        String token = UserManager.getInstance().getToken();
+        String token = HttpManager.getInstance().getToken();
         Map<String, RequestBody> params = new HashMap<>();
         params.put("reservoirId", RetrofitManager.convertToRequestBody(reservoirId));
         params.put("reservoir", RetrofitManager.convertToRequestBody(reservoir));
@@ -166,7 +166,7 @@ public class TaskManager {
 
 
     public Observable<WaterPptnPictureBean> newWaterPptnPicture(String reservoirId) {
-        String token = UserManager.getInstance().getToken();
+        String token = HttpManager.getInstance().getToken();
         return mRetrofitService.newWaterPptnPicture(token, reservoirId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -183,7 +183,7 @@ public class TaskManager {
      * @return
      */
     public Observable<TaskBeanFromNet> listReservoirWorkOrder(String reservoirId, String startDate, String endDate, int currentPage, int pageSize) {
-        String token = UserManager.getInstance().getToken();
+        String token = HttpManager.getInstance().getToken();
         return mRetrofitService.listReservoirWorkOrder(token, reservoirId,startDate,endDate,currentPage,pageSize)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
@@ -196,7 +196,7 @@ public class TaskManager {
      */
     public Observable<TaskItemBeanFromNet> getWorkOrderDetailInfo(String workOrderId){
 
-        String token = UserManager.getInstance().getToken();
+        String token = HttpManager.getInstance().getToken();
         return mRetrofitService.getWorkOrderDetailInfo(token, workOrderId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());

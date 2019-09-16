@@ -2,21 +2,17 @@ package com.tepia.guangdong_module;
 
 import android.Manifest;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Handler;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.KeyEvent;
 
 import com.alibaba.android.arouter.facade.annotation.Route;
@@ -35,6 +31,7 @@ import com.pgyersdk.update.UpdateManagerListener;
 import com.tepia.base.AppRoutePath;
 import com.tepia.base.CacheConsts;
 import com.tepia.base.common.CommonFragmentPagerAdapter;
+import com.tepia.base.common.HorizontalViewPager;
 import com.tepia.base.http.BaseResponse;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseActivity;
@@ -43,7 +40,6 @@ import com.tepia.base.utils.LogUtil;
 import com.tepia.base.utils.ToastUtils;
 import com.tepia.base.utils.Utils;
 import com.tepia.base.view.floatview.CollectionsUtil;
-import com.tepia.guangdong_module.amainguangdong.common.HorizontalViewPager;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.UserInfoBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
@@ -57,9 +53,6 @@ import com.tepia.photo_picker.utils.SPUtils;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
 
 /**
  * Created by      Android studio

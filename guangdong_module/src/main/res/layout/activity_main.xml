@@ -12,7 +12,7 @@
    >
 <!--fitsSystemWindows-->
 
-    <com.tepia.guangdong_module.amainguangdong.common.HorizontalViewPager
+    <com.tepia.base.common.HorizontalViewPager
         android:id="@+id/viewPagers"
         android:layout_width="match_parent"
         android:layout_height="0dp"

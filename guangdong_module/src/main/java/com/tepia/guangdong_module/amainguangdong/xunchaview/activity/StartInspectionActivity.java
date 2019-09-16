@@ -227,7 +227,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         yxcRoutePositions = new ArrayList<>();
         dxcRoutePositions = new ArrayList<>();
         defaultReservoir = UserManager.getInstance().getDefaultReservoir();
-        userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
+        userCode = UserManager.getInstance().getUserCode();
         reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
         mBinding = DataBindingUtil.bind(mRootView);
 
@@ -242,7 +242,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             startTime = taskBean.getStartTime();
             workOrderId = taskBean.getWorkOrderId();
 
-            routeListBean =  DataSupport.where("workorderid=?",workOrderId).findFirst(RouteListBean.class);
+            routeListBean = DataSupport.where("workorderid=?", workOrderId).findFirst(RouteListBean.class);
             LogUtil.i(StartInspectionActivity.class.getName(), "workOrderId:" + workOrderId);
 
             if (routeListBean == null) {
@@ -255,26 +255,23 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 
         }
 
-        SPUtils.getInstance().putBoolean(CacheConsts.isOpenAuto,true);
-        if (SPUtils.getInstance().getBoolean(CacheConsts.isOpenAuto,true)) {
-            SPUtils.getInstance().putBoolean(CacheConsts.isOpenAuto,true);
+        SPUtils.getInstance().putBoolean(CacheConsts.isOpenAuto, true);
+        if (SPUtils.getInstance().getBoolean(CacheConsts.isOpenAuto, true)) {
+            SPUtils.getInstance().putBoolean(CacheConsts.isOpenAuto, true);
             mBinding.checkbox.setChecked(true);
-        }else {
+        } else {
             mBinding.checkbox.setChecked(false);
-            SPUtils.getInstance().putBoolean(CacheConsts.isOpenAuto,false);
+            SPUtils.getInstance().putBoolean(CacheConsts.isOpenAuto, false);
 
 
         }
-        mBinding.checkbox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked) {
-                    SPUtils.getInstance().putBoolean(CacheConsts.isOpenAuto,true);
+        mBinding.checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked) {
+                SPUtils.getInstance().putBoolean(CacheConsts.isOpenAuto, true);
 
-                }else{
-                    SPUtils.getInstance().putBoolean(CacheConsts.isOpenAuto,false);
+            } else {
+                SPUtils.getInstance().putBoolean(CacheConsts.isOpenAuto, false);
 
-                }
             }
         });
 
@@ -284,16 +281,16 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
     /**
      * 刷新统计列表
      */
-    public void refreshTitle(){
+    public void refreshTitle() {
         if (isCompleteOfTaskBean) {
             List<TaskItemBean> taskItemBeanList = DataSupport.where("workorderid=? and executeResultType=? or workorderid=? and executeResultType=?",
-                    workOrderId,"1",workOrderId,"3").find(TaskItemBean.class);
+                    workOrderId, "1", workOrderId, "3").find(TaskItemBean.class);
             mBinding.nearCheckLinearLy.setVisibility(View.GONE);
             mBinding.hasCheckLinearLy.setVisibility(View.GONE);
             mBinding.executeResultTypeLinearLy.setVisibility(View.VISIBLE);
 
-            mBinding.executeResultTypeTv.setText(""+taskItemBeanList.size());
-        }else {
+            mBinding.executeResultTypeTv.setText("" + taskItemBeanList.size());
+        } else {
             mBinding.nearCheckLinearLy.setVisibility(View.VISIBLE);
             mBinding.hasCheckLinearLy.setVisibility(View.VISIBLE);
             mBinding.executeResultTypeLinearLy.setVisibility(View.GONE);
@@ -305,7 +302,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 
             if (notnum == 0) {
                 mBinding.btComplete.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 mBinding.btComplete.setVisibility(View.GONE);
 
             }
@@ -315,7 +312,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
     @Override
     public void initView() {
         CrashHandler.getInstance().init(this);
-        vibrator = (Vibrator)this.getSystemService(VIBRATOR_SERVICE);
+        vibrator = (Vibrator) this.getSystemService(VIBRATOR_SERVICE);
         LinearLayout llMapDescribe = findViewById(R.id.ll_map_describe);
         scroll_down_layout = findViewById(R.id.scroll_down_layout);
         text_foot = findViewById(R.id.text_foot);
@@ -353,21 +350,21 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
     /**
      * 标题展示
      */
-    private void showTitle(){
-        if (defaultReservoir!=null){
+    private void showTitle() {
+        if (defaultReservoir != null) {
             String executorName = taskBean.getExecutorName();
             String roleName = taskBean.getRoleName();
             if (!TextUtils.isEmpty(roleName)) {
                 mBinding.executorNameTv.setVisibility(View.VISIBLE);
-                mBinding.executorNameTv.setText("巡查人："+executorName+"（"+roleName+"）");
-            }else{
+                mBinding.executorNameTv.setText("巡查人：" + executorName + "（" + roleName + "）");
+            } else {
                 if (isCompleteOfTaskBean) {
                     mBinding.executorNameTv.setVisibility(View.VISIBLE);
 
-                }else {
+                } else {
                     mBinding.executorNameTv.setVisibility(View.GONE);
                 }
-                mBinding.executorNameTv.setText("巡查人："+executorName);
+                mBinding.executorNameTv.setText("巡查人：" + executorName);
 
             }
             mBinding.titleTv.setText(defaultReservoir.getReservoir() + startTime + routeName);
@@ -385,7 +382,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
     /**
      * 判读recycleView列表显示什么
      */
-    private void emptviewShow(){
+    private void emptviewShow() {
         if (!isCompleteOfTaskBean) {
 
             if (CollectionsUtil.isEmpty(inspections)) {
@@ -409,40 +406,34 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
     /**
      * 初始化各类监听
      */
-    private void initListen(){
+    private void initListen() {
         viewById.setOnClickListener(v -> {
             Intent intent = new Intent();
             intent.setClass(StartInspectionActivity.this, DangerReportActivity.class);
             startActivity(intent);
         });
 
-        adapterTaskItemList.setOnGetCurrentClickListener(new AdapterTaskItemListNew.OnGetCurrentClickListener() {
-            @Override
-            public void onCilck(TaskItemBean taskItemBean) {
-                if (currentPoint != null) {
-                    taskItemBean.setExcuteLatitude(currentPoint.getY() + "");
-                    taskItemBean.setExcuteLongitude(currentPoint.getX() + "");
-                }
-                //刷新待巡查点和已巡查点
-                setYxcListAndDxcList();
-                setRoutePosition(dxcRoutePositions, picIds[0], dxcOverlay);
-                setRoutePosition(yxcRoutePositions, picIds[1], yxcOverlay);
+        adapterTaskItemList.setOnGetCurrentClickListener(taskItemBean -> {
+            if (currentPoint != null) {
+                taskItemBean.setExcuteLatitude(currentPoint.getY() + "");
+                taskItemBean.setExcuteLongitude(currentPoint.getX() + "");
             }
+            //刷新待巡查点和已巡查点
+            setYxcListAndDxcList();
+            setRoutePosition(dxcRoutePositions, picIds[0], dxcOverlay);
+            setRoutePosition(yxcRoutePositions, picIds[1], yxcOverlay);
         });
 
-        mBinding.btComplete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int notnum = routeListBean.getItemListHasNotCheck(workOrderId, "0");
-                if (notnum == 0) {
+        mBinding.btComplete.setOnClickListener(v -> {
+            int notnum = routeListBean.getItemListHasNotCheck(workOrderId, "0");
+            if (notnum == 0) {
 
-                    if (DoubleClickUtil.isFastDoubleClick()) {
-                        return;
-                    }
-                    showTjDialog();
-                } else {
-                    ToastUtils.shortToast("还有待完成项，请继续巡查");
+                if (DoubleClickUtil.isFastDoubleClick()) {
+                    return;
                 }
+                showTjDialog();
+            } else {
+                ToastUtils.shortToast("还有待完成项，请继续巡查");
             }
         });
         ViewTreeObserver viewTreeObserver = alMapview.getViewTreeObserver();
@@ -461,44 +452,38 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         });
     }
 
-    private boolean isWatingForUpload(){
+    private boolean isWatingForUpload() {
 
         List<TaskItemBean> itemList = DataSupport.where("workorderid=? and completestatus=?",
-                taskBean.getWorkOrderId(),"0").find(TaskItemBean.class);
+                taskBean.getWorkOrderId(), "0").find(TaskItemBean.class);
         if (CollectionsUtil.isEmpty(itemList)) {
             showAlertOfWhenisWatingForUpload();
-            return  true;
-        }else{
+            return true;
+        } else {
             return false;
         }
     }
 
-    private void showAlertOfWhenisWatingForUpload(){
+    private void showAlertOfWhenisWatingForUpload() {
         new AlertDialog.Builder(this)
                 .setMessage("此次巡查工作已完成，是否提交巡查结果?")
                 .setCancelable(false)
-                .setPositiveButton("提交结果", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton("提交结果", (dialog, which) -> {
 
-                        if (DoubleClickUtil.isFastDoubleClick()) {
-                            return;
-                        }
-                        showTjDialog();
+                    if (DoubleClickUtil.isFastDoubleClick()) {
+                        return;
                     }
+                    showTjDialog();
                 })
-                .setNegativeButton("继续巡查", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (DoubleClickUtil.isFastDoubleClick()) {
-                            return;
-                        }
-                        startLocation();
+                .setNegativeButton("继续巡查", (dialog, which) -> {
+                    if (DoubleClickUtil.isFastDoubleClick()) {
+                        return;
                     }
+                    startLocation();
                 }).show();
     }
 
-    private void startLocation(){
+    private void startLocation() {
         getGaoDeLocation();
         //android 6.0动态申请权限
         if (ContextCompat.checkSelfPermission(getContext(),
@@ -541,7 +526,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 //                    objectAnimator.start();
 //                    mBinding.checkbox
                     float translationY1 = mBinding.checkbox.getTranslationY();
-                    ObjectAnimator animator = ObjectAnimator.ofFloat(mBinding.checkbox,"translationY",-mapHeight/2,0);
+                    ObjectAnimator animator = ObjectAnimator.ofFloat(mBinding.checkbox, "translationY", -mapHeight / 2, 0);
                     animator.setDuration(500);
                     animator.start();
                 }
@@ -551,7 +536,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                     moveMap(true);
                     isMoveUp = true;
 //                    float translationY1 = mBinding.checkbox.getTranslationY();
-                    ObjectAnimator animator = ObjectAnimator.ofFloat(mBinding.checkbox,"translationY",0,-mapHeight/2);
+                    ObjectAnimator animator = ObjectAnimator.ofFloat(mBinding.checkbox, "translationY", 0, -mapHeight / 2);
                     animator.setDuration(300);
                     animator.start();
                 }
@@ -570,7 +555,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         if (mapView.screenToLocation(screenPoint) != null) {
             double mapScale = mapView.getMapScale();
             if (status) {
-                mapView.setViewpointScaleAsync(mapScale*0.5).addDoneListener(() -> {
+                mapView.setViewpointScaleAsync(mapScale * 0.5).addDoneListener(() -> {
                     double y = mapView.screenToLocation(screenPoint).getY();
                     android.graphics.Point bottomPoint = new android.graphics.Point(0, mapHeight);
                     double bottomY = mapView.screenToLocation(bottomPoint).getY();
@@ -589,7 +574,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 //                mapView.visibleArea   返回一个Polygon，表示当前在MapView中可见的ArcGISMap区域。
                 Viewpoint viewPoint = mapView.getCurrentViewpoint(Viewpoint.Type.CENTER_AND_SCALE);
                 Point centerPoint = viewPoint.getTargetGeometry().getExtent().getCenter();
-                mapView.setViewpointScaleAsync(mapScale*2).addDoneListener(() -> {
+                mapView.setViewpointScaleAsync(mapScale * 2).addDoneListener(() -> {
                     //下移
                     mapView.setViewpointCenterAsync(new Point(centerPoint.getX(), centerPoint.getY() - translationY));
                 });
@@ -606,7 +591,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         scroll_down_layout.setMaxOffset(mapHeight / 2);
         //最低部退出状态时可看到的高度，0为不可见
         int height = mBinding.checkbox.getHeight();
-        scroll_down_layout.setExitOffset(ScreenUtil.getScreenHeightPix(getContext()) - checkBoxTop - Px2dpUtils.dip2px(getContext(), 15) - ScreenUtil.getStatusBarHeight()-height);
+        scroll_down_layout.setExitOffset(ScreenUtil.getScreenHeightPix(getContext()) - checkBoxTop - Px2dpUtils.dip2px(getContext(), 15) - ScreenUtil.getStatusBarHeight() - height);
         //解决recycleView底部显示不全的问题
 //        rvStartInspection.setPadding(0, 0, 0, Px2dpUtils.dip2px(getContext(), 100));
         //是否支持下滑退出，支持会有下滑到最底部时的回调
@@ -617,16 +602,17 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         scroll_down_layout.setToExit();
         scroll_down_layout.getBackground().setAlpha(0);
         text_foot.setOnClickListener(v -> scroll_down_layout.scrollToOpen());
-        llListTitle.setOnClickListener(v -> {});
+        llListTitle.setOnClickListener(v -> {
+        });
 //        new Handler().postDelayed(() -> {
 //            scroll_down_layout.scrollToOpen();
 //        },2000);
     }
 
-    private boolean stopClick(){
+    private boolean stopClick() {
         TaskBean taskBean = DataSupport.where("workOrderId=?", workOrderId).findFirst(TaskBean.class);
         if (taskBean != null) {
-            if ("3".equals(taskBean.getExecuteStatus() )) {
+            if ("3".equals(taskBean.getExecuteStatus())) {
                 return true;
             }
         }
@@ -642,10 +628,10 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 
         if (!isCompleteOfTaskBean) {
             boolean isWatingForUpload = isWatingForUpload();
-            if (!isWatingForUpload){
+            if (!isWatingForUpload) {
                 startLocation();
             }
-        }else {
+        } else {
             //隐藏地图描述
             llDxc.setVisibility(View.GONE);
             //隐藏地图图标
@@ -659,7 +645,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         newTaskTimeOfNearPosition();
     }
 
-    private void initAndSetMapView(){
+    private void initAndSetMapView() {
         exeline2 = new ArrayList<>();
         alMapview = findViewById(R.id.al_mapview);
         mapView = alMapview.getMapView();
@@ -707,9 +693,9 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
     }
 
     /**
-     *  定时闪烁临近巡查点
+     * 定时闪烁临近巡查点
      */
-    private void newTaskTimeOfNearPosition(){
+    private void newTaskTimeOfNearPosition() {
         Handler handler = new Handler();
         Runnable runnable = new Runnable() {
             @Override
@@ -802,7 +788,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                 if (result != null && result.size() > 0) {
                     Map map = new HashMap();
                     alMapview.addPicToGraphicsOverlay(standardRouteOverlay, R.mipmap.ic_me_history_startpoint, result.get(0), map);
-                    alMapview.addPicToGraphicsOverlay(standardRouteOverlay, R.mipmap.ic_me_history_finishpoint, result.get(result.size()-1), map);
+                    alMapview.addPicToGraphicsOverlay(standardRouteOverlay, R.mipmap.ic_me_history_finishpoint, result.get(result.size() - 1), map);
                 }
                 alMapview.setMapViewVisibleExtent(result);
             } catch (Exception e) {
@@ -831,15 +817,15 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                         double lttd = Double.parseDouble(positionLttd);
                         Point point = new Point(lgtd, lttd, SpatialReference.create(4326));
                         int color = ContextCompat.getColor(getContext(), R.color.text_map_bg);
-                        if (itemList!=null&&itemList.size()>0){
+                        if (itemList != null && itemList.size() > 0) {
                             TaskItemBean taskItemBean = itemList.get(0);
                             String positionTreeNames = taskItemBean.getPositionTreeNames();
 //                            ArcgisLayout.setTextMarker(point, textGraphics, positionTreeNames, color);
                             Map<String, Object> attrs = new HashMap<>();
                             attrs.put("positionId", routePosition.getPositionId());
-                            ArcgisLayout.setTextMarker(point, textGraphics, positionTreeNames, color,attrs,28);
+                            ArcgisLayout.setTextMarker(point, textGraphics, positionTreeNames, color, attrs, 28);
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
 
                     }
                 }
@@ -995,9 +981,9 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                     if (i < dxcRoutePositions.size() && min < 1) {
                         RoutePosition routePosition = dxcRoutePositions.get(i);
                         String positionId = routePosition.getPositionId();
-                        if (positionId!=null){
-                            if (!nearDxcPositionStr.equals(positionId)){
-                                if (vibrator.hasVibrator()){
+                        if (positionId != null) {
+                            if (!nearDxcPositionStr.equals(positionId)) {
+                                if (vibrator.hasVibrator()) {
                                     vibrator.vibrate(1000);
                                 }
                                 nearDxcPositionStr = positionId;
@@ -1072,6 +1058,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
      * @param point
      */
     Bitmap bitmapLocation;
+
     public void addLocationPic(GraphicsOverlay graphicsOverlay, int id, Point point) {
         PictureMarkerSymbol pictureMarkerSymbol1 = null;
         try {
@@ -1147,6 +1134,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
      * 控制加载的点
      */
     private int initCount = 0;
+
     private void getGaoDeLocation() {
         if (gaodeEntity == null) {
             gaodeEntity = new GaodeEntity(this, StartInspectionActivity.class, R.mipmap.logo);
@@ -1163,14 +1151,11 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             if (gaodeEntity != null) {
                 if (aMapLocation.getErrorCode() == 14) {
 //                    ToastUtils.shortToast("设备当前 GPS 状态差,请持设备到相对开阔的露天场所再次尝试");
-                    new android.app.AlertDialog.Builder(getBaseContext())
+                    new AlertDialog.Builder(getBaseContext())
                             .setMessage("设备当前 GPS 状态差,请持设备到相对开阔的露天场所再次尝试")
                             .setCancelable(true)
-                            .setPositiveButton("好的", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
+                            .setPositiveButton("好的", (dialog, which) -> {
 
-                                }
                             })
                             .show();
 
@@ -1178,13 +1163,12 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                 if (aMapLocation.getErrorCode() != 0) {
 //                    ToastUtils.shortToast(aMapLocation.getErrorInfo()+aMapLocation.getLocationDetail());
                     gaodeEntity.getLocationClient().setLocationOption(getDefaultOption(5000));
-                    if(aMapLocation.getErrorCode() == 4){
+                    if (aMapLocation.getErrorCode() == 4) {
                         ToastUtils.shortToast("当前网络较差，已自动切换为无网模式定位");
 
                     }
 
                 }
-
 
 
 //                refreshTitle();
@@ -1200,7 +1184,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                 initCount++;
                 currentPoint = new Point(longitude, latitude, SpatialReference.create(4326));
 
-                if(SPUtils.getInstance().getBoolean(CacheConsts.isOpenAuto,false)) {
+                if (SPUtils.getInstance().getBoolean(CacheConsts.isOpenAuto, false)) {
                     setYxcListAndDxcList();
                     setRoutePosition(dxcRoutePositions, picIds[0], dxcOverlay);
                     setRoutePosition(yxcRoutePositions, picIds[1], yxcOverlay);
@@ -1219,10 +1203,10 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 //                    initCallout(point2, item.getReservoir());
                             mapView.setViewpointCenterAsync(point2);
                         }
-                    }else {
+                    } else {
                         alMapview.setCenterPoint(currentPoint, alMapview.getMapView().getMapScale());
                     }
-                    LogUtil.e("缩放比例------"+alMapview.getMapView().getMapScale());
+                    LogUtil.e("缩放比例------" + alMapview.getMapView().getMapScale());
 
                 }
                 //添加定位图标
@@ -1245,12 +1229,12 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 //                            mBinding.alMapview.addPolyline(exeline2, SimpleLineSymbol.Style.SOLID, color, 6);
 //                        Point pointTrans = ArcgisLayout.transformationPoint(currentPoint.getX(), currentPoint.getY());
 //                        alMapview.addPolylineToGraphicsOverlay(actualRouteOverlay,exeline2,SimpleLineSymbol.Style.SOLID, colorOfLine, 4);
-                        LogUtil.e("点个数-------------"+exeline2.size());
+                        LogUtil.e("点个数-------------" + exeline2.size());
                         if (exeline2.size() > 0) {
                             if (exeline2.size() == 1) {
                                 mBinding.alMapview.addPic(R.mipmap.ic_me_history_startpoint, exeline2.get(0));
                             }
-                            alMapview.addPolylineToGraphicsOverlayNew(actualRouteOverlay, exeline2.get(exeline2.size() -1),currentPoint, SimpleLineSymbol.Style.SOLID, colorOfLine, 4);
+                            alMapview.addPolylineToGraphicsOverlayNew(actualRouteOverlay, exeline2.get(exeline2.size() - 1), currentPoint, SimpleLineSymbol.Style.SOLID, colorOfLine, 4);
                         }
 //                        ToastUtils.shortToast("点个数-------------"+exeline2.size());
                         if (initCount > 3) {
@@ -1334,35 +1318,32 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             return;
         }
         mBinding.alMapview.removeGraphics();
-        mBinding.alMapview.post(new Runnable() {
-            @Override
-            public void run() {
-                if (!TextUtils.isEmpty(taskBean.getWorkOrderRoute())) {
-                    if (TextUtils.isEmpty(taskBean.getExecuteStatus())) {
-                        refreshMapViewList();
-                        return;
-                    }
-                    if ("3".equals(taskBean.getExecuteStatus())) {
-                        //已完成状态时
-                        refreshMapViewList2(taskBean.getWorkOrderRoute());
-                        //默认第一个巡查点
-                        if (routePositions!=null&&routePositions.size()>0){
-                            RoutePosition routePosition = routePositions.get(0);
-                            String positionLgtd = routePosition.getPositionLgtd();
-                            String positionLttd = routePosition.getPositionLttd();
-                            double lgtd = Double.parseDouble(positionLgtd);
-                            double lttd = Double.parseDouble(positionLttd);
-                            Point locationPoint = new Point(lgtd, lttd, SpatialReference.create(4326));
-                            searchNearbyRoutePosition(routePositions, locationPoint);
-                        }
-                    } else {
-                        refreshMapViewList();
+        mBinding.alMapview.post(() -> {
+            if (!TextUtils.isEmpty(taskBean.getWorkOrderRoute())) {
+                if (TextUtils.isEmpty(taskBean.getExecuteStatus())) {
+                    refreshMapViewList();
+                    return;
+                }
+                if ("3".equals(taskBean.getExecuteStatus())) {
+                    //已完成状态时
+                    refreshMapViewList2(taskBean.getWorkOrderRoute());
+                    //默认第一个巡查点
+                    if (routePositions != null && routePositions.size() > 0) {
+                        RoutePosition routePosition = routePositions.get(0);
+                        String positionLgtd = routePosition.getPositionLgtd();
+                        String positionLttd = routePosition.getPositionLttd();
+                        double lgtd = Double.parseDouble(positionLgtd);
+                        double lttd = Double.parseDouble(positionLttd);
+                        Point locationPoint = new Point(lgtd, lttd, SpatialReference.create(4326));
+                        searchNearbyRoutePosition(routePositions, locationPoint);
                     }
                 } else {
                     refreshMapViewList();
                 }
-                refreshMapViewPoint();
+            } else {
+                refreshMapViewList();
             }
+            refreshMapViewPoint();
         });
 
 
@@ -1401,7 +1382,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                     mBinding.alMapview.addPic(R.mipmap.ic_me_history_startpoint, exeline.get(0), new HashMap<>());
                     mBinding.alMapview.addPic(R.mipmap.ic_me_history_finishpoint, exeline.get(exeline.size() - 1), new HashMap<>());
                 }
-            }else{
+            } else {
 
             }
         } catch (Exception e) {
@@ -1465,31 +1446,25 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 
         TjDialogFragment tjDialogFragment = new TjDialogFragment();
         tjDialogFragment.tip = spannableString;
-        tjDialogFragment.setListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DoubleClickUtil.isFastDoubleClick()) {
-                    return;
-                }
-                tjDialogFragment.dismiss();
-
-                commitTotal();
-
-
+        tjDialogFragment.setListener(v -> {
+            if (DoubleClickUtil.isFastDoubleClick()) {
+                return;
             }
-        }, new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (DoubleClickUtil.isFastDoubleClick()) {
-                    return;
-                }
-                tjDialogFragment.dismiss();
+            tjDialogFragment.dismiss();
 
-                Intent intent = new Intent();
-                StartInspectionActivity.this.setResult(YunweiFragment.resultCode, intent);
-                finish();
+            commitTotal();
 
+
+        }, v -> {
+            if (DoubleClickUtil.isFastDoubleClick()) {
+                return;
             }
+            tjDialogFragment.dismiss();
+
+            Intent intent = new Intent();
+            StartInspectionActivity.this.setResult(YunweiFragment.resultCode, intent);
+            finish();
+
         });
         tjDialogFragment.show(getSupportFragmentManager(), "cb");
 
@@ -1519,12 +1494,12 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                             if (taskBean.getExecuteStatus().equals("2")) {
                                 String temp = RoutepointDataManager.getInstance().getRoutePointListString(workOrderId);
                                 taskBean.setWorkOrderRoute(temp);
-                                taskBean.updateAll("workorderid=?",taskBean.getWorkOrderId());
+                                taskBean.updateAll("workorderid=?", taskBean.getWorkOrderId());
                                 /**
                                  * APP 巡检人员工单执行完成提交 （App 端使用）
                                  */
                                 mPresenter.endExecute(workOrderId, temp, true, "正在提交完成");
-                            }else{
+                            } else {
                                 finish();
                             }
 
@@ -1679,7 +1654,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 
         }
 
-
         ToastUtils.shortToast("提交成功");
         Intent intent = new Intent();
         StartInspectionActivity.this.setResult(YunweiFragment.resultCode, intent);
@@ -1690,7 +1664,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
     public void appReservoirWorkOrderItemCommitOneByOneSuccess() {
         String temp = RoutepointDataManager.getInstance().getRoutePointListString(workOrderId);
         taskBean.setWorkOrderRoute(temp);
-        taskBean.updateAll("workorderid=?",taskBean.getWorkOrderId());
+        taskBean.updateAll("workorderid=?", taskBean.getWorkOrderId());
         /**
          * APP 巡检人员工单执行完成提交 （App 端使用）
          */
@@ -1709,30 +1683,23 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                 } else {
                     new AlertDialog.Builder(this)
                             .setMessage("定位权限被拒绝,将导致定位功能无法正常使用，需要到设置页面手动授权")
-                            .setPositiveButton("去授权", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //引导用户至设置页手动授权
-                                    Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-                                    Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
-                                    intent.setData(uri);
-                                    startActivity(intent);
-                                }
+                            .setPositiveButton("去授权", (dialog, which) -> {
+                                //引导用户至设置页手动授权
+                                Intent intent = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
+                                Uri uri = Uri.fromParts("package", getContext().getPackageName(), null);
+                                intent.setData(uri);
+                                startActivity(intent);
                             })
                             .setNegativeButton("取消", (dialog, which) -> {
                                 //引导用户手动授权，权限请求失败
                                 ToastUtils.longToast("拒绝了定位权限，将不能使用定位功能！！！");
-                            }).setOnCancelListener(new DialogInterface.OnCancelListener() {
-                        @Override
-                        public void onCancel(DialogInterface dialog) {
-                            //引导用户手动授权，权限请求失败
-                            ToastUtils.longToast("拒绝了定位权限，将不能使用定位功能！！！");
-                        }
+                            }).setOnCancelListener(dialog -> {
+                        //引导用户手动授权，权限请求失败
+                        ToastUtils.longToast("拒绝了定位权限，将不能使用定位功能！！！");
                     }).show();
                     // Permission Denied
                 }
             }
-            return;
         }
     }
 
@@ -1800,7 +1767,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                 if (taskBean != null) {
                     String temp = RoutepointDataManager.getInstance().getRoutePointListString(workOrderId);
                     taskBean.setWorkOrderRoute(temp);
-                    taskBean.updateAll("workorderid=?",taskBean.getWorkOrderId());
+                    taskBean.updateAll("workorderid=?", taskBean.getWorkOrderId());
                 }
 
                 ToastUtils.shortToast("数据已保存");

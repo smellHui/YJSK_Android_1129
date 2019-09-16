@@ -1,8 +1,5 @@
 package com.tepia.guangdong_module.amainguangdong.xunchaview.activity;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.net.Uri;
@@ -17,7 +14,9 @@ import android.widget.AdapterView;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.guangdong_module.R;
 import com.example.guangdong_module.databinding.ActivityDangerReportBinding;
+import com.example.guangdong_module.databinding.ActivityTroubleReportBinding;
 import com.google.gson.Gson;
+import com.tepia.base.CacheConsts;
 import com.tepia.base.ConfigConsts;
 import com.tepia.base.mvp.BaseActivity;
 import com.tepia.base.utils.TimeFormatUtils;
@@ -25,7 +24,6 @@ import com.tepia.base.utils.ToastUtils;
 import com.tepia.base.view.dialog.basedailog.ActionSheetDialog;
 import com.tepia.base.view.dialog.basedailog.OnOpenItemClick;
 import com.tepia.base.view.floatview.CollectionsUtil;
-import com.tepia.base.CacheConsts;
 import com.tepia.guangdong_module.amainguangdong.common.PhotoSelectAdapter;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.common.pickview.OnItemClickListener;
@@ -34,7 +32,6 @@ import com.tepia.guangdong_module.amainguangdong.model.UtilDataBaseOfGD;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.DataBeanOflistReservoirRoute;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.PersonDutyBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
-import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirOfflineResponse;
 import com.tepia.guangdong_module.amainguangdong.route.TaskBean;
 import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
 import com.tepia.guangdong_module.amainguangdong.utils.EmptyLayoutUtil;
@@ -60,7 +57,7 @@ import java.util.List;
  **/
 public class TroubleRecordActivity extends BaseActivity {
 
-    ActivityDangerReportBinding mBinding;
+    ActivityTroubleReportBinding mBinding;
     AdapterWorker adapterWorker;
 
     private PhotoSelectAdapter photoRecycleViewAdapterBefore;
@@ -85,7 +82,7 @@ public class TroubleRecordActivity extends BaseActivity {
 
     @Override
     public int getLayoutId() {
-        return R.layout.activity_danger_report;
+        return R.layout.activity_trouble_report;
     }
 
     @Override
@@ -93,6 +90,7 @@ public class TroubleRecordActivity extends BaseActivity {
 //        ToastUtils.shortToast("请填写异常信息，否则该项巡查将视为未完成");
         executeResultType = getIntent().getStringExtra("executeResultType");
         mBinding = DataBindingUtil.bind(mRootView);
+
         mBinding.layoutDes.titleTv.setText("填写异常情况描述");
         mBinding.layoutDes.yichangTitleTv.setText("异常情况");
         mBinding.layoutDes.positionNameLy.setVisibility(View.GONE);
@@ -124,12 +122,12 @@ public class TroubleRecordActivity extends BaseActivity {
         if ("1".equals(operationLevel)) {
             //一般项
             mBinding.layoutTrouble.operationLevelTv.setVisibility(View.VISIBLE);
-            mBinding.layoutTrouble.operationLevelTv.setTextColor(ContextCompat.getColor(getBaseContext(),R.color.color_load_yellow));
+            mBinding.layoutTrouble.operationLevelTv.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.color_load_yellow));
             mBinding.layoutTrouble.operationLevelTv.setText("一般项");
-        }else if("2".equals(operationLevel)){
+        } else if ("2".equals(operationLevel)) {
             //报警项
             mBinding.layoutTrouble.operationLevelTv.setVisibility(View.VISIBLE);
-            mBinding.layoutTrouble.operationLevelTv.setTextColor(ContextCompat.getColor(getBaseContext(),R.color.common_red));
+            mBinding.layoutTrouble.operationLevelTv.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.common_red));
             mBinding.layoutTrouble.operationLevelTv.setText("报警项");
         }
 
@@ -137,10 +135,10 @@ public class TroubleRecordActivity extends BaseActivity {
 
     }
 
-    private boolean stopClick(String workOrderId){
+    private boolean stopClick(String workOrderId) {
         TaskBean taskBean = DataSupport.where("workOrderId=?", workOrderId).findFirst(TaskBean.class);
         if (taskBean != null) {
-            if ("3".equals(taskBean.getExecuteStatus() )) {
+            if ("3".equals(taskBean.getExecuteStatus())) {
                 return true;
             }
         }
@@ -175,10 +173,11 @@ public class TroubleRecordActivity extends BaseActivity {
 
     /**
      * 替换字符串中特殊字符
+     *
      * @param s
      * @return
      */
-    private  String format(String s){
+    private String format(String s) {
         return s.replaceAll("[1234567890`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……& amp;*（）——+|{}【】‘；：”“’。，、？|-]", "");
     }
 
@@ -196,10 +195,10 @@ public class TroubleRecordActivity extends BaseActivity {
                 String tv_content = mBinding.layoutTrouble.contentTv.getText().toString();
                 StringBuilder builder = new StringBuilder();
                 // 截取字符串前6位替换标点符号和字符等
-                if (!TextUtils.isEmpty(tv_content) && tv_content.length() > 6){
-                    builder.append(format(tv_content.substring(0,6)));
+                if (!TextUtils.isEmpty(tv_content) && tv_content.length() > 6) {
+                    builder.append(format(tv_content.substring(0, 6)));
                     builder.append(tv_content.substring(6));
-                }else {
+                } else {
                     builder.append(format(tv_content));
                 }
 //                ClipData clip = ClipData.newPlainText("simple text", builder.toString());
@@ -296,7 +295,7 @@ public class TroubleRecordActivity extends BaseActivity {
 
     private void initPhotoListView() {
         {
-            photoRecycleViewAdapterBefore = new PhotoSelectAdapter(getContext(),isCompleteOfTaskBean);
+            photoRecycleViewAdapterBefore = new PhotoSelectAdapter(getContext(), isCompleteOfTaskBean);
             mBinding.layoutPic.rvAddPhotoBefore.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
             mBinding.layoutPic.rvAddPhotoBefore.setAdapter(photoRecycleViewAdapterBefore);
 
@@ -352,7 +351,7 @@ public class TroubleRecordActivity extends BaseActivity {
 
                     }
                 });
-            }else {
+            } else {
 //                photoRecycleViewAdapterBefore
             }
 

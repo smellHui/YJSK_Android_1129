@@ -3,9 +3,8 @@ package com.yangj.dahemodule.fragment;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.utils.ToastUtils;
-import com.yangj.dahemodule.adapter.OperateAdapter;
 import com.yangj.dahemodule.adapter.ReportAdapter;
-import com.yangj.dahemodule.common.UserManager;
+import com.yangj.dahemodule.common.HttpManager;
 import com.yangj.dahemodule.model.Report.ReportBean;
 import com.yangj.dahemodule.model.Report.ReportDataBean;
 
@@ -23,7 +22,7 @@ public class DangerReportListFragment extends BaseListFragment<ReportBean> {
 
     @Override
     protected void initRequestData() {
-        UserManager.getInstance().getReportList("", getPage(), 20, "", "")
+        HttpManager.getInstance().getReportList("", getPage(), 20, "", "")
                 .subscribe(new LoadingSubject<ReportDataBean>() {
 
                     @Override

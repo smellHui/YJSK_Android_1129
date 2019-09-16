@@ -6,7 +6,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.utils.ToastUtils;
 import com.yangj.dahemodule.adapter.OperateAdapter;
-import com.yangj.dahemodule.common.UserManager;
+import com.yangj.dahemodule.common.HttpManager;
 import com.yangj.dahemodule.model.xuncha.RecordBean;
 import com.yangj.dahemodule.model.xuncha.RecordDataBean;
 
@@ -40,7 +40,7 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
 
     @Override
     protected void initRequestData() {
-        UserManager.getInstance().getRecordList(pageType, "", getPage(), 20, "", "")
+        HttpManager.getInstance().getRecordList(pageType, "", getPage(), 20, "", "")
                 .subscribe(new LoadingSubject<RecordDataBean>() {
 
                     @Override
