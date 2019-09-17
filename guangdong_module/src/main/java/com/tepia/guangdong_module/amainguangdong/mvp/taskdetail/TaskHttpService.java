@@ -13,6 +13,7 @@ import java.util.Map;
 import io.reactivex.Observable;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import retrofit2.http.Body;
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
@@ -54,7 +55,7 @@ interface TaskHttpService {
      * @return
      */
     @Multipart
-    @POST("app/patrolAppWorkOrder/commitOneItem")
+    @POST("app/patrol/addItem")
     Observable<BaseResponse> appReservoirWorkOrderItemCommitOne(@Header("Authorization") String token,
                                                                 @PartMap Map<String, RequestBody> params,
                                                                 @Part List<MultipartBody.Part> beforePathList
@@ -65,15 +66,15 @@ interface TaskHttpService {
      * APP 巡检人员工单执行完成提交 （App 端使用）
      *
      * @param token
-     * @param workOrderId    工单id
-     * @param workOrderRoute 流线信息
+     * @param omRecordCode    工单id
+     * @param omPath 流线信息
      * @return
      */
     @FormUrlEncoded
-    @POST("app/patrolAppWorkOrder/endExcute")
+    @POST("app/patrol/complete")
     Observable<BaseResponse> endExecute(@Header("Authorization") String token,
-                                        @Field("workOrderId") String workOrderId,
-                                        @Field("workOrderRoute") String workOrderRoute);
+                                        @Field("omRecordCode") String omRecordCode,
+                                        @Field("omPath") String omPath);
 
     @FormUrlEncoded
     @POST("app/patrolAppWorkOrder/endExcute")
@@ -82,19 +83,13 @@ interface TaskHttpService {
                                         );
 
 
-    @FormUrlEncoded
-    @POST("app/patrolAppWorkOrder/addWorkOrder")
+    @POST("app/patrol/add")
     Observable<TaskDetailResponse> newStartExecute(@Header("Authorization") String token,
-                                                   @Field("workOrderId") String workOrderId,
-                                                   @Field("routeId") String routeId,
-                                                   @Field("reservoirId") String reservoirId,
-                                                   @Field("reservoir") String reservoir,
-                                                   @Field("startTime") String startTime
-
+                                                   @Body RequestBody info
     );
 
     @Multipart
-    @POST("app/patrolAppWorkOrder/reportProblem")
+    @POST("app/problem/report")
     Observable<BaseResponse> reportProblem(@Header("Authorization") String token,
                                                  @PartMap Map<String, RequestBody> params,
                                                  @Part List<MultipartBody.Part> beforePathList

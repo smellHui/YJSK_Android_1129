@@ -1,11 +1,10 @@
 package com.tepia.guangdong_module.amainguangdong.mvp.typhoonroute;
 
-import com.tepia.base.http.BaseResponse;
 import com.tepia.base.http.RetrofitManager;
-import com.tepia.guangdong_module.APPCostant;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.typhoonroute.TyphoonDetailResponse;
 import com.tepia.guangdong_module.amainguangdong.model.typhoonroute.TyphoonListResponse;
+import com.yangj.dahemodule.APPCostant;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -34,7 +33,6 @@ public class TyphoonRouteManager {
     }
 
     /**
-     *
      * 查询台风列表
      *
      * @param year 年限
@@ -48,15 +46,14 @@ public class TyphoonRouteManager {
     }
 
     /**
-     *
      * 获取台风详情数据
      *
      * @param typhoonId 台风id
      * @return
      */
-    public Observable<TyphoonDetailResponse> getTyphoonDetails(String typhoonId){
+    public Observable<TyphoonDetailResponse> getTyphoonDetails(String typhoonId) {
         String token = UserManager.getInstance().getToken();
-        return  mRetrofitService.getTyphoonDetail(token, typhoonId)
+        return mRetrofitService.getTyphoonDetail(token, typhoonId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

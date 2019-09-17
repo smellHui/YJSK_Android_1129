@@ -114,12 +114,7 @@ public class DangerReportActivity extends BaseActivity {
         mBinding.layoutTrouble.rootTroubleLy.setVisibility(View.GONE);
         initRec();
         initPhotoListView();
-        mBinding.layoutDes.selectTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog();
-            }
-        });
+        mBinding.layoutDes.selectTv.setOnClickListener(v -> showDialog());
 
         if (dangerBean != null) {
             mBinding.layoutDes.selectTv.setText(dangerBean.getPositionName());
@@ -135,69 +130,66 @@ public class DangerReportActivity extends BaseActivity {
 
     @Override
     protected void initListener() {
-        mBinding.reportTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String positionName = mBinding.layoutDes.selectTv.getText().toString();
-                String problemDescription = mBinding.layoutDes.desEt.getText().toString();
-                String problemDescriTianqi = mBinding.layoutDes.tianqiDesTv.getText().toString();
-                if (TextUtils.isEmpty(positionName) && items.length > 0) {
-                    ToastUtils.shortToast("请选择险情部位");
-                    return;
-                }
-
-                if (TextUtils.isEmpty(problemDescription)) {
-                    ToastUtils.shortToast("请填写险情信息");
-                    return;
-                }
-
-                if (dangerBean == null) {
-                    dangerBean = new DangerBean();
-                    dangerBean.setPositionName(positionName);
-                    dangerBean.setProblemDescription(problemDescription + "\n" + problemDescriTianqi);
-                    dangerBean.setReservoir(reservoirBean.getReservoir());
-                    dangerBean.setReservoirId(reservoirId);
-                    dangerBean.setUserCode(userCode);
-                } else {
-                    dangerBean.setPositionName(positionName);
-                    dangerBean.setProblemDescription(problemDescription);
-                    dangerBean.saveOrUpdate("userCode=? and reservoirId=?", userCode, reservoirId);
-                }
-
-                TaskManager.getInstance().reportProblem(dangerBean, selectPhotosBefore)
-                        .subscribe(new LoadingSubject<BaseResponse>(true, ResUtils.getString(R.string.data_loading)) {
-                            @Override
-                            protected void _onNext(BaseResponse baseResponse) {
-                                if (baseResponse != null) {
-                                    if (baseResponse.getCode() == 0) {
-                                        ToastUtils.shortToast("险情报告提交成功");
-                                        if (dangerBean.isSaved()) {
-                                            dangerBean.delete();
-                                        }
-                                        DataSupport.deleteAll(CheckTaskPicturesBean.class, "bizType=? and userCode=? and reservoirId=?",
-                                                ConfigConsts.picType_danger, userCode, reservoirId);
-                                        finish();
-                                    }
-                                }
-                            }
-
-                            @Override
-                            protected void _onError(String message) {
-                                LogUtil.e(message + " ");
-                                dangerBean.setHasReport("1");
-                                dangerBean.save();
-                                if (!NetUtil.isNetworkConnected(Utils.getContext())) {
-                                    ToastUtils.shortToast("当前无网络，数据已保存，连网时将自动上传");
-                                    finish();
-                                    return;
-                                }
-                                ToastUtils.shortToast(message + " 数据已保存，连网时将自动上传");
-                                finish();
-
-
-                            }
-                        });
+        mBinding.reportTv.setOnClickListener(v -> {
+            String positionName = mBinding.layoutDes.selectTv.getText().toString();
+            String problemDescription = mBinding.layoutDes.desEt.getText().toString();
+            String problemDescriTianqi = mBinding.layoutDes.tianqiDesTv.getText().toString();
+            if (TextUtils.isEmpty(positionName) && items.length > 0) {
+                ToastUtils.shortToast("请选择险情部位");
+                return;
             }
+
+            if (TextUtils.isEmpty(problemDescription)) {
+                ToastUtils.shortToast("请填写险情信息");
+                return;
+            }
+
+            if (dangerBean == null) {
+                dangerBean = new DangerBean();
+                dangerBean.setPositionName(positionName);
+                dangerBean.setProblemDescription(problemDescription + "\n" + problemDescriTianqi);
+                dangerBean.setReservoir(reservoirBean.getReservoir());
+                dangerBean.setReservoirId(reservoirId);
+                dangerBean.setUserCode(userCode);
+            } else {
+                dangerBean.setPositionName(positionName);
+                dangerBean.setProblemDescription(problemDescription);
+                dangerBean.saveOrUpdate("userCode=? and reservoirId=?", userCode, reservoirId);
+            }
+
+            TaskManager.getInstance().reportProblem(dangerBean, selectPhotosBefore)
+                    .subscribe(new LoadingSubject<BaseResponse>(true, ResUtils.getString(R.string.data_loading)) {
+                        @Override
+                        protected void _onNext(BaseResponse baseResponse) {
+                            if (baseResponse != null) {
+                                if (baseResponse.getCode() == 0) {
+                                    ToastUtils.shortToast("险情报告提交成功");
+                                    if (dangerBean.isSaved()) {
+                                        dangerBean.delete();
+                                    }
+                                    DataSupport.deleteAll(CheckTaskPicturesBean.class, "bizType=? and userCode=? and reservoirId=?",
+                                            ConfigConsts.picType_danger, userCode, reservoirId);
+                                    finish();
+                                }
+                            }
+                        }
+
+                        @Override
+                        protected void _onError(String message) {
+                            LogUtil.e(message + " ");
+                            dangerBean.setHasReport("1");
+                            dangerBean.save();
+                            if (!NetUtil.isNetworkConnected(Utils.getContext())) {
+                                ToastUtils.shortToast("当前无网络，数据已保存，连网时将自动上传");
+                                finish();
+                                return;
+                            }
+                            ToastUtils.shortToast(message + " 数据已保存，连网时将自动上传");
+                            finish();
+
+
+                        }
+                    });
         });
     }
 
@@ -216,19 +208,15 @@ public class DangerReportActivity extends BaseActivity {
         if (CollectionsUtil.isEmpty(personDutyBeanList)) {
             adapterWorker.setEmptyView(EmptyLayoutUtil.showNew("暂无数据"));
         }
-        adapterWorker.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (!TextUtils.isEmpty(adapterWorker.getData().get(position).getMobile())) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    Uri data = Uri.parse("tel:" + adapterWorker.getData().get(position).getMobile());
-                    intent.setData(data);
-                    startActivity(intent);
-                } else {
-                    ToastUtils.shortToast("暂无手机号码");
-                }
+        adapterWorker.setOnItemClickListener((adapter, view, position) -> {
+            if (!TextUtils.isEmpty(adapterWorker.getData().get(position).getMobile())) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                Uri data = Uri.parse("tel:" + adapterWorker.getData().get(position).getMobile());
+                intent.setData(data);
+                startActivity(intent);
+            } else {
+                ToastUtils.shortToast("暂无手机号码");
             }
-
         });
     }
 
@@ -253,45 +241,36 @@ public class DangerReportActivity extends BaseActivity {
             photoRecycleViewAdapterBefore.setLocalData(selectPhotosBefore);
             mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
 
-            photoRecycleViewAdapterBefore.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    if (photoRecycleViewAdapterBefore.getItemViewType(position) == PhotoRecycleViewAdapter.TYPE_ADD) {
-
-
-                        PhotoPicker.builder()
-                                .setPhotoCount(5)
-                                .setShowCamera(true)
-                                .setPreviewEnabled(true)
-                                .setSelected(selectPhotosBefore)
-                                .start(DangerReportActivity.this, 100);
-                    } else {
-                        PhotoPreview.builder()
-                                .setPhotos(photoRecycleViewAdapterBefore.getPhotoPaths())
-                                .setCurrentItem(position)
-                                .setShowDeleteButton(false)
-                                .start(DangerReportActivity.this, 101);
-                    }
+            photoRecycleViewAdapterBefore.setOnItemClickListener((view, position) -> {
+                if (photoRecycleViewAdapterBefore.getItemViewType(position) == PhotoRecycleViewAdapter.TYPE_ADD) {
+                    PhotoPicker.builder()
+                            .setPhotoCount(5)
+                            .setShowCamera(true)
+                            .setPreviewEnabled(true)
+                            .setSelected(selectPhotosBefore)
+                            .start(DangerReportActivity.this, 100);
+                } else {
+                    PhotoPreview.builder()
+                            .setPhotos(photoRecycleViewAdapterBefore.getPhotoPaths())
+                            .setCurrentItem(position)
+                            .setShowDeleteButton(false)
+                            .start(DangerReportActivity.this, 101);
                 }
             });
 
-            photoRecycleViewAdapterBefore.setDeleteListener(new PhotoSelectAdapter.DeleteListener() {
-
-                @Override
-                public void ondelete(int position) {
-                    if (selectPhotosBefore.size() > 0 && selectPhotosBefore.size() > position) {
-                        String bizType = SPUtils.getInstance().getString(CacheConsts.bizType, "");
-                        String userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
-                        String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
-                        UtilDataBaseOfGD.getInstance().deletePic(bizType, selectPhotosBefore.get(position), userCode, reservoirId);
-                        selectPhotosBefore.remove(position);
-
-                    }
-
-                    photoRecycleViewAdapterBefore.setLocalData(selectPhotosBefore);
-                    mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
+            photoRecycleViewAdapterBefore.setDeleteListener(position -> {
+                if (selectPhotosBefore.size() > 0 && selectPhotosBefore.size() > position) {
+                    String bizType = SPUtils.getInstance().getString(CacheConsts.bizType, "");
+                    String userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
+                    String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
+                    UtilDataBaseOfGD.getInstance().deletePic(bizType, selectPhotosBefore.get(position), userCode, reservoirId);
+                    selectPhotosBefore.remove(position);
 
                 }
+
+                photoRecycleViewAdapterBefore.setLocalData(selectPhotosBefore);
+                mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
+
             });
 
         }

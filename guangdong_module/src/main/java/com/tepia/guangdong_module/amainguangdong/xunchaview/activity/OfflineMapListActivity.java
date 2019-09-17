@@ -2,7 +2,6 @@ package com.tepia.guangdong_module.amainguangdong.xunchaview.activity;
 
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -15,15 +14,13 @@ import android.widget.TextView;
 import com.example.guangdong_module.R;
 import com.google.gson.Gson;
 import com.tepia.base.mvp.BaseActivity;
-import com.tepia.base.utils.AppManager;
 import com.tepia.base.utils.SPUtils;
 import com.tepia.base.utils.TimeFormatUtils;
-import com.tepia.base.utils.ToastUtils;
-import com.tepia.guangdong_module.APPCostant;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
 import com.tepia.guangdong_module.amainguangdong.utils.EmptyLayoutUtil;
 import com.tepia.guangdong_module.amainguangdong.xunchaview.adapter.OfflineMapListAdapter;
+import com.yangj.dahemodule.APPCostant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -123,7 +120,7 @@ public class OfflineMapListActivity extends BaseActivity {
         mySelectReservoirAdapter.addFooterView(EmptyLayoutUtil.getFootView());
         mySelectReservoirAdapter.setmOnDownClickListener(item -> {
             boolean offlineMap = item.isOfflineMap();
-            if (offlineMap){
+            if (offlineMap) {
                 new AlertDialog.Builder(getContext())
                         .setTitle("是否重新下载离线地图包?")
                         .setMessage("重新下载将会删除本地已下载地图包并且消耗大量流量。")
@@ -133,15 +130,15 @@ public class OfflineMapListActivity extends BaseActivity {
                         })
                         .setNegativeButton("取消", (dialog, which) -> dialog.dismiss())
                         .show();
-            }else {
+            } else {
                 goDownLoadActivity(item);
             }
         });
         rvSelectReservoir.setAdapter(mySelectReservoirAdapter);
-        if (reservoirList!=null){
+        if (reservoirList != null) {
             searchReservoirList.addAll(reservoirList);
             mySelectReservoirAdapter.notifyDataSetChanged();
-        }else {
+        } else {
             mySelectReservoirAdapter.setEmptyView(EmptyLayoutUtil.show("暂无数据"));
             mySelectReservoirAdapter.notifyDataSetChanged();
         }
@@ -149,27 +146,28 @@ public class OfflineMapListActivity extends BaseActivity {
 
     /**
      * 跳转地图离线包下载界面
+     *
      * @param bean
      */
-    private void goDownLoadActivity(ReservoirBean bean){
-        if (bean!=null){
+    private void goDownLoadActivity(ReservoirBean bean) {
+        if (bean != null) {
             String reservoirCode = bean.getReservoirCode();
-            String fileName = reservoirCode+".tpk";
+            String fileName = reservoirCode + ".tpk";
             Intent intent1 = new Intent(OfflineMapListActivity.this, OffLineMapDownLoadActivity.class);
-            intent1.putExtra("fileName",fileName);
+            intent1.putExtra("fileName", fileName);
             intent1.putExtra("filePath", APPCostant.BASE_DOWN_MAP_URL + fileName);
-            intent1.putExtra("bean",bean);
-            startActivityForResult(intent1,DownLoadActivity.resultCode);
+            intent1.putExtra("bean", bean);
+            startActivityForResult(intent1, DownLoadActivity.resultCode);
         }
     }
 
     /**
      * 设置书库列表数据
      */
-    private void setReservoirList(){
+    private void setReservoirList() {
         //文件存在
         String spDownloadStr = SPUtils.getInstance().getString(downloadSpName, "");
-        if (reservoirList!=null&&reservoirList.size()>0){
+        if (reservoirList != null && reservoirList.size() > 0) {
             if (null == spDownloadStr || "".equals(spDownloadStr)) {
                 //没有水库下载了离线地图包
             } else {
@@ -177,8 +175,8 @@ public class OfflineMapListActivity extends BaseActivity {
                 if (downloadMap != null && downloadMap.size() > 0) {
                     for (Map.Entry<String, Boolean> entry : downloadMap.entrySet()) {
                         String key = entry.getKey();
-                        for (ReservoirBean reservoirBean:reservoirList) {
-                            String reservoirCode = reservoirBean.getReservoirCode()+".tpk";
+                        for (ReservoirBean reservoirBean : reservoirList) {
+                            String reservoirCode = reservoirBean.getReservoirCode() + ".tpk";
                             if (key.equals(reservoirCode)) {
                                 Boolean isLoadComplete = entry.getValue();
                                 reservoirBean.setOfflineMap(isLoadComplete);
@@ -206,11 +204,11 @@ public class OfflineMapListActivity extends BaseActivity {
         switch (requestCode) {
             case DownLoadActivity.resultCode:
                 setReservoirList();
-                if (reservoirList!=null){
+                if (reservoirList != null) {
                     searchReservoirList.clear();
                     searchReservoirList.addAll(reservoirList);
                     mySelectReservoirAdapter.notifyDataSetChanged();
-                }else {
+                } else {
                     mySelectReservoirAdapter.setEmptyView(EmptyLayoutUtil.show("暂无数据"));
                     mySelectReservoirAdapter.notifyDataSetChanged();
                 }

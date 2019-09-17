@@ -17,27 +17,22 @@ import com.tepia.base.utils.AppManager;
 import com.tepia.base.utils.LogUtil;
 import com.tepia.base.utils.NetUtil;
 import com.tepia.base.utils.ToastUtils;
-import com.tepia.guangdong_module.APPCostant;
 import com.tepia.guangdong_module.amainguangdong.LoginOfGDActivity;
 import com.tepia.guangdong_module.amainguangdong.common.MySettingView;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.UserInfoBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
-import com.tepia.guangdong_module.amainguangdong.route.TaskBean;
-import com.tepia.guangdong_module.amainguangdong.xunchaview.activity.DownLoadActivity;
 import com.tepia.guangdong_module.amainguangdong.xunchaview.activity.OfflineMapListActivity;
 import com.tepia.guangdong_module.amainguangdong.xunchaview.activity.VersionActivity;
 
-import org.litepal.crud.DataSupport;
-
 /**
-  * Created by      Android studio
-  *
-  * @author :ly (from Center Of Wuhan)
-  * 创建时间 :2019-4-28
-  * 更新时间 :
-  * Version :1.0
-  * 功能描述 :
+ * Created by      Android studio
+ *
+ * @author :ly (from Center Of Wuhan)
+ * 创建时间 :2019-4-28
+ * 更新时间 :
+ * Version :1.0
+ * 功能描述 :
  **/
 public class SettingFragment extends BaseCommonFragment implements View.OnClickListener {
 
@@ -119,7 +114,6 @@ public class SettingFragment extends BaseCommonFragment implements View.OnClickL
         roleSwitchMv.setIvLeft(R.drawable.p_switchrole);*/
 
 
-
     }
 
     /**
@@ -127,6 +121,7 @@ public class SettingFragment extends BaseCommonFragment implements View.OnClickL
      */
     private TextView userTv;
     private TextView zhizeTv;
+
     private void saveUserInfoBean() {
         UserManager.getInstance_ADMIN().getLoginUser().subscribe(new LoadingSubject<UserInfoBean>(false, "正在提交...") {
             @Override
@@ -137,10 +132,10 @@ public class SettingFragment extends BaseCommonFragment implements View.OnClickL
                         UserManager.getInstance().setUserBean(userInfoBean);
                         String roleName = "";
 
-                        if(TextUtils.isEmpty(roleName)) {
+                        if (TextUtils.isEmpty(roleName)) {
                             zhizeTv.setText(userInfoBean.getData().getOfficeName());
 
-                        }else{
+                        } else {
                             zhizeTv.setText(roleName);
 
                         }
@@ -178,7 +173,7 @@ public class SettingFragment extends BaseCommonFragment implements View.OnClickL
     @Override
     public void onClick(View v) {
         Intent intent = new Intent();
-        if(v.getId() == R.id.loginOutMv){
+        if (v.getId() == R.id.loginOutMv) {
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getBaseActivity());
             builder.setMessage(R.string.exit_message);
@@ -204,15 +199,15 @@ public class SettingFragment extends BaseCommonFragment implements View.OnClickL
             });
             builder.create().show();
 
-        }else if(v.getId() == R.id.settingMv){
+        } else if (v.getId() == R.id.settingMv) {
             intent = new Intent(getBaseActivity(), VersionActivity.class);
             startActivity(intent);
-        }else if(v.getId() == R.id.downMv){
+        } else if (v.getId() == R.id.downMv) {
             ARouter.getInstance().build(AppRoutePath.app_select_reservor_downoffline)
-                    .withString("offlineFlag","10")
+                    .withString("offlineFlag", "10")
                     .navigation();
 
-        }else if (v.getId()==R.id.offlineMap){
+        } else if (v.getId() == R.id.offlineMap) {
             if (!NetUtil.isWifiConnected(getBaseActivity())) {
                 new AlertDialog.Builder(getBaseActivity())
                         .setMessage("当前不再wifi环境下，将消耗移动流量，是否继续下载?")
@@ -237,7 +232,7 @@ public class SettingFragment extends BaseCommonFragment implements View.OnClickL
         }
     }
 
-    private void download(){
+    private void download() {
         //离线地图包测试
        /* String reservoirCode = "";
         defaultReservoir = UserManager.getInstance().getDefaultReservoir();

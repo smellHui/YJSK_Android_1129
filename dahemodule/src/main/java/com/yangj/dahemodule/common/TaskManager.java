@@ -3,7 +3,6 @@ package com.yangj.dahemodule.common;
 
 import com.tepia.base.http.BaseResponse;
 import com.tepia.base.http.RetrofitManager;
-import com.tepia.guangdong_module.amainguangdong.model.xuncha.DangerBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.WaterPptnPictureBean;
 import com.tepia.guangdong_module.amainguangdong.route.TaskBeanFromNet;
 import com.tepia.guangdong_module.amainguangdong.route.TaskDetailResponse;
@@ -131,47 +130,12 @@ public class TaskManager {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-
-    /**
-     * 上报险情
-
-     * @param files
-     * @return
-     */
-    public Observable<BaseResponse> reportProblem(DangerBean dangerBean,
-                                                  List<String> files
-    ) {
-        String reservoirId = dangerBean.getReservoirId();
-        String reservoir = dangerBean.getReservoir();
-        String positionName = dangerBean.getPositionName();
-        String problemDescription = dangerBean.getProblemDescription();
-        String token = HttpManager.getInstance().getToken();
-        Map<String, RequestBody> params = new HashMap<>();
-        params.put("reservoirId", RetrofitManager.convertToRequestBody(reservoirId));
-        params.put("reservoir", RetrofitManager.convertToRequestBody(reservoir));
-        params.put("positionName", RetrofitManager.convertToRequestBody(positionName));
-        params.put("problemDescription", RetrofitManager.convertToRequestBody(problemDescription));
-
-
-        List<File> beforefileList = new ArrayList<>();
-        for (int i = 0; i < files.size(); i++) {
-            File file = new File(files.get(i));
-            beforefileList.add(file);
-        }
-        List<MultipartBody.Part> beforePathList = RetrofitManager.filesToMultipartBodyParts("files", beforefileList);
-        return mRetrofitService.reportProblem(token, params, beforePathList)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread());
-    }
-
-
     public Observable<WaterPptnPictureBean> newWaterPptnPicture(String reservoirId) {
         String token = HttpManager.getInstance().getToken();
         return mRetrofitService.newWaterPptnPicture(token, reservoirId)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
 
     /**
      * 分页查询水库工单列表

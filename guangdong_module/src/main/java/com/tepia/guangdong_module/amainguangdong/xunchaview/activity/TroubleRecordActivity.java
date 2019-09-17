@@ -183,77 +183,67 @@ public class TroubleRecordActivity extends BaseActivity {
 
     @Override
     protected void initListener() {
-        mBinding.layoutTrouble.copyBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //获取剪贴版
+        mBinding.layoutTrouble.copyBtn.setOnClickListener(v -> {
+            //获取剪贴版
 //                ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-                //创建ClipData对象
-                //第一个参数只是一个标记，随便传入。
-                //第二个参数是要复制到剪贴版的内容
-                // 获取edittext中输入的参数
-                String tv_content = mBinding.layoutTrouble.contentTv.getText().toString();
-                StringBuilder builder = new StringBuilder();
-                // 截取字符串前6位替换标点符号和字符等
-                if (!TextUtils.isEmpty(tv_content) && tv_content.length() > 6) {
-                    builder.append(format(tv_content.substring(0, 6)));
-                    builder.append(tv_content.substring(6));
-                } else {
-                    builder.append(format(tv_content));
-                }
+            //创建ClipData对象
+            //第一个参数只是一个标记，随便传入。
+            //第二个参数是要复制到剪贴版的内容
+            // 获取edittext中输入的参数
+            String tv_content = mBinding.layoutTrouble.contentTv.getText().toString();
+            StringBuilder builder = new StringBuilder();
+            // 截取字符串前6位替换标点符号和字符等
+            if (!TextUtils.isEmpty(tv_content) && tv_content.length() > 6) {
+                builder.append(format(tv_content.substring(0, 6)));
+                builder.append(tv_content.substring(6));
+            } else {
+                builder.append(format(tv_content));
+            }
 //                ClipData clip = ClipData.newPlainText("simple text", builder.toString());
 //                //传入clipdata对象.
 //                clipboard.setPrimaryClip(clip);
 //                ToastUtils.shortToast("已复制");
-                String et_content = mBinding.layoutDes.desEt.getText().toString();
-                builder.append(et_content);
-                mBinding.layoutDes.desEt.setText(builder.toString());
-            }
+            String et_content = mBinding.layoutDes.desEt.getText().toString();
+            builder.append(et_content);
+            mBinding.layoutDes.desEt.setText(builder.toString());
         });
-        mBinding.reportTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String positionName = mBinding.layoutDes.selectTv.getText().toString();
-                String problemDescription = mBinding.layoutDes.desEt.getText().toString();
-                /*if (TextUtils.isEmpty(positionName) && items.length > 0) {
-                    ToastUtils.shortToast("请选择险情部位");
-                    return;
-                }*/
+        mBinding.reportTv.setOnClickListener(v -> {
+            String positionName = mBinding.layoutDes.selectTv.getText().toString();
+            String problemDescription = mBinding.layoutDes.desEt.getText().toString();
+            /*if (TextUtils.isEmpty(positionName) && items.length > 0) {
+                ToastUtils.shortToast("请选择险情部位");
+                return;
+            }*/
 
-                if (TextUtils.isEmpty(problemDescription)) {
-                    ToastUtils.shortToast("请填写异常信息");
-                    return;
-                }
-
-                if (CollectionsUtil.isEmpty(selectPhotosBefore)) {
-                    ToastUtils.shortToast("请上传图片");
-                    return;
-                }
-
-                if (taskItemBean != null) {
-                    taskItemBean.setBeforelist(new Gson().toJson(selectPhotosBefore));
-
-                    taskItemBean.setPositionName(positionName);
-                    taskItemBean.setExecuteResultDescription(problemDescription);
-                    taskItemBean.setCompleteStatus("1");
-
-                    if (!TextUtils.isEmpty(executeResultType)) {
-                        taskItemBean.setExecuteResultType(executeResultType);
-                    }
-                    taskItemBean.setExcuteDate(TimeFormatUtils.getStringDate());
-
-                    taskItemBean.updateAll("userCode=? and reservoirId=? and itemId=?", userCode, reservoirId, itemId);
-                }
-
-                ToastUtils.shortToast("提交成功");
-                Intent intent = new Intent();
-
-                TroubleRecordActivity.this.setResult(1000, intent);
-
-                finish();
-
-
+            if (TextUtils.isEmpty(problemDescription)) {
+                ToastUtils.shortToast("请填写异常信息");
+                return;
             }
+
+            if (CollectionsUtil.isEmpty(selectPhotosBefore)) {
+                ToastUtils.shortToast("请上传图片");
+                return;
+            }
+
+            if (taskItemBean != null) {
+                taskItemBean.setBeforelist(new Gson().toJson(selectPhotosBefore));
+
+                taskItemBean.setPositionName(positionName);
+                taskItemBean.setExecuteResultDescription(problemDescription);
+                taskItemBean.setCompleteStatus("1");
+
+                if (!TextUtils.isEmpty(executeResultType)) {
+                    taskItemBean.setExecuteResultType(executeResultType);
+                }
+                taskItemBean.setExcuteDate(TimeFormatUtils.getStringDate());
+
+                taskItemBean.updateAll("userCode=? and reservoirId=? and itemId=?", userCode, reservoirId, itemId);
+            }
+
+            ToastUtils.shortToast("提交成功");
+            Intent intent = new Intent();
+            TroubleRecordActivity.this.setResult(1000, intent);
+            finish();
         });
     }
 
@@ -272,19 +262,15 @@ public class TroubleRecordActivity extends BaseActivity {
         if (CollectionsUtil.isEmpty(personDutyBeanList)) {
             adapterWorker.setEmptyView(EmptyLayoutUtil.showNew("暂无数据"));
         }
-        adapterWorker.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
-                if (!TextUtils.isEmpty(adapterWorker.getData().get(position).getMobile())) {
-                    Intent intent = new Intent(Intent.ACTION_DIAL);
-                    Uri data = Uri.parse("tel:" + adapterWorker.getData().get(position).getMobile());
-                    intent.setData(data);
-                    startActivity(intent);
-                } else {
-                    ToastUtils.shortToast("暂无手机号码");
-                }
+        adapterWorker.setOnItemClickListener((adapter, view, position) -> {
+            if (!TextUtils.isEmpty(adapterWorker.getData().get(position).getMobile())) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                Uri data = Uri.parse("tel:" + adapterWorker.getData().get(position).getMobile());
+                intent.setData(data);
+                startActivity(intent);
+            } else {
+                ToastUtils.shortToast("暂无手机号码");
             }
-
         });
     }
 
@@ -333,23 +319,19 @@ public class TroubleRecordActivity extends BaseActivity {
             });
 
             if (!isCompleteOfTaskBean) {
-                photoRecycleViewAdapterBefore.setDeleteListener(new PhotoSelectAdapter.DeleteListener() {
-
-                    @Override
-                    public void ondelete(int position) {
-                        if (selectPhotosBefore.size() > 0 && selectPhotosBefore.size() > position) {
-                            String bizType = SPUtils.getInstance().getString(CacheConsts.bizType, "");
-                            String userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
-                            String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
-                            UtilDataBaseOfGD.getInstance().deletePic(bizType, selectPhotosBefore.get(position), userCode, reservoirId);
-                            selectPhotosBefore.remove(position);
-
-                        }
-
-                        photoRecycleViewAdapterBefore.setLocalData(selectPhotosBefore);
-                        mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
+                photoRecycleViewAdapterBefore.setDeleteListener(position -> {
+                    if (selectPhotosBefore.size() > 0 && selectPhotosBefore.size() > position) {
+                        String bizType = SPUtils.getInstance().getString(CacheConsts.bizType, "");
+                        String userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
+                        String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
+                        UtilDataBaseOfGD.getInstance().deletePic(bizType, selectPhotosBefore.get(position), userCode, reservoirId);
+                        selectPhotosBefore.remove(position);
 
                     }
+
+                    photoRecycleViewAdapterBefore.setLocalData(selectPhotosBefore);
+                    mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
+
                 });
             } else {
 //                photoRecycleViewAdapterBefore
@@ -417,12 +399,9 @@ public class TroubleRecordActivity extends BaseActivity {
                 .widthScale(0.8f)
                 .show();
 
-        dialog.setOnOpenItemClickL(new OnOpenItemClick() {
-            @Override
-            public void onOpenItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mBinding.layoutDes.selectTv.setText(items[position]);
-                dialog.dismiss();
-            }
+        dialog.setOnOpenItemClickL((parent, view, position, id) -> {
+            mBinding.layoutDes.selectTv.setText(items[position]);
+            dialog.dismiss();
         });
     }
 

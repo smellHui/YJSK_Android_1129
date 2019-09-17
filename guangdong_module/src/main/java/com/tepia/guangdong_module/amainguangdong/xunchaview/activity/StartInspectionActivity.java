@@ -56,7 +56,6 @@ import com.example.gaodelibrary.GaodeEntity;
 import com.example.guangdong_module.R;
 import com.example.guangdong_module.databinding.ActivityStartInspectionBinding;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.tepia.base.CacheConsts;
 import com.tepia.base.ConfigConsts;
 import com.tepia.base.http.LoadingSubject;
@@ -93,7 +92,6 @@ import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
 import com.tepia.guangdong_module.amainguangdong.utils.ArcgisUtils;
 import com.tepia.guangdong_module.amainguangdong.utils.EmptyLayoutUtil;
 import com.tepia.guangdong_module.amainguangdong.xunchaview.adapter.AdapterTaskItemListNew;
-import com.tepia.guangdong_module.amainguangdong.xunchaview.fragment.YunweiFragment;
 import com.tepia.photo_picker.utils.SPUtils;
 
 import org.litepal.crud.DataSupport;
@@ -749,7 +747,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 //                mBinding.alMapview.addPolyline(exeline2, SimpleLineSymbol.Style.SOLID, Color.RED, 6);
                 int color = ContextCompat.getColor(getContext(), R.color.route_color_one);
                 alMapview.addPolylineToGraphicsOverlay(standardRouteOverlay, result, SimpleLineSymbol.Style.SOLID, color, 4);
-                if (result != null && result.size() > 0) {
+                if (!CollectionsUtil.isEmpty(result)) {
                     Map map = new HashMap();
                     alMapview.addPicToGraphicsOverlay(standardRouteOverlay, R.mipmap.ic_me_history_startpoint, result.get(0), map);
                     alMapview.addPicToGraphicsOverlay(standardRouteOverlay, R.mipmap.ic_me_history_finishpoint, result.get(result.size() - 1), map);
@@ -761,7 +759,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             //第一次进界面添加待巡查点
             routePositions = routeListBean.getRoutePositionsByworkid(workOrderId);
             //刷新待巡查点和已巡查点
-
             setYxcListAndDxcList();
             setRoutePosition(dxcRoutePositions, picIds[0], dxcOverlay);
             setRoutePosition(yxcRoutePositions, picIds[1], yxcOverlay);
@@ -775,10 +772,9 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                                 , userCode, reservoirId, workOrderId, routePosition.getPositionId()).find(TaskItemBean.class);
                         Point point = routePosition.parasePoint();
                         int color = ContextCompat.getColor(getContext(), R.color.text_map_bg);
-                        if (itemList != null && itemList.size() > 0) {
+                        if (!CollectionsUtil.isEmpty(itemList)) {
                             TaskItemBean taskItemBean = itemList.get(0);
                             String positionTreeNames = taskItemBean.getPositionTreeNames();
-//                            ArcgisLayout.setTextMarker(point, textGraphics, positionTreeNames, color);
                             Map<String, Object> attrs = new HashMap<>();
                             attrs.put("positionId", routePosition.getPositionId());
                             ArcgisLayout.setTextMarker(point, textGraphics, positionTreeNames, color, attrs, 28);
@@ -1369,18 +1365,12 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                 return;
             }
             tjDialogFragment.dismiss();
-
             commitTotal();
-
-
         }, v -> {
             if (DoubleClickUtil.isFastDoubleClick()) {
                 return;
             }
             tjDialogFragment.dismiss();
-
-            Intent intent = new Intent();
-            StartInspectionActivity.this.setResult(YunweiFragment.resultCode, intent);
             finish();
 
         });
@@ -1401,31 +1391,30 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 
             TaskBean taskBean = DataSupport.where("workOrderId=?", workOrderId).findFirst(TaskBean.class);
             if (taskBean != null) {
-                if (taskBean != null) {
-                    if (taskBean.isHasStartExecute()) {
-                        //如果已经新建过工单了则直接提交
+                if (taskBean.isHasStartExecute()) {
+                    //如果已经新建过工单了则直接提交
 //                        List<TaskItemBean> taskItemBeanList = DataSupport.where("workOrderId=?", workOrderId).find(TaskItemBean.class);
-                        List<TaskItemBean> localTaskItemBeanList = adapterTaskItemList.getLocalData(workOrderId);
-                        if (!CollectionsUtil.isEmpty(localTaskItemBeanList)) {
-                            mPresenter.commitTotal(localTaskItemBeanList, StartInspectionActivity.this);
-                        } else {
-                            if (taskBean.getExecuteStatus().equals("2")) {
-                                String temp = RoutepointDataManager.getInstance().getRoutePointListString(workOrderId);
-                                taskBean.setWorkOrderRoute(temp);
-                                taskBean.updateAll("workorderid=?", taskBean.getWorkOrderId());
-                                /**
-                                 * APP 巡检人员工单执行完成提交 （App 端使用）
-                                 */
-                                mPresenter.endExecute(workOrderId, temp, true, "正在提交完成");
-                            } else {
-                                finish();
-                            }
-
-                        }
+                    List<TaskItemBean> localTaskItemBeanList = adapterTaskItemList.getLocalData(workOrderId);
+                    if (!CollectionsUtil.isEmpty(localTaskItemBeanList)) {
+                        mPresenter.commitTotal(localTaskItemBeanList, StartInspectionActivity.this);
                     } else {
-                        newStartExecute(taskBean.getWorkOrderId(), taskBean.getRouteId(), taskBean.getReservoirId(), taskBean.getReservoir(), taskBean.getStartTime());
+                        if (taskBean.getExecuteStatus().equals("2")) {
+                            String temp = RoutepointDataManager.getInstance().getRoutePointListString(workOrderId);
+                            taskBean.setWorkOrderRoute(temp);
+                            taskBean.updateAll("workorderid=?", taskBean.getWorkOrderId());
+                            /**
+                             * APP 巡检人员工单执行完成提交 （App 端使用）
+                             */
+                            mPresenter.endExecute(workOrderId, temp, true, "正在提交完成");
+                        } else {
+                            finish();
+                        }
+
                     }
+                } else {
+                    newStartExecute(taskBean.getWorkOrderId(), taskBean.getRouteId(), taskBean.getStartTime());
                 }
+
             }
 
         }
@@ -1472,12 +1461,10 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 
     /**
      * 新建工单
-     *
-     * @param reservoirId
      */
-    public void newStartExecute(String workOrderId, String routeId, String reservoirId, String reservoir, String startTime) {
+    public void newStartExecute(String workOrderId, String routeId, String startTime) {
 //        startTime += ":00";
-        TaskManager.getInstance().newStartExecute(workOrderId, routeId, reservoirId, reservoir, startTime).safeSubscribe(new LoadingSubject<TaskDetailResponse>(true, "正在新建工单...") {
+        TaskManager.getInstance().newStartExecute(workOrderId, routeId, startTime).safeSubscribe(new LoadingSubject<TaskDetailResponse>(true, "正在新建工单...") {
             @Override
             protected void _onNext(TaskDetailResponse taskDetailResponse) {
                 /**
@@ -1573,8 +1560,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         }
 
         ToastUtils.shortToast("提交成功");
-        Intent intent = new Intent();
-        StartInspectionActivity.this.setResult(YunweiFragment.resultCode, intent);
         finish();
     }
 
@@ -1689,8 +1674,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                 }
 
                 ToastUtils.shortToast("数据已保存");
-                Intent intent = new Intent();
-                StartInspectionActivity.this.setResult(YunweiFragment.resultCode, intent);
             }
         }
         return super.onKeyDown(keyCode, event);

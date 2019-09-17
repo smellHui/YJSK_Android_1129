@@ -35,7 +35,6 @@ import java.util.List;
 public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.View> implements TaskDetailContract.Presenter {
 
 
-
     /**
      * 修改工单状态为执行中
      *
@@ -63,6 +62,7 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
 
     /**
      * 完成巡查
+     *
      * @param workOrderId
      * @param workOrderRoute
      * @param isShow
@@ -82,8 +82,8 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
             protected void _onError(String message) {
 
                 LoadingDialog.with(AppManager.getInstance().getCurrentActivity()).dismiss();
-                LogUtil.e("endExecute:"+message);
-                ToastUtils.shortToast("最后执行工单提交失败，请重试一次"+message);
+                LogUtil.e("endExecute:" + message);
+                ToastUtils.shortToast("最后执行工单提交失败，请重试一次" + message);
 
             }
         });
@@ -91,46 +91,45 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
 
 
     public void commitTotal(List<TaskItemBean> localData, Context mContext) {
-        if (!CollectionsUtil.isEmpty(localData)) {
-            appReservoirWorkOrderItemCommitOneByOne(localData, 0,mContext);
-
-
-        }
+        if (CollectionsUtil.isEmpty(localData)) return;
+        appReservoirWorkOrderItemCommitOneByOne(localData, 0, mContext);
     }
 
     SimpleLoadDialog simpleLoadDialog;
-    public void appReservoirWorkOrderItemCommitOneByOne(List<TaskItemBean> localData, int count,Context mContext) {
+
+    public void appReservoirWorkOrderItemCommitOneByOne(List<TaskItemBean> localData, int count, Context mContext) {
+        if (CollectionsUtil.isEmpty(localData)) return;
         int size = localData.size();
 
-        if (!CollectionsUtil.isEmpty(localData)) {
-            if (count < localData.size()) {
-                TaskItemBean bean = localData.get(count);
-                List<String> files = new Gson().fromJson(bean.getBeforelist(), new TypeToken<List<String>>() {
-                }.getType());
-                if (files == null) {
-                    files = new ArrayList<>();
-                }
-                if (simpleLoadDialog == null) {
-                    simpleLoadDialog = new SimpleLoadDialog(mContext,"正在提交第" + (count+1) +"/"+size +"项离线数据",true);
-                }
-                simpleLoadDialog.show();
-                simpleLoadDialog.setMessage("正在提交第" + (count+1) +"/"+size + "项离线数据");
-                appReservoirWorkOrderItemCommitOne(localData, count,files, false, "正在提交第" + (count+1) +"/"+size + "项离线数据",mContext);
-            } else {
-                /**
-                 * 一项一项提交完成后执行
-                 */
-                if (simpleLoadDialog != null) {
-                    simpleLoadDialog.dismiss();
-                }
-                mView.appReservoirWorkOrderItemCommitOneByOneSuccess();
+        if (count < localData.size()) {
+            TaskItemBean bean = localData.get(count);
+            List<String> files = new Gson().fromJson(bean.getBeforelist(), new TypeToken<List<String>>() {
+            }.getType());
+            if (files == null) {
+                files = new ArrayList<>();
             }
+            if (simpleLoadDialog == null) {
+                simpleLoadDialog = new SimpleLoadDialog(mContext, "正在提交第" + (count + 1) + "/" + size + "项离线数据", true);
+            }
+            simpleLoadDialog.show();
+            simpleLoadDialog.setMessage("正在提交第" + (count + 1) + "/" + size + "项离线数据");
+            appReservoirWorkOrderItemCommitOne(localData, count, files, false, "正在提交第" + (count + 1) + "/" + size + "项离线数据", mContext);
+        } else {
+            /**
+             * 一项一项提交完成后执行
+             */
+            if (simpleLoadDialog != null) {
+                simpleLoadDialog.dismiss();
+            }
+            mView.appReservoirWorkOrderItemCommitOneByOneSuccess();
         }
+
     }
 
 
     /**
      * 一项一项提交
+     *
      * @param localData
      * @param count
      * @param files
@@ -139,15 +138,14 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
      */
     public void appReservoirWorkOrderItemCommitOne(List<TaskItemBean> localData,
                                                    int count,
-
                                                    List<String> files,
                                                    boolean isShow,
                                                    String msg,
                                                    Context mContext
-                                                   ) {
+    ) {
 
 
-        if (files.size() == 0 ) {
+        if (files.size() == 0) {
             TaskItemBean taskItemBean = localData.get(count);
             TaskManager.getInstance().appReservoirWorkOrderItemCommitOne(taskItemBean, files)
                     .subscribe(new LoadingSubject<BaseResponse>(isShow, msg) {
@@ -157,7 +155,7 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
                                 taskItemBean.setIsCommitLocal("1");
                                 taskItemBean.saveOrUpdate("itemid=?", taskItemBean.getItemId());
 
-                                appReservoirWorkOrderItemCommitOneByOne(localData, count + 1,mContext);
+                                appReservoirWorkOrderItemCommitOneByOne(localData, count + 1, mContext);
                             }
                         }
 
@@ -165,7 +163,7 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
                         protected void _onError(String message) {
                             LoadingDialog.with(AppManager.getInstance().getCurrentActivity()).dismiss();
                             if (message.contains("重复")) {
-                                appReservoirWorkOrderItemCommitOneByOne(localData, count + 1,mContext);
+                                appReservoirWorkOrderItemCommitOneByOne(localData, count + 1, mContext);
                                 return;
                             }
                             ToastUtils.shortToast(message);
@@ -197,14 +195,14 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
                                         if (response.getCode() == 0) {
                                             taskItemBean.setIsCommitLocal("1");
                                             taskItemBean.saveOrUpdate("itemid=?", taskItemBean.getItemId());
-                                            appReservoirWorkOrderItemCommitOneByOne(localData, count + 1,mContext);
+                                            appReservoirWorkOrderItemCommitOneByOne(localData, count + 1, mContext);
                                         }
                                     }
 
                                     @Override
                                     protected void _onError(String message) {
                                         if (message.contains("重复")) {
-                                            appReservoirWorkOrderItemCommitOneByOne(localData, count + 1,mContext);
+                                            appReservoirWorkOrderItemCommitOneByOne(localData, count + 1, mContext);
                                             return;
                                         }
                                         ToastUtils.shortToast(message);

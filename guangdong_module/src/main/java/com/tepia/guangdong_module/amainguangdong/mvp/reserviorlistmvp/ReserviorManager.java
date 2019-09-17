@@ -1,16 +1,13 @@
 package com.tepia.guangdong_module.amainguangdong.mvp.reserviorlistmvp;
 
 import com.tepia.base.http.RetrofitManager;
-import com.tepia.guangdong_module.APPCostant;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.AreaReservoirCountBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReserviorListBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.UserReservoirCount;
-import com.tepia.guangdong_module.amainguangdong.mvp.taskdetail.TaskManager;
-import com.tepia.guangdong_module.amainguangdong.route.TaskBeanFromNet;
+import com.yangj.dahemodule.APPCostant;
 
 import io.reactivex.Observable;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 
@@ -39,20 +36,20 @@ public class ReserviorManager {
 
     public Observable<ReserviorListBean> listReservoirInfo(String reservoir, String reservoirType, String areaCode, int currentPage, int pageSize) {
         String token = UserManager.getInstance().getToken();
-        return mRetrofitService.listReservoirInfo(token, reservoir,reservoirType,areaCode,currentPage,pageSize)
+        return mRetrofitService.listReservoirInfo(token, reservoir, reservoirType, areaCode, currentPage, pageSize)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
 
-    public Observable<UserReservoirCount> getUserReservoirCount(){
+    public Observable<UserReservoirCount> getUserReservoirCount() {
         String token = UserManager.getInstance().getToken();
         return mRetrofitService.getUserReservoirCount(token)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public Observable<AreaReservoirCountBean> getAreaReservoirCount(){
+    public Observable<AreaReservoirCountBean> getAreaReservoirCount() {
         String token = UserManager.getInstance().getToken();
 
         return mRetrofitService.getAreaReservoirCount(token)

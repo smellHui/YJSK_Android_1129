@@ -9,8 +9,6 @@ import android.text.TextUtils;
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.pgyersdk.update.PgyUpdateManager;
 import com.tepia.base.AppRoutePath;
 import com.tepia.base.CacheConsts;
 import com.tepia.base.http.BaseResponse;
@@ -26,7 +24,6 @@ import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirOfflineRe
 import com.tepia.photo_picker.utils.SPUtils;
 import com.yangj.dahemodule.APPCostant;
 import com.yangj.dahemodule.http.UserHttpService;
-import com.yangj.dahemodule.model.JsonBean;
 import com.yangj.dahemodule.model.NewNoticeBean;
 import com.yangj.dahemodule.model.Report.ReportDataBean;
 import com.yangj.dahemodule.model.UserBean;
@@ -35,7 +32,6 @@ import com.yangj.dahemodule.model.UserLoginResponse;
 import com.yangj.dahemodule.model.WeatherWarnBean;
 import com.yangj.dahemodule.model.main.DangerousPosition;
 import com.yangj.dahemodule.model.main.MainDataBean;
-import com.yangj.dahemodule.model.main.ReservoirInfo;
 import com.yangj.dahemodule.model.main.Route;
 import com.yangj.dahemodule.model.main.UserInfo;
 import com.yangj.dahemodule.model.user.SysUserDataBean;
@@ -43,7 +39,6 @@ import com.yangj.dahemodule.model.xuncha.RecordDataBean;
 
 import org.litepal.crud.DataSupport;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;

@@ -1,7 +1,6 @@
 package com.tepia.guangdong_module.amainguangdong.mvp.adminstatistics;
 
 import com.tepia.base.http.RetrofitManager;
-import com.tepia.guangdong_module.APPCostant;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.adminstatistics.InspectionStatisticsResponse;
 import com.tepia.guangdong_module.amainguangdong.model.adminstatistics.RealTimeMonitorResponse;
@@ -9,6 +8,7 @@ import com.tepia.guangdong_module.amainguangdong.model.adminstatistics.SafetyIde
 import com.tepia.guangdong_module.amainguangdong.model.adminstatistics.ThreeKeyPointResponse;
 import com.tepia.guangdong_module.amainguangdong.model.adminstatistics.ThreePersonsResponse;
 import com.tepia.guangdong_module.amainguangdong.mvp.typhoonroute.TyphoonRouteHttpService;
+import com.yangj.dahemodule.APPCostant;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;

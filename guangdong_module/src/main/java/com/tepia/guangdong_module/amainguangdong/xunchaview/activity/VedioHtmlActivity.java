@@ -12,7 +12,6 @@ import com.tepia.base.mvp.BaseActivity;
 import com.tepia.base.utils.NetUtil;
 import com.tepia.base.utils.ToastUtils;
 import com.tepia.base.utils.Utils;
-import com.tepia.guangdong_module.APPCostant;
 /**
   * Created by      Android studio
   *

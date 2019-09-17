@@ -2,27 +2,23 @@ package com.tepia.guangdong_module.amainguangdong.mvp.reservoirDetail;
 
 import com.tepia.base.http.RetrofitManager;
 import com.tepia.base.utils.Utils;
-import com.tepia.guangdong_module.APPCostant;
 import com.tepia.guangdong_module.amainguangdong.model.reservoirdetail.PicDetailBean;
 import com.tepia.guangdong_module.amainguangdong.model.reservoirdetail.RainDetailBean;
 import com.tepia.guangdong_module.amainguangdong.model.reservoirdetail.WaterRegimeDetailBean;
 import com.tepia.photo_picker.utils.SPUtils;
-
-import java.util.Observer;
+import com.yangj.dahemodule.APPCostant;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.http.Header;
-import retrofit2.http.Query;
 
 /**
-  * Created by      Android studio
-  *
-  * @author :wwj (from Center Of Wuhan)
-  * Date    :2019/5/29
-  * Version :1.0
-  * 功能描述 : 水库详情
+ * Created by      Android studio
+ *
+ * @author :wwj (from Center Of Wuhan)
+ * Date    :2019/5/29
+ * Version :1.0
+ * 功能描述 : 水库详情
  **/
 public class ReservoirDetailManager {
     private ReservoirDetailService mRetrofitService;
@@ -52,11 +48,11 @@ public class ReservoirDetailManager {
         return ourInstance_admin;
     }
 
-    public static ReservoirDetailManager getInstance_Works(){
+    public static ReservoirDetailManager getInstance_Works() {
         return ourInstance_works;
     }
 
-    public static ReservoirDetailManager getInstance_Monitor(){
+    public static ReservoirDetailManager getInstance_Monitor() {
         return ourInstance_monitor;
     }
 
@@ -70,43 +66,46 @@ public class ReservoirDetailManager {
 
     /**
      * 查询水库雨情（小时、日雨量）
+     *
      * @param reservoirId
      * @param startDate
      * @param endDate
      * @param selectType
      * @return
      */
-    public Observable<RainDetailBean>  getRainDetailList(String reservoirId, String startDate, String endDate,String selectType){
+    public Observable<RainDetailBean> getRainDetailList(String reservoirId, String startDate, String endDate, String selectType) {
         String token = getToken();
-        return mRetrofitService.getRainDetailList(token,reservoirId,startDate,endDate,selectType)
+        return mRetrofitService.getRainDetailList(token, reservoirId, startDate, endDate, selectType)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
      * 查询水库水情列表
+     *
      * @param reservoirId
      * @param startDate
      * @param endDate
      * @return
      */
-    public Observable<WaterRegimeDetailBean> getReservoirWaterList(String reservoirId,String startDate,String endDate){
+    public Observable<WaterRegimeDetailBean> getReservoirWaterList(String reservoirId, String startDate, String endDate) {
         String token = getToken();
-        return mRetrofitService.getReservoirWaterList(token,reservoirId,startDate,endDate)
+        return mRetrofitService.getReservoirWaterList(token, reservoirId, startDate, endDate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**
      * 查询水库图像列表
+     *
      * @param reservoirId
      * @param startDate
      * @param endDate
      * @return
      */
-    public Observable<PicDetailBean> getPictureDetailList(String reservoirId,String startDate,String endDate){
+    public Observable<PicDetailBean> getPictureDetailList(String reservoirId, String startDate, String endDate) {
         String token = getToken();
-        return mRetrofitService.getPictureDetailList(token,reservoirId,startDate,endDate)
+        return mRetrofitService.getPictureDetailList(token, reservoirId, startDate, endDate)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }

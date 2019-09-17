@@ -14,7 +14,6 @@ import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-
 import com.tepia.base.R;
 
 import java.lang.ref.WeakReference;
@@ -23,9 +22,9 @@ import java.lang.ref.WeakReference;
  * Describe:自定义网络加载进度条
  * Created by liying on 2018/3/5
  */
-public class SimpleLoadDialog extends Handler{
+public class SimpleLoadDialog extends Handler {
 
-    private  Dialog load = null;
+    private Dialog load = null;
 
     public static final int SHOW_PROGRESS_DIALOG = 1;
     public static final int DISMISS_PROGRESS_DIALOG = 2;
@@ -39,16 +38,17 @@ public class SimpleLoadDialog extends Handler{
     private String msg;
 
     private AnimationDrawable animationDrawable;
-    public SimpleLoadDialog(Context context,String msg,
+
+    public SimpleLoadDialog(Context context, String msg,
                             boolean cancelable) {
         this.reference = new WeakReference<>(context);
         this.msg = msg;
         this.cancelable = cancelable;
     }
 
-    private void create(){
+    private void create() {
         if (load == null) {
-            context  = reference.get();
+            context = reference.get();
 
             load = new Dialog(context, R.style.loading_dialog);
             View dialogView = LayoutInflater.from(context).inflate(
@@ -56,40 +56,37 @@ public class SimpleLoadDialog extends Handler{
             load.setCanceledOnTouchOutside(false);
             load.setCancelable(cancelable);
             load.setContentView(dialogView);
-            load.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    if(mProgressCancelListener!=null) {
-                        mProgressCancelListener.onCancelProgress();
-                    }
+            load.setOnCancelListener(dialog -> {
+                if (mProgressCancelListener != null) {
+                    mProgressCancelListener.onCancelProgress();
                 }
             });
             loadingMessageTv = dialogView.findViewById(R.id.loading_message);
             loadingMessageTv.setText(msg);
             animationIv = dialogView.findViewById(R.id.animationIv);
             animationIv.setImageResource(R.drawable.refresh_refreshing);
-            animationDrawable =  (AnimationDrawable) animationIv.getDrawable();
+            animationDrawable = (AnimationDrawable) animationIv.getDrawable();
             Window dialogWindow = load.getWindow();
             dialogWindow.setGravity(Gravity.CENTER_VERTICAL
                     | Gravity.CENTER_HORIZONTAL);
 
         }
-        if (!load.isShowing() && context != null && !((Activity)context).isFinishing()) {
+        if (!load.isShowing() && context != null && !((Activity) context).isFinishing()) {
 
             animationDrawable.start();
             load.show();
         }
     }
 
-    public void show(){
+    public void show() {
         create();
     }
 
 
     public void dismiss() {
-        context  = reference.get();
+        context = reference.get();
         if (load != null && load.isShowing() && !((Activity) context).isFinishing()) {
-            if(animationDrawable != null) {
+            if (animationDrawable != null) {
                 animationDrawable.stop();
                 animationDrawable = null;
             }
@@ -100,10 +97,11 @@ public class SimpleLoadDialog extends Handler{
 
     /**
      * 设置提示语
+     *
      * @param title
      */
-    public void setMessage(String title){
-        if(loadingMessageTv != null){
+    public void setMessage(String title) {
+        if (loadingMessageTv != null) {
             loadingMessageTv.setText(title);
         }
     }

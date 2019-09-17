@@ -1,18 +1,13 @@
 package com.tepia.guangdong_module.amainguangdong.mvp.reservoirregimen;
 
 import com.tepia.base.http.RetrofitManager;
-import com.tepia.base.mvp.BasePresenterImpl;
-import com.tepia.guangdong_module.APPCostant;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.reservoirregimen.ReservoirRegimenResponse;
-import com.tepia.guangdong_module.amainguangdong.mvp.adminstatistics.AdminStatisticsHttpService;
-import com.tepia.guangdong_module.amainguangdong.mvp.adminstatistics.AdminStatisticsManager;
-import com.tepia.guangdong_module.amainguangdong.mvp.reserviorlistmvp.ReserviorManager;
+import com.yangj.dahemodule.APPCostant;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.http.Query;
 
 /**
  * Created by Android Studio
@@ -22,7 +17,7 @@ import retrofit2.http.Query;
  * Time :    16:19
  * Describe :
  */
-public class ReservoirRegimenManager{
+public class ReservoirRegimenManager {
     private static final ReservoirRegimenManager ourInstance = new ReservoirRegimenManager();
     private ReservoirRegimenHttpService mRetrofitService;
 
@@ -38,12 +33,11 @@ public class ReservoirRegimenManager{
 
 
     /**
-     *
      * 获取水库水情列表
      *
      * @return
      */
-    public Observable<ReservoirRegimenResponse> getReservoirRegimenList(int currentPage,int pageSize, String type,String identifyType,String startTime,String endTime) {
+    public Observable<ReservoirRegimenResponse> getReservoirRegimenList(int currentPage, int pageSize, String type, String identifyType, String startTime, String endTime) {
         String token = UserManager.getInstance().getToken();
         return mRetrofitService.getReservoirRegimenList(token, currentPage, pageSize, type, identifyType, startTime, endTime)
                 .subscribeOn(Schedulers.io())

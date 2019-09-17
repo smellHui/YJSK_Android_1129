@@ -72,6 +72,7 @@ public class OperateFragment extends BaseCommonFragment {
         reservoirBean = UserManager.getInstance().getDefaultReservoir();
         String userCode = UserManager.getInstance().getUserCode();
         if (reservoirBean != null) {
+            SPUtils.getInstance().putString(CacheConsts.reservoirId, reservoirBean.getReservoirId());
             List<Route> routes = HttpManager.getInstance().getRoutes();
             if (!CollectionsUtil.isEmpty(routes)) {
                 Route route = routes.get(0);
@@ -85,6 +86,8 @@ public class OperateFragment extends BaseCommonFragment {
                     for (ReservoirStructure reservoirStructure : reservoirStructures) {
                         RoutePosition routePosition = new RoutePosition();
                         routePosition.setWorkOrderId(workOrderId);
+                        routePosition.setUserCode(userCode);
+                        routePosition.setReservoirId(reservoirBean.getReservoirId());
                         routePosition.setPositionId(reservoirStructure.getId());
                         routePosition.setPositionLgtd(reservoirStructure.getPositionLongitude());
                         routePosition.setPositionLttd(reservoirStructure.getPositionLatitude());
@@ -98,11 +101,13 @@ public class OperateFragment extends BaseCommonFragment {
                         TaskItemBean taskItemBean = new TaskItemBean();
                         taskItemBean.setWorkOrderId(workOrderId);
                         taskItemBean.setUserCode(userCode);
-                        taskItemBean.setPositionTreeNames(omltem.getOmItemName());
-                        taskItemBean.setSuperviseItemName(omltem.getOmItemContent());
+                        taskItemBean.setItemId(omltem.getOmItemId());
+                        taskItemBean.setPositionId(omltem.getReservoirStructureId());
+                        taskItemBean.setPositionTreeNames(omltem.getPositionName());
+                        taskItemBean.setSuperviseItemContent(omltem.getOmItemContent());
+                        taskItemBean.setSuperviseItemCode(UUIDUtil.getUUID32());
                         taskItemBean.setOperationLevel(omltem.getOmItemLevel());
                         taskItemBean.setReservoirId(reservoirBean.getReservoirId());
-                        taskItemBean.setPositionId(omltem.getOmItemId());
                         taskItemBean.setSuperviseItemName(omltem.getOmItemName());
                         itemList.add(taskItemBean);
                     }
@@ -125,7 +130,7 @@ public class OperateFragment extends BaseCommonFragment {
                 taskBean.setRouteId(routeListBeanNew.getId());
                 taskBean.setReservoirId(reservoirBean.getReservoirId());
                 taskBean.setReservoir(reservoirBean.getReservoir());
-//                taskBean.setUserCode(userCode);
+                taskBean.setUserCode(userCode);
                 UserBean userBean = HttpManager.getInstance().getUser();
 //            taskBean.setRoleName(userInfoBean.getData().getOfficeName());
                 if (userBean != null) {
@@ -186,7 +191,7 @@ public class OperateFragment extends BaseCommonFragment {
             taskItemBean.setReservoirId(reservoirId);
             taskItemBean.setFatherId(routeListBean.getId());
             taskItemBean.setIsCommitLocal(completeStatus);
-            taskItemBean.setItemId(UUIDUtil.getUUID32());
+            taskItemBean.setItemId(taskItemBean1.getItemId());
             taskItemBean.setWorkOrderId(workOrderId);
             taskItemBean.setCompleteStatus(completeStatus);
 

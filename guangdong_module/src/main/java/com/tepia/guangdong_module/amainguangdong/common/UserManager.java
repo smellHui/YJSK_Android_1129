@@ -14,9 +14,10 @@ import com.tepia.base.AppRoutePath;
 import com.tepia.base.CacheConsts;
 import com.tepia.base.http.BaseResponse;
 import com.tepia.base.http.RetrofitManager;
-import com.tepia.base.view.floatview.CollectionsUtil;
+import com.tepia.base.utils.Utils;
 import com.tepia.guangdong_module.amainguangdong.model.JsonBean;
 import com.tepia.guangdong_module.amainguangdong.model.NewNoticeBean;
+import com.tepia.guangdong_module.amainguangdong.model.UserInfoBean;
 import com.tepia.guangdong_module.amainguangdong.model.WeatherWarnBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.AreaBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.DataBeanOflistReservoirRoute;
@@ -24,19 +25,18 @@ import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirListResponse;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirOfflineResponse;
 import com.tepia.photo_picker.utils.SPUtils;
-import com.tepia.base.utils.Utils;
-import com.tepia.guangdong_module.APPCostant;
-import com.tepia.guangdong_module.amainguangdong.model.UserInfoBean;
+import com.yangj.dahemodule.APPCostant;
 
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.List;
 
-//import cn.jpush.android.api.JPushInterface;
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
+
+//import cn.jpush.android.api.JPushInterface;
 
 /**
  * Created by Joeshould on 2018/5/22.
@@ -102,7 +102,7 @@ public class UserManager {
      * @return
      */
     public Observable<ReservoirListResponse> getReservoirList() {
-        String token = getToken();
+        String token = makeToken();
 
         return mRetrofitService.getReservoirList(token)
                 .subscribeOn(Schedulers.io())
@@ -116,7 +116,7 @@ public class UserManager {
      * @return
      */
     public Observable<ReservoirOfflineResponse> getAllReservoirData(String reservoirId) {
-        String token = getToken();
+        String token = makeToken();
 
         return mRetrofitService.getAllReservoirData(token, reservoirId)
                 .subscribeOn(Schedulers.io())
@@ -130,7 +130,7 @@ public class UserManager {
      * @return
      */
     public Observable<NewNoticeBean> getNewNotice(String reservoirId) {
-        String token = getToken();
+        String token = makeToken();
 
         return mRetrofitService.getNewNotice(token, reservoirId)
                 .subscribeOn(Schedulers.io())
@@ -143,7 +143,7 @@ public class UserManager {
      * @return
      */
     public Observable<WeatherWarnBean> getWeatherWarn() {
-        String token = getToken();
+        String token = makeToken();
 
         return mRetrofitService.getWeatherWarn(token)
                 .subscribeOn(Schedulers.io())
@@ -156,7 +156,7 @@ public class UserManager {
      * @return
      */
     public Observable<AreaBean> getAreaSelect() {
-        String token = getToken();
+        String token = makeToken();
         /*token = "eyJhbGciOiJSUzI1NiJ9.eyJzdWIiOiJndWFuZ2RvbmdhZG" +
                 "1pbiIsInVzZXJJZCI6ImFlNTFiYzZiNWE5ZjRjZjA5YTk2YWQ4YjUwNzVjMTYxIiwibmFtZSI" +
                 "6IuW5v-S4nOecgeeuoeeQhuWRmCIsImxvZ2luU2NvcGUiOiIwIiwiZXhwIjoxNTU5MjM0OTgwfQ.BwxHE" +
@@ -169,7 +169,7 @@ public class UserManager {
     }
 
     public Observable<BaseResponse> updateNotice(String id, String workOrderId) {
-        String token = getToken();
+        String token = makeToken();
 
         return mRetrofitService.updateNotice(token, id, workOrderId)
                 .subscribeOn(Schedulers.io())
@@ -183,7 +183,7 @@ public class UserManager {
      * @return
      */
     public Observable<UserInfoBean> getLoginUser() {
-        String token = getToken();
+        String token = makeToken();
 
         return mRetrofitService.getLoginUser(token)
                 .subscribeOn(Schedulers.io())
@@ -208,8 +208,11 @@ public class UserManager {
      * @return
      */
     public String getToken() {
-        String temp = SPUtils.getInstance(Utils.getContext()).getString("TOKEN", "");
-        return temp;
+        return SPUtils.getInstance(Utils.getContext()).getString(TOKEN, "");
+    }
+
+    public String makeToken() {
+        return "Bearer " + getToken();
     }
 
 
@@ -439,7 +442,7 @@ public class UserManager {
      * @return
      */
     public Observable<BaseResponse> uploadCheckManLocation(String reservoirId, String longitude, String latitude) {
-        String token = getToken();
+        String token = makeToken();
 
         return mRetrofitService.uploadCheckManLocation(token, reservoirId, longitude, latitude)
                 .subscribeOn(Schedulers.io())

@@ -122,7 +122,6 @@ public class RouteListBean extends DataSupport implements Serializable {
 
     public List<RoutePosition> getRoutePositionsByworkid(String workOrderId) {
         List<RoutePosition> routePositionsNew = DataSupport.where("workorderid=?",workOrderId).find(RoutePosition.class);
-
         return routePositionsNew;
     }
 

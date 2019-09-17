@@ -8,10 +8,7 @@ import com.tepia.base.http.BaseResponse;
 
 public class TaskDetailResponse extends BaseResponse {
 
-
     private TaskBean data;
-
-
 
     public TaskBean getData() {
         return data;

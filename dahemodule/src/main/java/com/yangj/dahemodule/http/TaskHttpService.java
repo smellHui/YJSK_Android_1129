@@ -92,15 +92,6 @@ public interface TaskHttpService {
 
     );
 
-    @Multipart
-    @POST("app/patrolAppWorkOrder/reportProblem")
-    Observable<BaseResponse> reportProblem(@Header("Authorization") String token,
-                                           @PartMap Map<String, RequestBody> params,
-                                           @Part List<MultipartBody.Part> beforePathList
-
-    );
-
-
     /**
      * 水雨情
      * @param token

@@ -104,7 +104,6 @@ public class RetrofitManager {
     };
 
     public static RequestBody convertToRequestBody(String param) {
-
         if (TextUtils.isEmpty(param)) {
             param = "";
         }
