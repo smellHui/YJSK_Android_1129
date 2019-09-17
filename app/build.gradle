@@ -25,16 +25,43 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
+    signingConfigs {
+        release {
+            try {
+                storeFile file("./tepia.jks")
+                storePassword RELEASE_STORE_PASSWORD
+                keyAlias RELEASE_KEY_ALIAS
+                keyPassword RELEASE_KEY_PASSWORD
+            } catch (ex) {
+                throw new Exception(ex.toString())
+            }
+        }
+    }
+
     buildTypes {
         release {
+            //混淆
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            //其它
+            debuggable false
+            jniDebuggable false
+            renderscriptDebuggable false
+            pseudoLocalesEnabled false
+            zipAlignEnabled true
+        }
+        debug {
+            signingConfig signingConfigs.release
+            debuggable true
+            minifyEnabled false
         }
     }
 
     dataBinding{
         enabled = true
     }
+
 
 }
 

@@ -21,7 +21,7 @@ public class ConfigConsts {
      * glide参数配置
      */
     public static final RequestOptions options = new RequestOptions()
-            .placeholder(R.mipmap.icon_zanwu)
+            .placeholder(R.mipmap.icon_empty)
             .error(R.mipmap.icon_empty)
             .priority(Priority.HIGH)
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC);

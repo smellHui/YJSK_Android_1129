@@ -61,7 +61,7 @@ public class ImageShowAdapter extends BaseQuickAdapter<String,BaseViewHolder> {
 
 
         }else{
-            imageView.setImageResource(R.mipmap.icon_zanwu);
+            imageView.setImageResource(R.mipmap.icon_empty);
         }
 
         if (map != null && map.containsKey(position) && map.get(position)) {

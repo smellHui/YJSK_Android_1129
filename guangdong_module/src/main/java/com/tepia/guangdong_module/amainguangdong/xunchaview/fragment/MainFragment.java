@@ -512,7 +512,7 @@ public class MainFragment extends BaseCommonFragment {
                     }
                 });
             }else{
-                binding.layoutImg.waterPicIv.setImageResource(R.mipmap.icon_zanwu);
+                binding.layoutImg.waterPicIv.setImageResource(R.mipmap.icon_empty);
             }
 
         }

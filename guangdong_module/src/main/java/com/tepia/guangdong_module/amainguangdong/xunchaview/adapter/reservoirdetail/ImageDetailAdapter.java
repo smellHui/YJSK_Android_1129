@@ -37,14 +37,14 @@ public class ImageDetailAdapter extends BaseQuickAdapter<PicDetailBean.DataBean,
         String picpath = item.getPicpath();
         if ( picpath != null &&  (picpath.contains("http://") || picpath.contains("https://")) ) {
             final RequestOptions options = new RequestOptions();
-            options.error(R.mipmap.icon_zanwu);
+            options.error(R.mipmap.icon_empty);
             Glide.with(Utils.getContext())
                     .load(picpath)
                     .apply(ConfigConsts.options)
                     .apply(options)
                     .into(imageView);
         }else{
-            imageView.setImageResource(R.mipmap.icon_zanwu);
+            imageView.setImageResource(R.mipmap.icon_empty);
         }
         helper.setText(R.id.tv_pic_time,item.getTm()==null?"":item.getTm());
     }
