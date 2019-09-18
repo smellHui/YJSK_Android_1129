@@ -3,7 +3,9 @@ package com.yangj.dahemodule.fragment;
 import android.content.Intent;
 import android.view.View;
 
+import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
+import com.tepia.base.AppRoutePath;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseCommonFragment;
 import com.tepia.base.view.floatview.CollectionsUtil;
@@ -47,6 +49,10 @@ public class HomeFragment extends BaseCommonFragment {
 
         findView(R.id.btn_report).setOnClickListener(v -> {
             startActivity(new Intent(getContext(), DangerReportActivity.class));
+        });
+
+        findView(R.id.tv_weather).setOnClickListener(v -> {
+            ARouter.getInstance().build(AppRoutePath.app_weather_forecast).navigation();
         });
     }
 

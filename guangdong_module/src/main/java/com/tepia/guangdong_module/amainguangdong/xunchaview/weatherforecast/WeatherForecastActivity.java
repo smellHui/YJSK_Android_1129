@@ -67,16 +67,13 @@ public class WeatherForecastActivity extends MVPBaseActivity<WeatherForecastCont
         GaodeEntity gaodeEntity = new GaodeEntity(getContext());
         gaodeEntity.initLocation();
         gaodeEntity.startLocation();
-        gaodeEntity.setLocationListen(new OnGaodeLibraryListen.LocationListen() {
-            @Override
-            public void getCurrentGaodeLocation(AMapLocation aMapLocation) {
-                if (mPresenter != null) {
-                    if (aMapLocation.getCity() != null) {
-                        setCenterTitle(aMapLocation.getCity());
-                        showBack();
-                        mPresenter.getWeatherbyArea(aMapLocation.getCity());
-                        gaodeEntity.closeLocation();
-                    }
+        gaodeEntity.setLocationListen(aMapLocation -> {
+            if (mPresenter != null) {
+                if (aMapLocation.getCity() != null) {
+                    setCenterTitle(aMapLocation.getCity());
+                    showBack();
+                    mPresenter.getWeatherbyArea(aMapLocation.getCity());
+                    gaodeEntity.closeLocation();
                 }
             }
         });

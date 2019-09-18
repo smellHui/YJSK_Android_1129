@@ -10,7 +10,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.widget.AdapterView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.guangdong_module.R;
 import com.example.guangdong_module.databinding.ActivityDangerReportBinding;
 import com.tepia.base.CacheConsts;
@@ -28,7 +27,6 @@ import com.tepia.base.view.dialog.basedailog.OnOpenItemClick;
 import com.tepia.base.view.floatview.CollectionsUtil;
 import com.tepia.guangdong_module.amainguangdong.common.PhotoSelectAdapter;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
-import com.tepia.guangdong_module.amainguangdong.common.pickview.OnItemClickListener;
 import com.tepia.guangdong_module.amainguangdong.common.pickview.PhotoRecycleViewAdapter;
 import com.tepia.guangdong_module.amainguangdong.model.UtilDataBaseOfGD;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.DangerBean;
@@ -96,7 +94,6 @@ public class DangerReportActivity extends BaseActivity {
             items = new String[positionsBeanList.size()];
             for (int i = 0; i < positionsBeanList.size(); i++) {
                 items[i] = positionsBeanList.get(i).getPositionName();
-
             }
 
             personDutyBeanList = offlineDataBean.getDangerWarnPage().getUserList();

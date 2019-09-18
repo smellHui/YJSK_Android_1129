@@ -10,45 +10,72 @@
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="212dp"
-            android:background="@mipmap/bg_home">
+            android:layout_height="wrap_content"
+            android:background="@color/white">
 
-            <!--<ImageView-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:src="@mipmap/bg_home" />-->
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scaleType="fitXY"
+                android:src="@mipmap/bg_home" />
 
             <!--<LinearLayout-->
-                <!--android:layout_width="wrap_content"-->
-                <!--android:layout_height="wrap_content"-->
-                <!--android:layout_alignParentBottom="true"-->
-                <!--android:layout_centerHorizontal="true"-->
-                <!--android:orientation="horizontal">-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_centerHorizontal="true"-->
+            <!--android:orientation="horizontal">-->
 
-                <Button
-                    android:id="@+id/btn_report"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="险情上报"
-                    android:textSize="12sp" />
+            <TextView
+                android:id="@+id/tv_weather"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:drawableLeft="@mipmap/icon_weather"
+                android:drawablePadding="5dp"
+                android:gravity="center_vertical"
+                android:paddingTop="30dp"
+                android:paddingRight="20dp"
+                android:text="天气"
+                android:textColor="@color/white"
+                android:textSize="11sp" />
 
-                <!--<Button-->
-                    <!--android:layout_width="95dp"-->
-                    <!--android:layout_height="25dp"-->
-                    <!--android:layout_marginLeft="40dp"-->
-                    <!--android:text="险情上报"-->
-                    <!--android:textSize="12sp" />-->
-            <!--</LinearLayout>-->
         </RelativeLayout>
 
-        <com.yangj.dahemodule.view.BasicInfoView
-            android:id="@+id/view_basic_info"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content">
+
+            <com.yangj.dahemodule.view.BasicInfoView
+                android:id="@+id/view_basic_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/btn_report"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="@drawable/grey_circle_left"
+                android:drawableLeft="@mipmap/icon_warn"
+                android:drawablePadding="5dp"
+                android:elevation="5dp"
+                android:gravity="center_vertical"
+                android:paddingLeft="10dp"
+                android:paddingTop="5dp"
+                android:paddingRight="10dp"
+                android:paddingBottom="5dp"
+                android:text="险情上报"
+                android:textColor="#F81717"
+                android:textSize="11sp" />
+
+        </RelativeLayout>
+
 
         <com.yangj.dahemodule.view.WaterView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
             android:layout_marginTop="6dp" />
 
         <com.yangj.dahemodule.view.RainView

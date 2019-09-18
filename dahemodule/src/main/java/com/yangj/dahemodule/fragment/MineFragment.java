@@ -1,11 +1,17 @@
 package com.yangj.dahemodule.fragment;
 
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.view.View;
 import android.widget.TextView;
 
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseCommonFragment;
+import com.tepia.base.utils.AppManager;
+import com.tepia.guangdong_module.amainguangdong.LoginOfGDActivity;
+import com.tepia.guangdong_module.amainguangdong.common.UserManager;
+import com.tepia.guangdong_module.amainguangdong.xunchaview.fragment.TabMainFragmentFactory;
 import com.yangj.dahemodule.R;
 import com.yangj.dahemodule.activity.DangerReportListActivity;
 import com.yangj.dahemodule.activity.LoginActivity;
@@ -50,7 +56,7 @@ public class MineFragment extends BaseCommonFragment {
             startActivity(new Intent(getContext(), VersionActivity.class));
         });
         findView(R.id.ll_four).setOnClickListener(v -> {
-            startActivity(new Intent(getContext(), LoginActivity.class));
+            loginOutClick();
         });
     }
 
@@ -77,5 +83,20 @@ public class MineFragment extends BaseCommonFragment {
 
                     }
                 });
+    }
+
+    private void loginOutClick(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(getBaseActivity());
+        builder.setMessage(com.example.guangdong_module.R.string.exit_message);
+        builder.setCancelable(true);
+        builder.setPositiveButton(com.example.guangdong_module.R.string.sure, (dialog, which) -> {
+            UserManager.getInstance().clearCacheAndStopPush();
+            startActivity(new Intent(getActivity(), LoginActivity.class));
+            AppManager.getInstance().finishAll();
+        });
+        builder.setNegativeButton(com.example.guangdong_module.R.string.cancel, (dialog, which) -> {
+
+        });
+        builder.create().show();
     }
 }
