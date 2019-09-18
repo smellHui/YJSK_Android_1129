@@ -88,8 +88,8 @@ public class TaskManager {
         Map<String, RequestBody> params = new HashMap<>();
         params.put("omRecordCode", RetrofitManager.convertToRequestBody(taskItemBean.getWorkOrderId()));
         params.put("reservoirStructureId", RetrofitManager.convertToRequestBody(taskItemBean.getPositionId()));
-        params.put("omItemId", RetrofitManager.convertToRequestBody(taskItemBean.getItemId()));
-        params.put("omRecordItemCode", RetrofitManager.convertToRequestBody(taskItemBean.getSuperviseItemCode()));
+        params.put("omItemId", RetrofitManager.convertToRequestBody(taskItemBean.getSuperviseItemCode()));
+        params.put("omRecordItemCode", RetrofitManager.convertToRequestBody(taskItemBean.getItemId()));
         params.put("superviseItemName", RetrofitManager.convertToRequestBody(taskItemBean.getSuperviseItemName()));
         params.put("content", RetrofitManager.convertToRequestBody(taskItemBean.getContent()));
         params.put("executeResultType", RetrofitManager.convertToRequestBody(taskItemBean.getExecuteResultType()));

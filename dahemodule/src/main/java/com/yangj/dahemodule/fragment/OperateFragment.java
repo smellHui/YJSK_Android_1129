@@ -170,11 +170,11 @@ public class OperateFragment extends BaseCommonFragment {
                 TaskItemBean taskItemBean = new TaskItemBean();
                 taskItemBean.setWorkOrderId(workOrderId);
                 taskItemBean.setUserCode(userCode);
-                taskItemBean.setItemId(omltem.getOmItemId());
+                taskItemBean.setItemId(UUIDUtil.getUUID32());
                 taskItemBean.setPositionId(omltem.getReservoirStructureId());
                 taskItemBean.setPositionTreeNames(omltem.getPositionName());
                 taskItemBean.setSuperviseItemContent(omltem.getOmItemContent());
-                taskItemBean.setSuperviseItemCode(UUIDUtil.getUUID32());
+                taskItemBean.setSuperviseItemCode(omltem.getOmItemId());
                 taskItemBean.setOperationLevel(omltem.getOmItemLevel());
                 taskItemBean.setReservoirId(reservoirBean.getReservoirId());
                 taskItemBean.setSuperviseItemName(omltem.getOmItemName());
@@ -257,7 +257,6 @@ public class OperateFragment extends BaseCommonFragment {
             taskItemBean.setFatherId(routeListBean.getId());
             taskItemBean.setIsCommitLocal(completeStatus);
             taskItemBean.setItemId(taskItemBean1.getItemId());
-            taskItemBean.setWorkOrderId(workOrderId);
             taskItemBean.setCompleteStatus(completeStatus);
 
             if ("1".equals(completeStatus)) {

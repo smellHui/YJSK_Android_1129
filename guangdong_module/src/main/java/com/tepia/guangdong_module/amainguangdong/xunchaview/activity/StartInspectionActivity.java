@@ -115,7 +115,6 @@ import java.util.concurrent.ExecutionException;
 public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.View, TaskDetailPresenter> implements TaskDetailContract.View {
     ActivityStartInspectionBinding mBinding;
 
-    public static List<TaskItemBean> inspections = new ArrayList<>();
     String workOrderId;
     TaskBean taskBean;
     private Point currentPoint;
@@ -235,8 +234,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         } else {
             mBinding.checkbox.setChecked(false);
             SPUtils.getInstance().putBoolean(CacheConsts.isOpenAuto, false);
-
-
         }
         mBinding.checkbox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked) {
@@ -244,7 +241,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 
             } else {
                 SPUtils.getInstance().putBoolean(CacheConsts.isOpenAuto, false);
-
             }
         });
 
@@ -311,7 +307,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         }
 
         rvStartInspection.setLayoutManager(new LinearLayoutManager(this));
-        adapterTaskItemList = new AdapterTaskItemListNew(R.layout.rv_start_inspection_item, inspections, this);
+        adapterTaskItemList = new AdapterTaskItemListNew(R.layout.rv_start_inspection_item, null, this);
         rvStartInspection.setAdapter(adapterTaskItemList);
 
         emptviewShow();
@@ -357,10 +353,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
      */
     private void emptviewShow() {
         if (!isCompleteOfTaskBean) {
-
-            if (CollectionsUtil.isEmpty(inspections)) {
-                adapterTaskItemList.setEmptyView(EmptyLayoutUtil.showTop("附近没有巡查点，请按上方地图路线" + "\n" + "对各巡查点进行检查"));
-            }
+            adapterTaskItemList.setEmptyView(EmptyLayoutUtil.showTop("附近没有巡查点，请按上方地图路线" + "\n" + "对各巡查点进行检查"));
             int notnum = routeListBean.getItemListHasNotCheck(workOrderId, "0");
             if (notnum == 0) {
                 adapterTaskItemList.setEmptyView(EmptyLayoutUtil.showTop("巡检已完成，可以直接点击按钮提交"));
@@ -963,15 +956,12 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 
                         List<TaskItemBean> taskItemBeans = DataSupport.where("positionid=? and userCode=? and reservoirId=? and workorderid=?",
                                 positionId, userCode, reservoirId, workOrderId).find(TaskItemBean.class);
-                        inspections.clear();
-                        inspections.addAll(taskItemBeans);
-                        adapterTaskItemList.notifyDataSetChanged();
-                        if (CollectionsUtil.isEmpty(inspections)) {
+                        adapterTaskItemList.setNewData(taskItemBeans);
+                        if (CollectionsUtil.isEmpty(taskItemBeans)) {
                             adapterTaskItemList.setEmptyView(EmptyLayoutUtil.showTop("暂无数据"));
                         }
                     } else {
-                        inspections.clear();
-                        adapterTaskItemList.notifyDataSetChanged();
+                        adapterTaskItemList.setNewData(null);
                         adapterTaskItemList.setEmptyView(EmptyLayoutUtil.showTop("附近没有巡查点，请按上方地图路线" + "\n" + "对各巡查点进行检查"));
 
                         int notnum = routeListBean.getItemListHasNotCheck(workOrderId, "0");
@@ -1646,9 +1636,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         }
         if (alMapview != null) {
             alMapview.onMapDestroy();
-        }
-        if (inspections != null) {
-            inspections.clear();
         }
         if (bitmapLocation != null) {
             bitmapLocation.recycle();

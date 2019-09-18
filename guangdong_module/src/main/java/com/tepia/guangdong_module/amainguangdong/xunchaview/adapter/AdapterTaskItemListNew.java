@@ -290,16 +290,12 @@ public class AdapterTaskItemListNew extends BaseQuickAdapter<TaskItemBean, BaseV
 
         }
         //正常
-        normalBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!TextUtils.isEmpty(item.getExecuteResultDescription())) {
-                    showDialog(item,"0");
-                    return;
-                }
-                clickNormal(item,"0");
-
+        normalBtn.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(item.getExecuteResultDescription())) {
+                showDialog(item,"0");
+                return;
             }
+            clickNormal(item,"0");
         });
         //异常
         btAbnormal.setOnClickListener(v -> {
@@ -319,119 +315,92 @@ public class AdapterTaskItemListNew extends BaseQuickAdapter<TaskItemBean, BaseV
             mContext.startActivity(intent);
         });
         //已正常
-        hasNormalBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        hasNormalBtn.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(item.getExecuteResultDescription())) {
+                showDialog(item,"2");
+                return;
+            }
+            clickNormal(item,"2");
+
+        });
+        //仍异常
+        stillAbBtn.setOnClickListener(v -> {
+            if (onGetCurrentClickListener != null) {
+                onGetCurrentClickListener.onCilck(item);
+            }
+            item.setIsCommitLocal("0");
+            item.setCompleteStatus("0");
+            item.updateAll("itemId=?",item.getItemId());
+
+            refresh(item);
+
+            Intent intent = new Intent();
+            intent.setClass(mContext, TroubleRecordActivity.class);
+            intent.putExtra("item",item.getItemId());
+            intent.putExtra("executeResultType","3");
+
+            mContext.startActivity(intent);
+
+        });
+        //确认正常
+        querenNormalBtn.setOnClickListener(v -> {
+            if (!TextUtils.isEmpty(item.getExecuteResultDescription())) {
+                showDialog(item,"0");
+                return;
+            }
+            clickNormal(item,"0");
+        });
+
+        //发现异常
+        faxianyichangBtn.setOnClickListener(v -> {
+            if (onGetCurrentClickListener != null) {
+                onGetCurrentClickListener.onCilck(item);
+            }
+
+            item.setCompleteStatus("0");
+            item.setIsCommitLocal("0");
+            item.updateAll("itemId=?",item.getItemId());
+            refresh(item);
+            Intent intent = new Intent();
+            intent.setClass(mContext, TroubleRecordActivity.class);
+            intent.putExtra("item",item.getItemId());
+            intent.putExtra("executeResultType","1");
+
+            mContext.startActivity(intent);
+
+        });
+
+        editBtn.setOnClickListener(v -> {
+
+            boolean isNormal = "".equals(current) || "0".equals(current) || "2".equals(current);
+            if (isNormal) {
+                new AlertDialog.Builder(mContext)
+                        .setMessage("正在将该巡查项的巡查结果改为异常,是否继续执行?")
+                        .setPositiveButton("确定", (dialog, which) -> {
+                            if (onGetCurrentClickListener != null) {
+                                onGetCurrentClickListener.onCilck(item);
+                            }
+
+                            item.setCompleteStatus("0");
+                            item.setIsCommitLocal("0");
+                            item.updateAll("itemId=?",item.getItemId());
+                            refresh(item);
+                            Intent intent = new Intent();
+                            intent.setClass(mContext, TroubleRecordActivity.class);
+                            intent.putExtra("item",item.getItemId());
+                            intent.putExtra("executeResultType","1");
+                            mContext.startActivity(intent);
+
+                        })
+                        .setNegativeButton("取消", (dialog, which) -> {
+
+                        }).show();
+            }else{
                 if (!TextUtils.isEmpty(item.getExecuteResultDescription())) {
                     showDialog(item,"2");
                     return;
                 }
                 clickNormal(item,"2");
-
-            }
-        });
-        //仍异常
-        stillAbBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onGetCurrentClickListener != null) {
-                    onGetCurrentClickListener.onCilck(item);
-                }
-                item.setIsCommitLocal("0");
-                item.setCompleteStatus("0");
-                item.updateAll("itemId=?",item.getItemId());
-
-                refresh(item);
-
-                Intent intent = new Intent();
-                intent.setClass(mContext, TroubleRecordActivity.class);
-                intent.putExtra("item",item.getItemId());
-                intent.putExtra("executeResultType","3");
-
-                mContext.startActivity(intent);
-
-            }
-        });
-        //确认正常
-        querenNormalBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (!TextUtils.isEmpty(item.getExecuteResultDescription())) {
-                    showDialog(item,"0");
-                    return;
-                }
-                clickNormal(item,"0");
-
-
-
-
-            }
-        });
-
-        //发现异常
-        faxianyichangBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (onGetCurrentClickListener != null) {
-                    onGetCurrentClickListener.onCilck(item);
-                }
-
-                item.setCompleteStatus("0");
-                item.setIsCommitLocal("0");
-                item.updateAll("itemId=?",item.getItemId());
-                refresh(item);
-                Intent intent = new Intent();
-                intent.setClass(mContext, TroubleRecordActivity.class);
-                intent.putExtra("item",item.getItemId());
-                intent.putExtra("executeResultType","1");
-
-                mContext.startActivity(intent);
-
-            }
-        });
-
-        editBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                boolean isNormal = "".equals(current) || "0".equals(current) || "2".equals(current);
-                if (isNormal) {
-                    new AlertDialog.Builder(mContext)
-                            .setMessage("正在将该巡查项的巡查结果改为异常,是否继续执行?")
-                            .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    if (onGetCurrentClickListener != null) {
-                                        onGetCurrentClickListener.onCilck(item);
-                                    }
-
-                                    item.setCompleteStatus("0");
-                                    item.setIsCommitLocal("0");
-                                    item.updateAll("itemId=?",item.getItemId());
-                                    refresh(item);
-                                    Intent intent = new Intent();
-                                    intent.setClass(mContext, TroubleRecordActivity.class);
-                                    intent.putExtra("item",item.getItemId());
-                                    intent.putExtra("executeResultType","1");
-                                    mContext.startActivity(intent);
-
-                                }
-                            })
-                            .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-
-                                }
-                            }).show();
-                }else{
-                    if (!TextUtils.isEmpty(item.getExecuteResultDescription())) {
-                        showDialog(item,"2");
-                        return;
-                    }
-                    clickNormal(item,"2");
-                }
-
             }
         });
 
@@ -442,15 +411,12 @@ public class AdapterTaskItemListNew extends BaseQuickAdapter<TaskItemBean, BaseV
 
     private void goTrouble(View view, TaskItemBean taskItemBean){
         view.setEnabled(true);
-        view.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(mContext, TroubleRecordActivity.class);
-                intent.putExtra("item",taskItemBean.getItemId());
-                intent.putExtra("executeResultType",taskItemBean.getExecuteResultType());
-                mContext.startActivity(intent);
-            }
+        view.setOnClickListener(v -> {
+            Intent intent = new Intent();
+            intent.setClass(mContext, TroubleRecordActivity.class);
+            intent.putExtra("item",taskItemBean.getItemId());
+            intent.putExtra("executeResultType",taskItemBean.getExecuteResultType());
+            mContext.startActivity(intent);
         });
     }
 
@@ -458,17 +424,9 @@ public class AdapterTaskItemListNew extends BaseQuickAdapter<TaskItemBean, BaseV
     private void showDialog(TaskItemBean item,String executeResultType){
         new AlertDialog.Builder(mactivity)
                 .setMessage("目前有异常描述信息，是否清空异常并将巡查项结果修改为正常?")
-                .setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        clickNormal(item,executeResultType);
-                    }
-                })
-                .setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setPositiveButton("确定", (dialog, which) -> clickNormal(item,executeResultType))
+                .setNegativeButton("取消", (dialog, which) -> {
 
-                    }
                 }).show();
 
     }
@@ -521,12 +479,8 @@ public class AdapterTaskItemListNew extends BaseQuickAdapter<TaskItemBean, BaseV
     private void refresh(TaskItemBean taskItemBean){
         List<TaskItemBean> taskItemBeans = DataSupport.where("positionid=? and fatherId=? and userCode=? and reservoirId=? and workorderid=?",
                 taskItemBean.getPositionId(),taskItemBean.getFatherId(),taskItemBean.getUserCode(),taskItemBean.getReservoirId(),taskItemBean.getWorkOrderId()).find(TaskItemBean.class);
-
-        StartInspectionActivity.inspections.clear();
-        StartInspectionActivity.inspections.addAll(taskItemBeans);
-        notifyDataSetChanged();
+        setNewData(taskItemBeans);
         mactivity.refreshTitle();
-
     }
 
     /**

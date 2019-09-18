@@ -499,8 +499,6 @@ public class AdapterTaskItemList extends BaseQuickAdapter<TaskItemBean, BaseView
         List<TaskItemBean> taskItemBeans = DataSupport.where("positionid=? and fatherId=? and userCode=? and reservoirId=? and workorderid=?",
                 taskItemBean.getPositionId(),taskItemBean.getFatherId(),taskItemBean.getUserCode(),taskItemBean.getReservoirId(),taskItemBean.getWorkOrderId()).find(TaskItemBean.class);
 
-        StartInspectionActivity.inspections.clear();
-        StartInspectionActivity.inspections.addAll(taskItemBeans);
         notifyDataSetChanged();
         mactivity.refreshTitle();
 
