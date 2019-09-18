@@ -1,14 +1,20 @@
 package com.yangj.dahemodule.fragment;
 
+import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.alibaba.fastjson.JSON;
 import com.tepia.base.CacheConsts;
 import com.tepia.base.ConfigConsts;
+import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseCommonFragment;
 import com.tepia.base.utils.LogUtil;
 import com.tepia.base.utils.TimeFormatUtils;
 import com.tepia.base.utils.ToastUtils;
 import com.tepia.base.utils.UUIDUtil;
+import com.tepia.base.view.dialog.permissiondialog.Px2dpUtils;
 import com.tepia.base.view.floatview.CollectionsUtil;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
@@ -20,12 +26,19 @@ import com.tepia.guangdong_module.amainguangdong.xunchaview.fragment.MainFragmen
 import com.tepia.photo_picker.entity.CheckTaskPicturesBean;
 import com.tepia.photo_picker.utils.SPUtils;
 import com.yangj.dahemodule.R;
+import com.yangj.dahemodule.adapter.OperateMainAdapter;
 import com.yangj.dahemodule.common.HttpManager;
 import com.yangj.dahemodule.model.UserBean;
+import com.yangj.dahemodule.model.main.DangerousPosition;
+import com.yangj.dahemodule.model.main.MainBean;
+import com.yangj.dahemodule.model.main.MainDataBean;
 import com.yangj.dahemodule.model.main.Omltem;
+import com.yangj.dahemodule.model.main.ReservoirInfo;
 import com.yangj.dahemodule.model.main.ReservoirStructure;
 import com.yangj.dahemodule.model.main.Route;
+import com.yangj.dahemodule.model.main.UserInfo;
 import com.yangj.dahemodule.util.UiHelper;
+import com.yangj.dahemodule.view.WrapLayoutManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +51,9 @@ import java.util.List;
 public class OperateFragment extends BaseCommonFragment {
 
     private ReservoirBean reservoirBean;
+    private OperateMainAdapter operateMainAdapter;
+    private SwipeRefreshLayout swipeRefreshLayout;
+    private RecyclerView recyclerView;
 
     @Override
     protected int getLayoutId() {
@@ -51,104 +67,153 @@ public class OperateFragment extends BaseCommonFragment {
 
     @Override
     protected void initView(View view) {
-        findView(R.id.ll_one).setOnClickListener(v -> {
-            createWorkOrder();
-        });
-        findView(R.id.ll_two).setOnClickListener(v -> {
-            createWorkOrder();
-        });
-        findView(R.id.ll_three).setOnClickListener(v -> {
-            createWorkOrder();
+
+        swipeRefreshLayout = findView(R.id.layout_swipe_refresh);
+        recyclerView = findView(R.id.rv);
+        operateMainAdapter = new OperateMainAdapter(null);
+        recyclerView.setLayoutManager(new WrapLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        int zeroPx = Px2dpUtils.dip2px(getContext(), 0);
+        recyclerView.setPadding(zeroPx, zeroPx, zeroPx, zeroPx);
+        recyclerView.setAdapter(operateMainAdapter);
+
+        swipeRefreshLayout.setOnRefreshListener(this::loadData);
+
+        operateMainAdapter.setOnItemClickListener((adapter, v, position) -> {
+            Route route = (Route) adapter.getItem(position);
+            createWorkOrder(route);
         });
     }
 
     @Override
     protected void initRequestData() {
-
+        swipeRefreshLayout.setRefreshing(true);
+        loadData();
     }
 
-    private void createWorkOrder() {
+    private void loadData() {
+        HttpManager.getInstance().loadData("")
+                .subscribe(new LoadingSubject<MainDataBean>() {
+
+                    @Override
+                    protected void _onNext(MainDataBean mainDataBean) {
+                        MainBean mainBean = mainDataBean.getData();
+                        if (mainBean == null) return;
+                        List<Route> routeList = mainBean.getRouteList();
+                        operateMainAdapter.setNewData(routeList);
+                        if (!CollectionsUtil.isEmpty(routeList)) {
+                            HttpManager.getInstance().saveRoutes(JSON.toJSONString(routeList));
+                        }
+                        List<UserInfo> userInfos = mainBean.getUserList();
+                        if (!CollectionsUtil.isEmpty(userInfos)) {
+                            HttpManager.getInstance().saveUserInfos(JSON.toJSONString(userInfos));
+                        }
+                        List<DangerousPosition> dangerousPositions = mainBean.getDangerousPositionList();
+                        if (!CollectionsUtil.isEmpty(dangerousPositions)) {
+                            HttpManager.getInstance().saveDangerousPositions(JSON.toJSONString(dangerousPositions));
+                        }
+                        ReservoirInfo reservoirInfo = mainBean.getReservoirInfo();
+                        if (reservoirInfo != null) {
+                            ReservoirBean reservoirBean = new ReservoirBean();
+                            reservoirBean.setReservoirId(reservoirInfo.getId());
+                            reservoirBean.setReservoirCode(reservoirInfo.getCode());
+                            reservoirBean.setReservoir(reservoirInfo.getName());
+                            reservoirBean.setReservoirType(reservoirInfo.getType());
+                            reservoirBean.setReservoirAddress(reservoirInfo.getAddress());
+                            reservoirBean.setReservoirLongitude(reservoirInfo.getLongitude());
+                            reservoirBean.setReservoirLatitude(reservoirInfo.getLatitude());
+                            reservoirBean.setManageDepId(reservoirInfo.getManageDepartment());
+                            UserManager.getInstance().saveDefaultReservoir(reservoirBean);
+                        }
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        super.onComplete();
+                        swipeRefreshLayout.setRefreshing(false);
+                    }
+                });
+    }
+
+    private void createWorkOrder(Route route) {
         String workOrderId = UUIDUtil.getUUID32();
         reservoirBean = UserManager.getInstance().getDefaultReservoir();
+        if (reservoirBean == null) return;
         String userCode = UserManager.getInstance().getUserCode();
-        if (reservoirBean != null) {
-            SPUtils.getInstance().putString(CacheConsts.reservoirId, reservoirBean.getReservoirId());
-            List<Route> routes = HttpManager.getInstance().getRoutes();
-            if (!CollectionsUtil.isEmpty(routes)) {
-                Route route = routes.get(0);
-                if (route == null) {
-                    ToastUtils.shortToast("暂无巡查路线");
-                    return;
-                }
-                List<RoutePosition> routePositions = new ArrayList<>();
-                List<ReservoirStructure> reservoirStructures = route.getReservoirStructureList();
-                if (!CollectionsUtil.isEmpty(reservoirStructures)) {
-                    for (ReservoirStructure reservoirStructure : reservoirStructures) {
-                        RoutePosition routePosition = new RoutePosition();
-                        routePosition.setWorkOrderId(workOrderId);
-                        routePosition.setUserCode(userCode);
-                        routePosition.setReservoirId(reservoirBean.getReservoirId());
-                        routePosition.setPositionId(reservoirStructure.getId());
-                        routePosition.setPositionLgtd(reservoirStructure.getPositionLongitude());
-                        routePosition.setPositionLttd(reservoirStructure.getPositionLatitude());
-                        routePositions.add(routePosition);
-                    }
-                }
-                List<TaskItemBean> itemList = new ArrayList<>();
-                List<Omltem> omltems = route.getOmItemList();
-                if (!CollectionsUtil.isEmpty(omltems)) {
-                    for (Omltem omltem : omltems) {
-                        TaskItemBean taskItemBean = new TaskItemBean();
-                        taskItemBean.setWorkOrderId(workOrderId);
-                        taskItemBean.setUserCode(userCode);
-                        taskItemBean.setItemId(omltem.getOmItemId());
-                        taskItemBean.setPositionId(omltem.getReservoirStructureId());
-                        taskItemBean.setPositionTreeNames(omltem.getPositionName());
-                        taskItemBean.setSuperviseItemContent(omltem.getOmItemContent());
-                        taskItemBean.setSuperviseItemCode(UUIDUtil.getUUID32());
-                        taskItemBean.setOperationLevel(omltem.getOmItemLevel());
-                        taskItemBean.setReservoirId(reservoirBean.getReservoirId());
-                        taskItemBean.setSuperviseItemName(omltem.getOmItemName());
-                        itemList.add(taskItemBean);
-                    }
-                }
-                String startTime = TimeFormatUtils.getStringDate();
-                RouteListBean routeListBeanNew = new RouteListBean();
-                routeListBeanNew.setWorkOrderId(workOrderId);
-                routeListBeanNew.setId(route.getId());
-                routeListBeanNew.setRouteContent(route.getPath());
+        SPUtils.getInstance().putString(CacheConsts.reservoirId, reservoirBean.getReservoirId());
+        if (route == null) {
+            ToastUtils.shortToast("暂无巡查路线");
+            return;
+        }
+        List<RoutePosition> routePositions = new ArrayList<>();
+        List<ReservoirStructure> reservoirStructures = route.getReservoirStructureList();
+        if (!CollectionsUtil.isEmpty(reservoirStructures)) {
+            for (ReservoirStructure reservoirStructure : reservoirStructures) {
+                RoutePosition routePosition = new RoutePosition();
+                routePosition.setWorkOrderId(workOrderId);
+                routePosition.setUserCode(userCode);
+                routePosition.setReservoirId(reservoirBean.getReservoirId());
+                routePosition.setPositionId(reservoirStructure.getId());
+                routePosition.setPositionLgtd(reservoirStructure.getPositionLongitude());
+                routePosition.setPositionLttd(reservoirStructure.getPositionLatitude());
+                routePositions.add(routePosition);
+            }
+        }
+        List<TaskItemBean> itemList = new ArrayList<>();
+        List<Omltem> omltems = route.getOmItemList();
+        if (!CollectionsUtil.isEmpty(omltems)) {
+            for (Omltem omltem : omltems) {
+                TaskItemBean taskItemBean = new TaskItemBean();
+                taskItemBean.setWorkOrderId(workOrderId);
+                taskItemBean.setUserCode(userCode);
+                taskItemBean.setItemId(omltem.getOmItemId());
+                taskItemBean.setPositionId(omltem.getReservoirStructureId());
+                taskItemBean.setPositionTreeNames(omltem.getPositionName());
+                taskItemBean.setSuperviseItemContent(omltem.getOmItemContent());
+                taskItemBean.setSuperviseItemCode(UUIDUtil.getUUID32());
+                taskItemBean.setOperationLevel(omltem.getOmItemLevel());
+                taskItemBean.setReservoirId(reservoirBean.getReservoirId());
+                taskItemBean.setSuperviseItemName(omltem.getOmItemName());
+                itemList.add(taskItemBean);
+            }
+        }
+        String startTime = TimeFormatUtils.getStringDate();
+        RouteListBean routeListBeanNew = new RouteListBean();
+        routeListBeanNew.setWorkOrderId(workOrderId);
+        routeListBeanNew.setId(route.getId());
+        routeListBeanNew.setRouteContent(route.getPath());
 //                routeListBeanNew.setUserCode(userCode);
-                routeListBeanNew.setReservoirId(reservoirBean.getReservoirId());
-                routeListBeanNew.setItemList(itemList);
-                routeListBeanNew.setRouteName(route.getName());
-                routeListBeanNew.setRoutePositions(routePositions);
-                routeListBeanNew.setRouteType(route.getType());
-                boolean save = routeListBeanNew.save();
+        routeListBeanNew.setReservoirId(reservoirBean.getReservoirId());
+        routeListBeanNew.setItemList(itemList);
+        routeListBeanNew.setRouteName(route.getName());
+        routeListBeanNew.setRoutePositions(routePositions);
+        routeListBeanNew.setRouteType(route.getType());
+        boolean save = routeListBeanNew.save();
 
-                TaskBean taskBean = new TaskBean();
-                taskBean.setWorkOrderId(workOrderId);
-                taskBean.setRouteId(routeListBeanNew.getId());
-                taskBean.setReservoirId(reservoirBean.getReservoirId());
-                taskBean.setReservoir(reservoirBean.getReservoir());
-                taskBean.setUserCode(userCode);
-                UserBean userBean = HttpManager.getInstance().getUser();
+        TaskBean taskBean = new TaskBean();
+        taskBean.setWorkOrderId(workOrderId);
+        taskBean.setRouteId(routeListBeanNew.getId());
+        taskBean.setReservoirId(reservoirBean.getReservoirId());
+        taskBean.setReservoir(reservoirBean.getReservoir());
+        taskBean.setUserCode(userCode);
+        UserBean userBean = HttpManager.getInstance().getUser();
 //            taskBean.setRoleName(userInfoBean.getData().getOfficeName());
-                if (userBean != null) {
-                    taskBean.setExecutorName(userBean.getAccess_token());
-                }
-                taskBean.setStartTime(startTime);
-                taskBean.setExecuteStatus("2");
-                taskBean.setRouteName(routeListBeanNew.getRouteName());
-                RouteListBean routeListBean_a = taskBean.getRouteListBeanByWorkId(workOrderId);
-                if (save && routeListBean_a != null) {
-                    saveOther(workOrderId, routeListBeanNew, "0", userCode);
-                    boolean issave = taskBean.save();
-                    if (issave) {
-                        UiHelper.goToStartInspectionView(getBaseActivity(), workOrderId);
-                    }
-                }
-//                UiHelper.goToStartInspectionView(getBaseActivity(), workOrderId);
-
+        if (userBean != null) {
+            taskBean.setExecutorName(userBean.getAccess_token());
+        }
+        taskBean.setStartTime(startTime);
+        taskBean.setExecuteStatus("2");
+        taskBean.setRouteName(routeListBeanNew.getRouteName());
+        RouteListBean routeListBean_a = taskBean.getRouteListBeanByWorkId(workOrderId);
+        if (save && routeListBean_a != null) {
+            saveOther(workOrderId, routeListBeanNew, "0", userCode);
+            boolean issave = taskBean.save();
+            if (issave) {
+                UiHelper.goToStartInspectionView(getBaseActivity(), workOrderId);
             }
         }
     }

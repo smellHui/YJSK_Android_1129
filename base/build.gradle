@@ -111,8 +111,8 @@ dependencies {
 //    implementation rootProject.ext.dependencies.GaodeLiabrary
 
     implementation rootProject.ext.dependencies.Arouter
-    implementation rootProject.ext.dependencies.constraint
     annotationProcessor rootProject.ext.dependencies.Arouter_compiler
+    implementation rootProject.ext.dependencies.constraint
     implementation rootProject.ext.dependencies.androidWeakhandler
     implementation rootProject.ext.dependencies.toast
 

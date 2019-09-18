@@ -19,8 +19,8 @@ public class AppRoutePath {
     public final static String test = "/costom/test";
     public final static String appMain = "/app/main";
     public final static String appMainGuangdong = "/app/main/guangdong";
-    public final static String app_dahe_main = "/app/dh/main";
-    public final static String app_dahe_login = "/app/dh/login";
+    public final static String app_dahe_main = "/dahe/dh/main";
+    public final static String app_dahe_login = "/dahe/dh/login";
 
     /**
      * 巡查责任人首页 （第一页）（包含 巡检 保洁 维修责任人）

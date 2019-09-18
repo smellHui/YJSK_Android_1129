@@ -16,7 +16,7 @@ android {
         //添加如下配置就OK了 解决butterKnife问题
         javaCompileOptions {
             annotationProcessorOptions {
-                includeCompileClasspath = true
+                arguments = [ AROUTER_MODULE_NAME : project.getName() ]
             }
         }
     }
@@ -43,5 +43,6 @@ dependencies {
     implementation rootProject.ext.dependencies.litepal
     implementation project(':base')
 
-
+    implementation rootProject.ext.dependencies.Arouter
+    annotationProcessor rootProject.ext.dependencies.Arouter_compiler
 }

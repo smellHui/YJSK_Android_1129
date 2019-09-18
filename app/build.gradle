@@ -62,6 +62,10 @@ android {
         enabled = true
     }
 
+    packagingOptions {
+        exclude 'META-INF/proguard/androidx-annotations.pro'
+    }
+
 
 }
 
@@ -70,4 +74,7 @@ dependencies {
     if (!isModule.toBoolean()) {
         implementation project(':dahemodule')
     }
+
+    implementation rootProject.ext.dependencies.Arouter
+    annotationProcessor rootProject.ext.dependencies.Arouter_compiler
 }
