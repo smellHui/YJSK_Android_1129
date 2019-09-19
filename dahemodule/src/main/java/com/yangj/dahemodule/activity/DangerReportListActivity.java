@@ -1,7 +1,5 @@
 package com.yangj.dahemodule.activity;
 
-import android.support.v4.app.Fragment;
-
 import com.tepia.base.mvp.BaseActivity;
 import com.yangj.dahemodule.R;
 import com.yangj.dahemodule.fragment.DangerReportListFragment;
@@ -12,9 +10,9 @@ import com.yangj.dahemodule.view.SearchToolBar;
  * Date:2019/9/4
  * Description:
  */
-public class DangerReportListActivity extends BaseActivity {
+public class DangerReportListActivity extends BaseActivity implements SearchToolBar.DataSelectListener {
 
-    private Fragment fragment;
+    private DangerReportListFragment fragment;
     private SearchToolBar searchToolBar;
 
     @Override
@@ -29,6 +27,7 @@ public class DangerReportListActivity extends BaseActivity {
     @Override
     public void initView() {
         searchToolBar = findViewById(R.id.view_search_tool_bar);
+        searchToolBar.setDataSelectListener(this);
         fragment = DangerReportListFragment.newInstance();
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment)
@@ -49,5 +48,10 @@ public class DangerReportListActivity extends BaseActivity {
     @Override
     protected void initRequestData() {
 
+    }
+
+    @Override
+    public void onDataSelectPickListener(String startTime, String endTime, int cate) {
+        fragment.refresh(startTime, endTime, cate);
     }
 }

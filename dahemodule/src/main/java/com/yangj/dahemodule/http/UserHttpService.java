@@ -8,6 +8,7 @@ import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirOfflineRe
 import com.yangj.dahemodule.model.JsonBean;
 import com.yangj.dahemodule.model.NewNoticeBean;
 import com.yangj.dahemodule.model.Report.ReportDataBean;
+import com.yangj.dahemodule.model.Report.ReportDetailDataBean;
 import com.yangj.dahemodule.model.UserDataBean;
 import com.yangj.dahemodule.model.WeatherWarnBean;
 import com.yangj.dahemodule.model.main.MainDataBean;
@@ -71,6 +72,16 @@ public interface UserHttpService {
      */
     @GET("app/problem/list4Me")
     Observable<ReportDataBean> getReportList(@Header("Authorization") String token, @QueryMap Map<String, String> requestBody);
+
+    /**
+     * 【查询】险情详情
+     *
+     * @param token
+     * @param id
+     * @return
+     */
+    @GET("app/problem/detail")
+    Observable<ReportDetailDataBean> loadReportDetail(@Header("Authorization") String token, @Query("id") String id);
 
     /**
      * 【查询】加载数据接口

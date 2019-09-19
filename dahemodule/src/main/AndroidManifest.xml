@@ -17,6 +17,7 @@
         <activity android:name=".activity.LoginActivity" />
         <activity android:name=".activity.DangerReportListActivity" />
         <activity android:name=".activity.VersionActivity" />
+        <activity android:name=".activity.DangerReportDetailActivity"/>
         <activity
             android:name="com.tepia.photo_picker.PhotoPickerActivity"
             android:screenOrientation="portrait" /> <!-- 图片查看 -->

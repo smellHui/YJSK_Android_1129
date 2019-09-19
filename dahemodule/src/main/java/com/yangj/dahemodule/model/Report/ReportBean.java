@@ -1,11 +1,15 @@
 package com.yangj.dahemodule.model.Report;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * Author:xch
  * Date:2019/9/3
  * Description:险情上报列表项
  */
-public class ReportBean {
+public class ReportBean implements Serializable {
+
     private String status;
     private String createBy;
     private String creatorName;
@@ -22,6 +26,7 @@ public class ReportBean {
     private String sourceId;
     private String problemStatus;
     private String feedback;
+    private String pictures;
 
     @Override
     public String toString() {
@@ -42,6 +47,7 @@ public class ReportBean {
                 ", sourceId='" + sourceId + '\'' +
                 ", problemStatus='" + problemStatus + '\'' +
                 ", feedback='" + feedback + '\'' +
+                ", pictures=" + pictures +
                 '}';
     }
 
@@ -171,5 +177,13 @@ public class ReportBean {
 
     public void setFeedback(String feedback) {
         this.feedback = feedback;
+    }
+
+    public String getPictures() {
+        return pictures;
+    }
+
+    public void setPictures(String pictures) {
+        this.pictures = pictures;
     }
 }

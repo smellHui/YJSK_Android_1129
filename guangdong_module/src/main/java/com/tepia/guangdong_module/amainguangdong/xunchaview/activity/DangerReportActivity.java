@@ -95,11 +95,8 @@ public class DangerReportActivity extends BaseActivity {
             for (int i = 0; i < positionsBeanList.size(); i++) {
                 items[i] = positionsBeanList.get(i).getPositionName();
             }
-
             personDutyBeanList = offlineDataBean.getDangerWarnPage().getUserList();
-
         }
-
         mBinding.loHeader.tvReservoirName.setText(reservoirBean.getReservoir());
 
     }

@@ -21,6 +21,11 @@ public class SearchToolBar extends ViewBase implements SelectDataView.onDataSele
     private TextView dateTv;
     private Toolbar toolbar;
     private SelectDataView selectDataView;
+    private DataSelectListener dataSelectListener;
+
+    public void setDataSelectListener(DataSelectListener dataSelectListener) {
+        this.dataSelectListener = dataSelectListener;
+    }
 
     public SearchToolBar(Context context) {
         super(context);
@@ -63,6 +68,11 @@ public class SearchToolBar extends ViewBase implements SelectDataView.onDataSele
 
     @Override
     public void onDataSelectPickListener(String startTime, String endTime, int cate) {
+        if (dataSelectListener != null)
+            dataSelectListener.onDataSelectPickListener(startTime, endTime, cate);
+    }
 
+    public interface DataSelectListener {
+        void onDataSelectPickListener(String startTime, String endTime, int cate);
     }
 }

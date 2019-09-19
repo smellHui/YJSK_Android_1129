@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <data></data>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/background_common"
+        android:orientation="vertical">
+
+        <include layout="@layout/toolbar" />
+
+        <!--复用布局-->
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="1dp">
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white_my"
+                    android:visibility="gone">
+
+                    <include
+                        android:id="@+id/lo_header"
+                        layout="@layout/common_qiehuan_reserviors_layout" />
+                </FrameLayout>
+
+
+                <include
+                    android:id="@+id/layoutTel"
+                    layout="@layout/layout_tel" />
+
+                <include
+                    android:id="@+id/layoutTrouble"
+                    layout="@layout/layout_trouble_item" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="@color/white_my"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp">
+
+                        <ImageView
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:layout_marginLeft="15dp"
+                            android:src="@drawable/icon_worker_head_default" />
+
+                        <TextView
+                            android:id="@+id/titleTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="5dp"
+                            android:text="填写险情描述"
+                            android:textColor="@color/textcommon"
+                            android:textSize="16sp" />
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/background_common_1" />
+
+                    <LinearLayout
+                        android:id="@+id/positionNameLy"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="13dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="险情部位"
+                            android:textColor="@color/textcommon"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_title"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="right"
+                            android:textColor="#666666"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginLeft="15dp"
+                        android:background="@color/background_common_1" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:padding="13dp">
+
+                        <TextView
+                            android:id="@+id/yichangTitleTv"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="险情描述"
+                            android:textColor="@color/textcommon"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/tv_description"
+                            android:layout_width="match_parent"
+                            android:layout_height="120dp"
+                            android:layout_marginLeft="10dp"
+                            android:background="@null"
+                            android:gravity="left|top"
+                            android:hint="请输入险情描述的详细信息"
+                            android:scrollbars="vertical"
+                            android:textColor="#666666"
+                            android:textColorHint="#999999"
+                            android:textSize="14sp" />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginLeft="15dp"
+                        android:background="@color/background_common_1" />
+
+                    <TextView
+                        android:id="@+id/tianqiDesTv"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="--"
+                        android:textColor="#999999"
+                        android:textSize="12sp" />
+
+                </LinearLayout>
+
+                <include
+                    android:id="@+id/layoutPic"
+                    layout="@layout/layout_danger_pic" />
+
+            </LinearLayout>
+
+        </android.support.v4.widget.NestedScrollView>
+
+    </LinearLayout>
+</layout>
