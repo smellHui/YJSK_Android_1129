@@ -24,7 +24,7 @@ import com.codbking.widget.genview.WheelGeneralAdapter;
          {
 
     protected int textColor = 0xffdddddd;
-    protected int selectColor = 0xff4FB17C;
+    protected int selectColor = 0xff1785F8;
     protected int split = 0xffdddddd;
     protected int splitHeight = 1;
     protected Context ctx;
@@ -40,7 +40,7 @@ import com.codbking.widget.genview.WheelGeneralAdapter;
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DatePicker);
         textColor = a.getColor(R.styleable.DatePicker_picker_text_color, 0xffdddddd);
-        selectColor = a.getColor(R.styleable.DatePicker_picker_select_textColor, 0xff444444);
+        selectColor = a.getColor(R.styleable.DatePicker_picker_select_textColor, 0xff1785F8);
         split = a.getColor(R.styleable.DatePicker_picker_split, 0xffdddddd);
         splitHeight = (int) a.getDimension(R.styleable.DatePicker_picker_split_height, 0.5f);
 
