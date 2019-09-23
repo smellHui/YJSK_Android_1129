@@ -144,7 +144,6 @@ public class OperateFragment extends BaseCommonFragment {
         reservoirBean = UserManager.getInstance().getDefaultReservoir();
         if (reservoirBean == null) return;
         String userCode = UserManager.getInstance().getUserCode();
-        SPUtils.getInstance().putString(CacheConsts.reservoirId, reservoirBean.getReservoirId());
         if (route == null) {
             ToastUtils.shortToast("暂无巡查路线");
             return;

@@ -13,6 +13,7 @@ import com.yangj.dahemodule.model.UserDataBean;
 import com.yangj.dahemodule.model.WeatherWarnBean;
 import com.yangj.dahemodule.model.main.MainDataBean;
 import com.yangj.dahemodule.model.user.SysUserDataBean;
+import com.yangj.dahemodule.model.xuncha.ProtalDataBean;
 import com.yangj.dahemodule.model.xuncha.RecordDataBean;
 
 import java.util.Map;
@@ -72,6 +73,15 @@ public interface UserHttpService {
      */
     @GET("app/problem/list4Me")
     Observable<ReportDataBean> getReportList(@Header("Authorization") String token, @QueryMap Map<String, String> requestBody);
+
+    /**
+     * 【查询】巡检详情
+     * @param token
+     * @param omRecordCode
+     * @return
+     */
+    @GET("/app/patrol/detail")
+    Observable<ProtalDataBean> getPatrolDetail(@Header("Authorization") String token, @Query("omRecordCode") String omRecordCode);
 
     /**
      * 【查询】险情详情

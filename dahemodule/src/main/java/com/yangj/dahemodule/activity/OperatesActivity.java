@@ -25,7 +25,7 @@ import static com.yangj.dahemodule.fragment.OperatesFragment.MINE_OPERATE;
  * Date:2019/8/27
  * Description:
  */
-public class OperatesActivity extends BaseActivity {
+public class OperatesActivity extends BaseActivity implements SearchToolBar.DataSelectListener {
     public final static int REPORT_SITE = 2;//我的巡查
     public final static int FAULT_SITE = REPORT_SITE >> 1;//全部巡查
     private String[] mTitles_2 = {"我的巡查", "全部巡查"};
@@ -34,6 +34,8 @@ public class OperatesActivity extends BaseActivity {
     private SearchToolBar searchToolBar;
     private CommonTabLayout mTabLayout;
     private ViewPager viewPager;
+    private CommonFragmentPagerAdapter pagerAdapter;
+    private OperatesFragment myOperatesFragment, allOperatesFragment;
 
     @Override
     public int getLayoutId() {
@@ -51,13 +53,17 @@ public class OperatesActivity extends BaseActivity {
         mTabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.vp);
 
+        searchToolBar.setDataSelectListener(this);
+
         tabEntities = new ArrayList<>();
         tabEntities.add(new TabEntity("我的巡查"));
         tabEntities.add(new TabEntity("全部巡查"));
         mTabLayout.setTabData(tabEntities);
-        CommonFragmentPagerAdapter pagerAdapter = new CommonFragmentPagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(OperatesFragment.launch(MINE_OPERATE));
-        pagerAdapter.addFragment(OperatesFragment.launch(ALL_OPERATE));
+        pagerAdapter = new CommonFragmentPagerAdapter(getSupportFragmentManager());
+        myOperatesFragment = OperatesFragment.launch(MINE_OPERATE);
+        allOperatesFragment = OperatesFragment.launch(ALL_OPERATE);
+        pagerAdapter.addFragment(myOperatesFragment);
+        pagerAdapter.addFragment(allOperatesFragment);
         viewPager.setAdapter(pagerAdapter);
         mTabLayout.setOnTabSelectListener(new OnTabSelectListener() {
             @Override
@@ -102,5 +108,10 @@ public class OperatesActivity extends BaseActivity {
     @Override
     protected void initRequestData() {
 
+    }
+
+    @Override
+    public void onDataSelectPickListener(String startTime, String endTime, int cate) {
+        myOperatesFragment.refresh(startTime, endTime, cate);
     }
 }

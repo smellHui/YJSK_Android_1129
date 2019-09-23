@@ -200,7 +200,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         dxcRoutePositions = new ArrayList<>();
         defaultReservoir = UserManager.getInstance().getDefaultReservoir();
         userCode = UserManager.getInstance().getUserCode();
-        reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
+        reservoirId = UserManager.getInstance().getReservoirId();
         mBinding = DataBindingUtil.bind(mRootView);
 
         Bundle bundle = getIntent().getExtras();
@@ -209,7 +209,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             taskBean = DataSupport.where("workOrderId=?", workOrderId).findFirst(TaskBean.class);
             if ("3".equals(taskBean.getExecuteStatus())) {
                 userCode = taskBean.getUserCode();
-
             }
             startTime = taskBean.getStartTime();
             workOrderId = taskBean.getWorkOrderId();
@@ -303,7 +302,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             mBinding.checkbox.setVisibility(View.INVISIBLE);
             mBinding.btComplete.setVisibility(View.GONE);
             rvStartInspection.setEnabled(false);
-
         }
 
         rvStartInspection.setLayoutManager(new LinearLayoutManager(this));
@@ -760,7 +758,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             if (routePositions != null && routePositions.size() > 0) {
                 for (RoutePosition routePosition : routePositions) {
                     try {
-                        String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
                         List<TaskItemBean> itemList = DataSupport.where("usercode=? and reservoirid=? and workorderid=? and positionid=?"
                                 , userCode, reservoirId, workOrderId, routePosition.getPositionId()).find(TaskItemBean.class);
                         Point point = routePosition.parasePoint();
@@ -793,7 +790,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
         if (routePositions != null && routePositions.size() > 0) {
             //得到待巡查点集合和已巡查点集合
             for (RoutePosition routePosition : routePositionList) {
-                String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
                 List<TaskItemBean> itemList = DataSupport.where("usercode=? and reservoirid=? and workorderid=? and positionid=?",
                         userCode, reservoirId, workOrderId, routePosition.getPositionId()).find(TaskItemBean.class);
                 boolean isYxc = false;
@@ -948,29 +944,28 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             isRefreshList = true;
         }
         if (routeListBean != null) {
-            if (routeListBean != null) {
-                routePositions = routeListBean.getRoutePositionsByworkid(workOrderId);
-                if (routePositions != null && routePositions.size() > 0) {
-                    if (routePosition != null) {
-                        String positionId = routePosition.getPositionId();
+            routePositions = routeListBean.getRoutePositionsByworkid(workOrderId);
+            if (!CollectionsUtil.isEmpty(routePositions)) {
+                if (routePosition != null) {
+                    String positionId = routePosition.getPositionId();
 
-                        List<TaskItemBean> taskItemBeans = DataSupport.where("positionid=? and userCode=? and reservoirId=? and workorderid=?",
-                                positionId, userCode, reservoirId, workOrderId).find(TaskItemBean.class);
-                        adapterTaskItemList.setNewData(taskItemBeans);
-                        if (CollectionsUtil.isEmpty(taskItemBeans)) {
-                            adapterTaskItemList.setEmptyView(EmptyLayoutUtil.showTop("暂无数据"));
-                        }
-                    } else {
-                        adapterTaskItemList.setNewData(null);
-                        adapterTaskItemList.setEmptyView(EmptyLayoutUtil.showTop("附近没有巡查点，请按上方地图路线" + "\n" + "对各巡查点进行检查"));
-
-                        int notnum = routeListBean.getItemListHasNotCheck(workOrderId, "0");
-                        if (notnum == 0) {
-                            adapterTaskItemList.setEmptyView(EmptyLayoutUtil.showTop("巡检已完成，可以直接点击按钮提交"));
-                        }
-
+                    List<TaskItemBean> taskItemBeans = DataSupport.where("positionid=? and userCode=? and reservoirId=? and workorderid=?",
+                            positionId, userCode, reservoirId, workOrderId).find(TaskItemBean.class);
+                    adapterTaskItemList.setNewData(taskItemBeans);
+                    if (CollectionsUtil.isEmpty(taskItemBeans)) {
+                        adapterTaskItemList.setEmptyView(EmptyLayoutUtil.showTop("暂无数据"));
                     }
+                } else {
+                    adapterTaskItemList.setNewData(null);
+                    adapterTaskItemList.setEmptyView(EmptyLayoutUtil.showTop("附近没有巡查点，请按上方地图路线" + "\n" + "对各巡查点进行检查"));
+
+                    int notnum = routeListBean.getItemListHasNotCheck(workOrderId, "0");
+                    if (notnum == 0) {
+                        adapterTaskItemList.setEmptyView(EmptyLayoutUtil.showTop("巡检已完成，可以直接点击按钮提交"));
+                    }
+
                 }
+
             }
         }
     }

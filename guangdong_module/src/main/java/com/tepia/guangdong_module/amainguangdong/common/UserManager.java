@@ -348,6 +348,12 @@ public class UserManager {
         return reservoirBeans;
     }
 
+    public String getReservoirId() {
+        ReservoirBean reservoirBean = getDefaultReservoir();
+        if (reservoirBean == null) return "";
+        return reservoirBean.getReservoirId();
+    }
+
     /**
      * @param reservoirBean
      */

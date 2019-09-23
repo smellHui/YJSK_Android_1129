@@ -36,6 +36,7 @@ import com.yangj.dahemodule.model.main.MainDataBean;
 import com.yangj.dahemodule.model.main.Route;
 import com.yangj.dahemodule.model.main.UserInfo;
 import com.yangj.dahemodule.model.user.SysUserDataBean;
+import com.yangj.dahemodule.model.xuncha.ProtalDataBean;
 import com.yangj.dahemodule.model.xuncha.RecordDataBean;
 
 import org.litepal.crud.DataSupport;
@@ -157,11 +158,14 @@ public class HttpManager {
      */
     public Observable<RecordDataBean> getRecordList(int pageType, String reservoirCode, int pageNum, int pageSize, String startDate, String endDate) {
         HashMap<String, String> hashMap = new HashMap<>();
-        hashMap.put("reservoirCode", reservoirCode);
+        if (!TextUtils.isEmpty(reservoirCode))
+            hashMap.put("reservoirCode", reservoirCode);
         hashMap.put("pageNum", pageNum + "");
         hashMap.put("pageSize", pageSize + "");
-        hashMap.put("startDate", startDate);
-        hashMap.put("endDate", endDate);
+        if (!TextUtils.isEmpty(startDate))
+            hashMap.put("startDate", startDate);
+        if (!TextUtils.isEmpty(endDate))
+            hashMap.put("endDate", endDate);
         if (pageType == MINE_OPERATE) {
             return mRetrofitService.getRecordListByMe(makeToken(), hashMap)
                     .subscribeOn(Schedulers.io())
@@ -173,6 +177,18 @@ public class HttpManager {
                     .observeOn(AndroidSchedulers.mainThread());
         }
         return null;
+    }
+
+    /**
+     * 【查询】巡检详情
+     *
+     * @param omRecordCode
+     * @return
+     */
+    public Observable<ProtalDataBean> getPatrolDetail(String omRecordCode) {
+        return mRetrofitService.getPatrolDetail(makeToken(), omRecordCode)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     /**

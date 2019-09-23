@@ -107,7 +107,7 @@ public class TroubleRecordActivity extends BaseActivity {
         SPUtils.getInstance().putString(CacheConsts.itemId, itemId);
         reservoirBean = UserManager.getInstance().getDefaultReservoir();
 //        userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
-        reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
+        reservoirId = UserManager.getInstance().getReservoirId();
         taskItemBean = DataSupport.where("reservoirId=? and itemId=?", reservoirId, itemId).findFirst(TaskItemBean.class);
         userCode = taskItemBean.getUserCode();
         isCompleteOfTaskBean = stopClick(taskItemBean.getWorkOrderId());

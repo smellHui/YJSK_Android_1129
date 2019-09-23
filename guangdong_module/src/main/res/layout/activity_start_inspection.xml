@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<layout>
+<layout xmlns:tools="http://schemas.android.com/tools">
 
     <data></data>
 
@@ -194,7 +194,7 @@
                                     android:layout_gravity="center_horizontal"
                                     android:layout_weight="1"
                                     android:gravity="center"
-                                    android:text="8"
+                                    tools:text="8"
                                     android:textColor="#FFA400"
                                     android:textSize="20sp"
                                     android:textStyle="bold" />
