@@ -28,7 +28,6 @@ import com.yangj.dahemodule.util.UiHelper;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -44,6 +43,8 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
     private int pageType;
     private String startTime, endTime;
 
+    private List<RecordBean> localRecordList;
+
     public static OperatesFragment launch(int pageType) {
         OperatesFragment operatesFragment = new OperatesFragment();
         Bundle bundle = new Bundle();
@@ -58,10 +59,33 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
         if (bundle != null) {
             pageType = bundle.getInt("pageType", MINE_OPERATE);
         }
+
+        localRecordList = new ArrayList<>();
+        String userCode = UserManager.getInstance().getUserCode();
+        List<TaskBean> toDoLocalTask;
+        if (pageType == MINE_OPERATE) {
+            toDoLocalTask = DataSupport.where("usercode=? and executeStatus != 3", userCode).find(TaskBean.class);
+        } else {
+            toDoLocalTask = DataSupport.where("usercode=? and executeStatus = 3", userCode).find(TaskBean.class);
+        }
+        if (!CollectionsUtil.isEmpty(toDoLocalTask)) {
+            for (TaskBean taskBean : toDoLocalTask) {
+                RecordBean recordBean = new RecordBean();
+                recordBean.setName(taskBean.getRouteName());
+                recordBean.setCreateTime(taskBean.getStartTime());
+                recordBean.setCode(taskBean.getWorkOrderId());
+                localRecordList.add(recordBean);
+            }
+        }
+
     }
 
     @Override
     protected void initRequestData() {
+        if (getPage() == 1 && !CollectionsUtil.isEmpty(localRecordList)) {
+            getList().clear();
+            getList().addAll(localRecordList);
+        }
         getRecordList();
     }
 
@@ -97,7 +121,7 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
         RecordBean recordBean = (RecordBean) adapter.getItem(position);
         if (recordBean == null) return;
         touchTaskBean = queryTaskBeanBySql(recordBean.getCode());
-        if (touchTaskBean != null && touchTaskBean.getExecuteStatus().equals("3")) {
+        if (touchTaskBean != null) {
             UiHelper.goToStartInspectionView(getBaseActivity(), touchTaskBean.getWorkOrderId());
         } else {
             loadPatrolDetail(recordBean.getCode());
