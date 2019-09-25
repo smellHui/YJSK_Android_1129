@@ -156,12 +156,6 @@ public class TroubleRecordActivity extends BaseActivity {
 
         initRec();
         initPhotoListView();
-        /*mBinding.layoutDes.selectTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showDialog();
-            }
-        });*/
 
         if (taskItemBean != null) {
             mBinding.layoutDes.selectTv.setText(taskItemBean.getPositionName());

@@ -313,6 +313,7 @@ public class AdapterTaskItemListNew extends BaseQuickAdapter<TaskItemBean, BaseV
             intent.putExtra("item",item.getItemId());
             intent.putExtra("executeResultType","1");
             mContext.startActivity(intent);
+
         });
         //已正常
         hasNormalBtn.setOnClickListener(v -> {
@@ -334,13 +335,7 @@ public class AdapterTaskItemListNew extends BaseQuickAdapter<TaskItemBean, BaseV
 
             refresh(item);
 
-            Intent intent = new Intent();
-            intent.setClass(mContext, TroubleRecordActivity.class);
-            intent.putExtra("item",item.getItemId());
-            intent.putExtra("executeResultType","3");
-
-            mContext.startActivity(intent);
-
+            goToTroubleRecordView(item.getItemId(),"3");
         });
         //确认正常
         querenNormalBtn.setOnClickListener(v -> {
@@ -361,13 +356,8 @@ public class AdapterTaskItemListNew extends BaseQuickAdapter<TaskItemBean, BaseV
             item.setIsCommitLocal("0");
             item.updateAll("itemId=?",item.getItemId());
             refresh(item);
-            Intent intent = new Intent();
-            intent.setClass(mContext, TroubleRecordActivity.class);
-            intent.putExtra("item",item.getItemId());
-            intent.putExtra("executeResultType","1");
 
-            mContext.startActivity(intent);
-
+            goToTroubleRecordView(item.getItemId(),"1");
         });
 
         editBtn.setOnClickListener(v -> {
@@ -385,12 +375,7 @@ public class AdapterTaskItemListNew extends BaseQuickAdapter<TaskItemBean, BaseV
                             item.setIsCommitLocal("0");
                             item.updateAll("itemId=?",item.getItemId());
                             refresh(item);
-                            Intent intent = new Intent();
-                            intent.setClass(mContext, TroubleRecordActivity.class);
-                            intent.putExtra("item",item.getItemId());
-                            intent.putExtra("executeResultType","1");
-                            mContext.startActivity(intent);
-
+                            goToTroubleRecordView(item.getItemId(),"1");
                         })
                         .setNegativeButton("取消", (dialog, which) -> {
 
@@ -412,12 +397,15 @@ public class AdapterTaskItemListNew extends BaseQuickAdapter<TaskItemBean, BaseV
     private void goTrouble(View view, TaskItemBean taskItemBean){
         view.setEnabled(true);
         view.setOnClickListener(v -> {
-            Intent intent = new Intent();
-            intent.setClass(mContext, TroubleRecordActivity.class);
-            intent.putExtra("item",taskItemBean.getItemId());
-            intent.putExtra("executeResultType",taskItemBean.getExecuteResultType());
-            mContext.startActivity(intent);
+            goToTroubleRecordView(taskItemBean.getItemId(),taskItemBean.getExecuteResultType());
         });
+    }
+
+    private void goToTroubleRecordView(String id,String executeResultType){
+        Intent intent = new Intent(mContext, TroubleRecordActivity.class);
+        intent.putExtra("item",id);
+        intent.putExtra("executeResultType",executeResultType);
+        mContext.startActivity(intent);
     }
 
 

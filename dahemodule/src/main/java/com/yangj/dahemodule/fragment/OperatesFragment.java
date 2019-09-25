@@ -97,9 +97,9 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
         RecordBean recordBean = (RecordBean) adapter.getItem(position);
         if (recordBean == null) return;
         touchTaskBean = queryTaskBeanBySql(recordBean.getCode());
-        if (touchTaskBean != null && touchTaskBean.getExecuteStatus().equals("3")){
+        if (touchTaskBean != null && touchTaskBean.getExecuteStatus().equals("3")) {
             UiHelper.goToStartInspectionView(getBaseActivity(), touchTaskBean.getWorkOrderId());
-        }else {
+        } else {
             loadPatrolDetail(recordBean.getCode());
         }
     }
@@ -135,7 +135,7 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
         List<ReservoirStructure> reservoirStructureList = protalBean.getReservoirStructureList();
         if (touchTaskBean == null) {
             ReservoirBean selectedResrvoir = UserManager.getInstance().getDefaultReservoir();
-            String userCode = UserManager.getInstance().getUserCode();
+            String userCode = protalBean.getCreatorName();
             //本地不存在工单详情数据，则保存
             TaskBean taskBean = new TaskBean();
             taskBean.setWorkOrderId(workOrderId);
@@ -160,7 +160,9 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
                     taskItem.setWorkOrderId(workOrderId);
                     taskItem.setUserCode(userCode);
                     taskItem.setPositionTreeNames(protalItemBean.getPositionName());
+                    taskItem.setPositionName(protalItemBean.getPositionName());
                     taskItem.setSuperviseItemName(protalItemBean.getOmItemName());
+                    taskItem.setSuperviseItemContent(protalItemBean.getOmItemContent());
                     taskItem.setPositionLatitude(protalItemBean.getPositionLatitude());
                     taskItem.setPositionLongitude(protalItemBean.getPositionLongitude());
                     taskItem.setReservoirId(selectedResrvoir.getReservoirId());
