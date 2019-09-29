@@ -6,7 +6,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
 import com.alibaba.fastjson.JSON;
-import com.tepia.base.CacheConsts;
 import com.tepia.base.ConfigConsts;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseCommonFragment;
@@ -17,6 +16,8 @@ import com.tepia.base.utils.UUIDUtil;
 import com.tepia.base.view.dialog.permissiondialog.Px2dpUtils;
 import com.tepia.base.view.floatview.CollectionsUtil;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
+import com.tepia.guangdong_module.amainguangdong.model.DangerousPosition;
+import com.tepia.guangdong_module.amainguangdong.model.UserInfo;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.RouteListBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.RoutePosition;
@@ -24,19 +25,16 @@ import com.tepia.guangdong_module.amainguangdong.route.TaskBean;
 import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
 import com.tepia.guangdong_module.amainguangdong.xunchaview.fragment.MainFragment;
 import com.tepia.photo_picker.entity.CheckTaskPicturesBean;
-import com.tepia.photo_picker.utils.SPUtils;
 import com.yangj.dahemodule.R;
 import com.yangj.dahemodule.adapter.OperateMainAdapter;
 import com.yangj.dahemodule.common.HttpManager;
 import com.yangj.dahemodule.model.UserBean;
-import com.yangj.dahemodule.model.main.DangerousPosition;
 import com.yangj.dahemodule.model.main.MainBean;
 import com.yangj.dahemodule.model.main.MainDataBean;
 import com.yangj.dahemodule.model.main.Omltem;
 import com.yangj.dahemodule.model.main.ReservoirInfo;
 import com.yangj.dahemodule.model.main.ReservoirStructure;
 import com.yangj.dahemodule.model.main.Route;
-import com.yangj.dahemodule.model.main.UserInfo;
 import com.yangj.dahemodule.util.UiHelper;
 import com.yangj.dahemodule.view.WrapLayoutManager;
 
@@ -105,11 +103,11 @@ public class OperateFragment extends BaseCommonFragment {
                         }
                         List<UserInfo> userInfos = mainBean.getUserList();
                         if (!CollectionsUtil.isEmpty(userInfos)) {
-                            HttpManager.getInstance().saveUserInfos(JSON.toJSONString(userInfos));
+                            UserManager.getInstance().saveUserInfos(JSON.toJSONString(userInfos));
                         }
                         List<DangerousPosition> dangerousPositions = mainBean.getDangerousPositionList();
                         if (!CollectionsUtil.isEmpty(dangerousPositions)) {
-                            HttpManager.getInstance().saveDangerousPositions(JSON.toJSONString(dangerousPositions));
+                            UserManager.getInstance().saveDangerousPositions(JSON.toJSONString(dangerousPositions));
                         }
                         ReservoirInfo reservoirInfo = mainBean.getReservoirInfo();
                         if (reservoirInfo != null) {
@@ -227,8 +225,8 @@ public class OperateFragment extends BaseCommonFragment {
         LogUtil.i(MainFragment.class.getName(), "--------------工单workOrderId:" + workOrderId);
         int num = 0;
         int numOFTaskItemBean = 0;
-        String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
         for (TaskItemBean taskItemBean1 : routeListBean.getItemList()) {
+            String reservoirId = taskItemBean1.getReservoirId();
             TaskItemBean taskItemBean = new TaskItemBean();
             taskItemBean.setPositionId(taskItemBean1.getPositionId());
             taskItemBean.setSuperviseItemCode(taskItemBean1.getSuperviseItemCode());
@@ -299,7 +297,7 @@ public class OperateFragment extends BaseCommonFragment {
 //            String userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
 //            String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
             routePosition.setUserCode(userCode);
-            routePosition.setReservoirId(reservoirId);
+            routePosition.setReservoirId(routePosition1.getReservoirId());
             routePosition.setFatherId(routeListBean.getId());
             routePosition.setWorkOrderId(workOrderId);
             routePosition.setUuid(UUIDUtil.getUUID32());

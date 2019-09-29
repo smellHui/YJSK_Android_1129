@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.text.TextUtils;
 
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.pgyersdk.update.PgyUpdateManager;
@@ -15,8 +16,10 @@ import com.tepia.base.CacheConsts;
 import com.tepia.base.http.BaseResponse;
 import com.tepia.base.http.RetrofitManager;
 import com.tepia.base.utils.Utils;
+import com.tepia.guangdong_module.amainguangdong.model.DangerousPosition;
 import com.tepia.guangdong_module.amainguangdong.model.JsonBean;
 import com.tepia.guangdong_module.amainguangdong.model.NewNoticeBean;
+import com.tepia.guangdong_module.amainguangdong.model.UserInfo;
 import com.tepia.guangdong_module.amainguangdong.model.UserInfoBean;
 import com.tepia.guangdong_module.amainguangdong.model.WeatherWarnBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.AreaBean;
@@ -473,6 +476,24 @@ public class UserManager {
 
     public String getUserCode() {
         return SPUtils.getInstance().getString(CacheConsts.userCode, "");
+    }
+
+    public void saveDangerousPositions(String str) {
+        SPUtils.getInstance().putString("DangerousPositions", str);
+    }
+
+    public List<DangerousPosition> getDangerousPositions() {
+        String str = SPUtils.getInstance().getString("DangerousPositions", "");
+        return JSON.parseArray(str, DangerousPosition.class);
+    }
+
+    public void saveUserInfos(String str) {
+        SPUtils.getInstance().putString("UserInfos", str);
+    }
+
+    public List<UserInfo> getUserInfos() {
+        String str = SPUtils.getInstance().getString("UserInfos", "");
+        return JSON.parseArray(str, UserInfo.class);
     }
 
 }

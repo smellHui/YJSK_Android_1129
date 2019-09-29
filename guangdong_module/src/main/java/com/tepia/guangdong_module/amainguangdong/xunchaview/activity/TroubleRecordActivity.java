@@ -28,6 +28,7 @@ import com.tepia.guangdong_module.amainguangdong.common.PhotoSelectAdapter;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.common.pickview.OnItemClickListener;
 import com.tepia.guangdong_module.amainguangdong.common.pickview.PhotoRecycleViewAdapter;
+import com.tepia.guangdong_module.amainguangdong.model.UserInfo;
 import com.tepia.guangdong_module.amainguangdong.model.UtilDataBaseOfGD;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.DataBeanOflistReservoirRoute;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.PersonDutyBean;
@@ -74,7 +75,7 @@ public class TroubleRecordActivity extends BaseActivity {
     String itemId = "1";
     String[] items = new String[]{"坝体", "坝脚", "泄水设施", "输水设施", "其他"};
     DataBeanOflistReservoirRoute offlineDataBean;
-    private List<PersonDutyBean> personDutyBeanList = new ArrayList<>();
+    private List<UserInfo> userInfos;
     String executeResultType = "";
 
     boolean isCompleteOfTaskBean;
@@ -130,7 +131,7 @@ public class TroubleRecordActivity extends BaseActivity {
             mBinding.layoutTrouble.operationLevelTv.setTextColor(ContextCompat.getColor(getBaseContext(), R.color.common_red));
             mBinding.layoutTrouble.operationLevelTv.setText("报警项");
         }
-
+        userInfos = UserManager.getInstance().getUserInfos();
         mBinding.loHeader.tvReservoirName.setText(reservoirBean.getReservoir());
 
     }
@@ -250,16 +251,17 @@ public class TroubleRecordActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mBinding.layoutTel.rvWorker.setLayoutManager(layoutManager);
-        adapterWorker = new AdapterWorker(R.layout.lv_tab_main_worker_item, personDutyBeanList);
+        adapterWorker = new AdapterWorker(R.layout.lv_tab_main_worker_item, userInfos);
         mBinding.layoutTel.rvWorker.setAdapter(adapterWorker);
         mBinding.layoutTel.rvWorker.setNestedScrollingEnabled(false);
-        if (CollectionsUtil.isEmpty(personDutyBeanList)) {
+        if (CollectionsUtil.isEmpty(userInfos)) {
             adapterWorker.setEmptyView(EmptyLayoutUtil.showNew("暂无数据"));
         }
         adapterWorker.setOnItemClickListener((adapter, view, position) -> {
-            if (!TextUtils.isEmpty(adapterWorker.getData().get(position).getMobile())) {
+            UserInfo userInfo = (UserInfo) adapter.getItem(position);
+            if (userInfo != null) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                Uri data = Uri.parse("tel:" + adapterWorker.getData().get(position).getMobile());
+                Uri data = Uri.parse("tel:" + userInfo.getPhone());
                 intent.setData(data);
                 startActivity(intent);
             } else {
@@ -292,7 +294,6 @@ public class TroubleRecordActivity extends BaseActivity {
                 @Override
                 public void onItemClick(View view, int position) {
                     if (photoRecycleViewAdapterBefore.getItemViewType(position) == PhotoRecycleViewAdapter.TYPE_ADD) {
-
                         if (!isCompleteOfTaskBean) {
                             PhotoPicker.builder()
                                     .setPhotoCount(5)
@@ -320,20 +321,12 @@ public class TroubleRecordActivity extends BaseActivity {
                         String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
                         UtilDataBaseOfGD.getInstance().deletePic(bizType, selectPhotosBefore.get(position), userCode, reservoirId);
                         selectPhotosBefore.remove(position);
-
                     }
-
                     photoRecycleViewAdapterBefore.setLocalData(selectPhotosBefore);
                     mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
-
                 });
-            } else {
-//                photoRecycleViewAdapterBefore
             }
-
-
         }
-
     }
 
     @Override

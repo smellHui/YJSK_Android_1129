@@ -62,6 +62,7 @@ public class DangerReportDetailActivity extends BaseActivity {
         rv_add_photo_before.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
         rv_add_photo_before.setAdapter(pictureAdapter);
         pictureAdapter.setEmptyView(EmptyLayoutUtil.showTop("暂无图片"));
+
     }
 
     @Override

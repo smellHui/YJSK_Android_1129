@@ -7,7 +7,6 @@ import com.tepia.base.http.RetrofitManager;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.DangerBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.WaterPptnPictureBean;
-import com.tepia.guangdong_module.amainguangdong.route.TaskBean;
 import com.tepia.guangdong_module.amainguangdong.route.TaskBeanFromNet;
 import com.tepia.guangdong_module.amainguangdong.route.TaskDetailResponse;
 import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
@@ -26,7 +25,6 @@ import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
-import retrofit2.http.Field;
 
 
 /**
@@ -144,19 +142,15 @@ public class TaskManager {
      * @param files
      * @return
      */
-    public Observable<BaseResponse> reportProblem(DangerBean dangerBean,
-                                                  List<String> files
-    ) {
-        String reservoirId = dangerBean.getReservoirId();
-        String positionName = dangerBean.getPositionName();
-        String problemDescription = dangerBean.getProblemDescription();
+    public Observable<BaseResponse> reportProblem(DangerBean dangerBean,List<String> files) {
         String token = makeToken();
         Map<String, RequestBody> params = new HashMap<>();
-        params.put("reservoirCode", RetrofitManager.convertToRequestBody(reservoirId));
-        params.put("positionName", RetrofitManager.convertToRequestBody(positionName));
-        params.put("problemDescription", RetrofitManager.convertToRequestBody(problemDescription));
-
-
+        if (dangerBean != null) {
+            params.put("reservoirCode", RetrofitManager.convertToRequestBody(dangerBean.getReservoirId()));
+            params.put("positionId", RetrofitManager.convertToRequestBody(dangerBean.getPositionId()));
+            params.put("positionName", RetrofitManager.convertToRequestBody(dangerBean.getPositionName()));
+            params.put("problemDescription", RetrofitManager.convertToRequestBody(dangerBean.getProblemDescription()));
+        }
         List<File> beforefileList = new ArrayList<>();
         for (int i = 0; i < files.size(); i++) {
             File file = new File(files.get(i));

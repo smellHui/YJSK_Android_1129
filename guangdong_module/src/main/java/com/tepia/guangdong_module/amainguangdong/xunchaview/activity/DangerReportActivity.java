@@ -8,7 +8,6 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 
 import com.example.guangdong_module.R;
 import com.example.guangdong_module.databinding.ActivityDangerReportBinding;
@@ -23,15 +22,14 @@ import com.tepia.base.utils.ResUtils;
 import com.tepia.base.utils.ToastUtils;
 import com.tepia.base.utils.Utils;
 import com.tepia.base.view.dialog.basedailog.ActionSheetDialog;
-import com.tepia.base.view.dialog.basedailog.OnOpenItemClick;
 import com.tepia.base.view.floatview.CollectionsUtil;
 import com.tepia.guangdong_module.amainguangdong.common.PhotoSelectAdapter;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.common.pickview.PhotoRecycleViewAdapter;
+import com.tepia.guangdong_module.amainguangdong.model.DangerousPosition;
+import com.tepia.guangdong_module.amainguangdong.model.UserInfo;
 import com.tepia.guangdong_module.amainguangdong.model.UtilDataBaseOfGD;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.DangerBean;
-import com.tepia.guangdong_module.amainguangdong.model.xuncha.DataBeanOflistReservoirRoute;
-import com.tepia.guangdong_module.amainguangdong.model.xuncha.PersonDutyBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
 import com.tepia.guangdong_module.amainguangdong.mvp.taskdetail.TaskManager;
 import com.tepia.guangdong_module.amainguangdong.utils.EmptyLayoutUtil;
@@ -68,10 +66,10 @@ public class DangerReportActivity extends BaseActivity {
 
     String userCode;
     String reservoirId;
-    String[] items = new String[]{"坝体", "坝脚", "泄水设施", "输水设施", "其他"};
-
-    DataBeanOflistReservoirRoute offlineDataBean;
-    private List<PersonDutyBean> personDutyBeanList = new ArrayList<>();
+    private DangerousPosition dangerousPosition;
+    private List<DangerousPosition> dangerousPositions;
+    private List<String> items;
+    private List<UserInfo> userInfos;
 
 
     @Override
@@ -88,17 +86,16 @@ public class DangerReportActivity extends BaseActivity {
         reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
         dangerBean = DataSupport.where("userCode=? and reservoirId=?", userCode, reservoirId).findFirst(DangerBean.class);
 
-        offlineDataBean = UserManager.getInstance().getOfflineReservoir(reservoirId, userCode, this);
-        if (offlineDataBean != null) {
-            List<DataBeanOflistReservoirRoute.DangerWarnPageBean.PositionsBean> positionsBeanList = offlineDataBean.getDangerWarnPage().getPositions();
-            items = new String[positionsBeanList.size()];
-            for (int i = 0; i < positionsBeanList.size(); i++) {
-                items[i] = positionsBeanList.get(i).getPositionName();
+        items = new ArrayList<>();
+        userInfos = UserManager.getInstance().getUserInfos();
+        dangerousPositions = UserManager.getInstance().getDangerousPositions();
+        if (!CollectionsUtil.isEmpty(dangerousPositions)) {
+            for (int i = 0; i < dangerousPositions.size(); i++) {
+                items.add(dangerousPositions.get(i).getPositionName());
             }
-            personDutyBeanList = offlineDataBean.getDangerWarnPage().getUserList();
         }
-        mBinding.loHeader.tvReservoirName.setText(reservoirBean.getReservoir());
 
+        mBinding.loHeader.tvReservoirName.setText(reservoirBean.getReservoir());
     }
 
     @Override
@@ -125,10 +122,9 @@ public class DangerReportActivity extends BaseActivity {
     @Override
     protected void initListener() {
         mBinding.reportTv.setOnClickListener(v -> {
-            String positionName = mBinding.layoutDes.selectTv.getText().toString();
             String problemDescription = mBinding.layoutDes.desEt.getText().toString();
             String problemDescriTianqi = mBinding.layoutDes.tianqiDesTv.getText().toString();
-            if (TextUtils.isEmpty(positionName) && items.length > 0) {
+            if (dangerousPosition == null) {
                 ToastUtils.shortToast("请选择险情部位");
                 return;
             }
@@ -140,13 +136,15 @@ public class DangerReportActivity extends BaseActivity {
 
             if (dangerBean == null) {
                 dangerBean = new DangerBean();
-                dangerBean.setPositionName(positionName);
+                dangerBean.setPositionName(dangerousPosition.getPositionName());
                 dangerBean.setProblemDescription(problemDescription + "\n" + problemDescriTianqi);
                 dangerBean.setReservoir(reservoirBean.getReservoir());
                 dangerBean.setReservoirId(reservoirId);
+                dangerBean.setPositionId(dangerousPosition.getId());
                 dangerBean.setUserCode(userCode);
             } else {
-                dangerBean.setPositionName(positionName);
+                dangerBean.setPositionName(dangerousPosition.getPositionName());
+                dangerBean.setPositionId(dangerousPosition.getId());
                 dangerBean.setProblemDescription(problemDescription);
                 dangerBean.saveOrUpdate("userCode=? and reservoirId=?", userCode, reservoirId);
             }
@@ -196,16 +194,17 @@ public class DangerReportActivity extends BaseActivity {
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         mBinding.layoutTel.rvWorker.setLayoutManager(layoutManager);
-        adapterWorker = new AdapterWorker(R.layout.lv_tab_main_worker_item, personDutyBeanList);
+        adapterWorker = new AdapterWorker(R.layout.lv_tab_main_worker_item, userInfos);
         mBinding.layoutTel.rvWorker.setAdapter(adapterWorker);
         mBinding.layoutTel.rvWorker.setNestedScrollingEnabled(false);
-        if (CollectionsUtil.isEmpty(personDutyBeanList)) {
+        if (CollectionsUtil.isEmpty(userInfos)) {
             adapterWorker.setEmptyView(EmptyLayoutUtil.showNew("暂无数据"));
         }
         adapterWorker.setOnItemClickListener((adapter, view, position) -> {
-            if (!TextUtils.isEmpty(adapterWorker.getData().get(position).getMobile())) {
+            UserInfo userInfo = (UserInfo) adapter.getItem(position);
+            if (userInfo != null) {
                 Intent intent = new Intent(Intent.ACTION_DIAL);
-                Uri data = Uri.parse("tel:" + adapterWorker.getData().get(position).getMobile());
+                Uri data = Uri.parse("tel:" + userInfo.getPhone());
                 intent.setData(data);
                 startActivity(intent);
             } else {
@@ -322,18 +321,16 @@ public class DangerReportActivity extends BaseActivity {
                 .show();*/
 
 
-        ActionSheetDialog dialog = new ActionSheetDialog(this, items, null);
+        ActionSheetDialog dialog = new ActionSheetDialog(this, items.toArray(new String[items.size()]), null);
         dialog.title("请选择部位")
                 .titleTextSize_SP(14.5f)
                 .widthScale(0.8f)
                 .show();
 
-        dialog.setOnOpenItemClickL(new OnOpenItemClick() {
-            @Override
-            public void onOpenItemClick(AdapterView<?> parent, View view, int position, long id) {
-                mBinding.layoutDes.selectTv.setText(items[position]);
-                dialog.dismiss();
-            }
+        dialog.setOnOpenItemClickL((parent, view, position, id) -> {
+            dangerousPosition = dangerousPositions.get(position);
+            mBinding.layoutDes.selectTv.setText(dangerousPosition.getPositionName());
+            dialog.dismiss();
         });
     }
 

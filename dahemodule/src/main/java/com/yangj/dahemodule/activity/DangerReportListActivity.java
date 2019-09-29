@@ -32,6 +32,7 @@ public class DangerReportListActivity extends BaseActivity implements SearchTool
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.container, fragment)
                 .commit();
+
     }
 
     @Override

@@ -1,5 +1,8 @@
 package com.yangj.dahemodule.model.main;
 
+import com.tepia.guangdong_module.amainguangdong.model.DangerousPosition;
+import com.tepia.guangdong_module.amainguangdong.model.UserInfo;
+
 import java.util.List;
 
 /**

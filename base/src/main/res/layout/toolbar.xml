@@ -24,15 +24,14 @@
             android:textSize="20sp" />
 
         <TextView
-            android:padding="8dp"
-            android:layout_centerVertical="true"
             android:id="@+id/tv_left_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="8dp"
             android:drawableLeft="@drawable/come_back_blue"
             android:drawablePadding="15dp"
-             />
+            android:padding="8dp" />
 
         <TextView
             android:id="@+id/tv_right_text"
@@ -41,10 +40,10 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
+            android:background="@drawable/login_out"
             android:gravity="center_vertical"
             android:text=""
             android:textColor="@color/colorAccent"
-            android:background="@drawable/login_out"
             android:textSize="18sp"
             android:visibility="invisible" />
 
@@ -55,10 +54,10 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="10dp"
+            android:background="@drawable/tianqi"
             android:gravity="center_vertical"
             android:textColor="#ffffff"
             android:textSize="18sp"
-            android:background="@drawable/tianqi"
             android:visibility="invisible" />
 
     </RelativeLayout>

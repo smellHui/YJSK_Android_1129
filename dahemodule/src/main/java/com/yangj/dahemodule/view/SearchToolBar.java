@@ -1,5 +1,6 @@
 package com.yangj.dahemodule.view;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.Toolbar;
@@ -52,6 +53,12 @@ public class SearchToolBar extends ViewBase implements SelectDataView.onDataSele
         dateTv.setOnClickListener(v ->
                 showChoiceDateDialog()
         );
+
+        findViewById(R.id.iv_back).setOnClickListener(v -> {
+            if (mContext instanceof Activity) {
+                ((Activity) mContext).finish();
+            }
+        });
     }
 
     public void showChoiceDateDialog() {

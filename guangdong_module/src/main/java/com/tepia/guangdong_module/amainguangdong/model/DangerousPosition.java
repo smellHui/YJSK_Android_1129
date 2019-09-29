@@ -1,4 +1,4 @@
-package com.yangj.dahemodule.model.main;
+package com.tepia.guangdong_module.amainguangdong.model;
 
 /**
  * Author:xch

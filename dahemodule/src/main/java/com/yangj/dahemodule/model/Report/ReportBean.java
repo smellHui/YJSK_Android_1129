@@ -24,6 +24,11 @@ public class ReportBean implements Serializable {
     private String description;
     private String reportUserId;
     private String sourceId;
+    /**
+     * 问题状态：
+     * 1-待反馈；
+     * 2-已完结；
+     */
     private String problemStatus;
     private String feedback;
     private String pictures;

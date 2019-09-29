@@ -18,6 +18,7 @@ public class DangerBean extends DataSupport {
     String positionName;
     String problemDescription;
     String userCode;
+    String positionId;
     /**
      * 0 表示未提交 1 表示已提交
      */
@@ -61,6 +62,14 @@ public class DangerBean extends DataSupport {
 
     public void setProblemDescription(String problemDescription) {
         this.problemDescription = problemDescription;
+    }
+
+    public String getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(String positionId) {
+        this.positionId = positionId;
     }
 
     public String getUserCode() {

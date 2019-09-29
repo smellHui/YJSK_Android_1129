@@ -31,10 +31,8 @@ import com.yangj.dahemodule.model.UserBean;
 import com.yangj.dahemodule.model.UserDataBean;
 import com.yangj.dahemodule.model.UserLoginResponse;
 import com.yangj.dahemodule.model.WeatherWarnBean;
-import com.yangj.dahemodule.model.main.DangerousPosition;
 import com.yangj.dahemodule.model.main.MainDataBean;
 import com.yangj.dahemodule.model.main.Route;
-import com.yangj.dahemodule.model.main.UserInfo;
 import com.yangj.dahemodule.model.user.SysUserDataBean;
 import com.yangj.dahemodule.model.xuncha.ProtalDataBean;
 import com.yangj.dahemodule.model.xuncha.RecordDataBean;
@@ -363,15 +361,6 @@ public class HttpManager {
         return JSON.parseArray(str, Route.class);
     }
 
-    public void saveUserInfos(String str) {
-        SPUtils.getInstance().putString("UserInfos", str);
-    }
-
-    public List<UserInfo> getUserInfos() {
-        String str = SPUtils.getInstance().getString("UserInfos", "");
-        return JSON.parseArray(str, UserInfo.class);
-    }
-
     public void saveUser(String str) {
         SPUtils.getInstance().putString("Userbean", str);
     }
@@ -385,15 +374,6 @@ public class HttpManager {
         UserBean userBean = getUser();
         if (userBean == null) return null;
         return userBean.getAccess_token();
-    }
-
-    public void saveDangerousPositions(String str) {
-        SPUtils.getInstance().putString("DangerousPositions", str);
-    }
-
-    public List<DangerousPosition> getDangerousPositions() {
-        String str = SPUtils.getInstance().getString("DangerousPositions", "");
-        return JSON.parseArray(str, DangerousPosition.class);
     }
 
     /**
