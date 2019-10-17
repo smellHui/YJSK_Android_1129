@@ -1,4 +1,4 @@
-package com.yangj.dahemodule.fragment;
+package com.yangj.dahemodule.fragment.dangerReport;
 
 import android.view.View;
 
@@ -7,8 +7,9 @@ import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.utils.ToastUtils;
 import com.yangj.dahemodule.adapter.ReportAdapter;
 import com.yangj.dahemodule.common.HttpManager;
-import com.yangj.dahemodule.model.Report.ReportBean;
-import com.yangj.dahemodule.model.Report.ReportDataBean;
+import com.yangj.dahemodule.fragment.BaseListFragment;
+import com.yangj.dahemodule.model.report.ReportBean;
+import com.yangj.dahemodule.model.report.ReportDataBean;
 import com.yangj.dahemodule.util.UiHelper;
 
 /**

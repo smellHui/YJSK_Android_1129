@@ -42,7 +42,6 @@ public class PhotoSelectAdapter extends RecyclerView.Adapter<PhotoSelectAdapter.
     public final static int MAX = 5;
 
     private OnItemClickListener onItemClickListener;
-    private ArrayList<String> localData;
     private ArrayList<String> netDataUrl = new ArrayList<>();
     private DeleteListener deleteListener;
     private boolean showType = false;
@@ -204,7 +203,6 @@ public class PhotoSelectAdapter extends RecyclerView.Adapter<PhotoSelectAdapter.
     }
 
     public void setLocalData(ArrayList<String> localData) {
-        this.localData = localData;
         photoPaths.clear();
         if (netDataUrl != null && netDataUrl.size() > 0) {
             photoPaths.addAll(netDataUrl);

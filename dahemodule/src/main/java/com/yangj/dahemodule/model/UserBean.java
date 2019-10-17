@@ -22,6 +22,7 @@ public class UserBean {
     private String expires_in;
     private String scope;
     private String license;
+    private String loginTime;
 
     public String getAccess_token() {
         return access_token;
@@ -71,6 +72,14 @@ public class UserBean {
         this.license = license;
     }
 
+    public String getLoginTime() {
+        return loginTime;
+    }
+
+    public void setLoginTime(String loginTime) {
+        this.loginTime = loginTime;
+    }
+
     @Override
     public String toString() {
         return "UserBean{" +
@@ -80,6 +89,7 @@ public class UserBean {
                 ", expires_in='" + expires_in + '\'' +
                 ", scope='" + scope + '\'' +
                 ", license='" + license + '\'' +
+                ", loginTime='" + loginTime + '\'' +
                 '}';
     }
 }

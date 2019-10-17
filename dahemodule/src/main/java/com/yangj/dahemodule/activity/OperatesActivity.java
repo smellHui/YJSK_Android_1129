@@ -1,24 +1,21 @@
 package com.yangj.dahemodule.activity;
 
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 
 import com.flyco.tablayout.CommonTabLayout;
-import com.flyco.tablayout.SegmentTabLayout;
 import com.flyco.tablayout.listener.CustomTabEntity;
 import com.flyco.tablayout.listener.OnTabSelectListener;
 import com.tepia.base.common.CommonFragmentPagerAdapter;
 import com.tepia.base.mvp.BaseActivity;
 import com.yangj.dahemodule.R;
-import com.yangj.dahemodule.fragment.OperatesFragment;
+import com.yangj.dahemodule.fragment.operate.OperatesFragment;
 import com.yangj.dahemodule.model.TabEntity;
 import com.yangj.dahemodule.view.SearchToolBar;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import static com.yangj.dahemodule.fragment.OperatesFragment.ALL_OPERATE;
-import static com.yangj.dahemodule.fragment.OperatesFragment.MINE_OPERATE;
+import static com.yangj.dahemodule.fragment.operate.OperatesFragment.ALL_OPERATE;
+import static com.yangj.dahemodule.fragment.operate.OperatesFragment.MINE_OPERATE;
 
 /**
  * Author:xch
@@ -26,10 +23,6 @@ import static com.yangj.dahemodule.fragment.OperatesFragment.MINE_OPERATE;
  * Description:
  */
 public class OperatesActivity extends BaseActivity implements SearchToolBar.DataSelectListener {
-    public final static int REPORT_SITE = 2;//我的巡查
-    public final static int FAULT_SITE = REPORT_SITE >> 1;//全部巡查
-    private String[] mTitles_2 = {"我的巡查", "全部巡查"};
-    private ArrayList<CustomTabEntity> tabEntities;
 
     private SearchToolBar searchToolBar;
     private CommonTabLayout mTabLayout;
@@ -55,7 +48,7 @@ public class OperatesActivity extends BaseActivity implements SearchToolBar.Data
 
         searchToolBar.setDataSelectListener(this);
 
-        tabEntities = new ArrayList<>();
+        ArrayList<CustomTabEntity> tabEntities = new ArrayList<>();
         tabEntities.add(new TabEntity("我的巡查"));
         tabEntities.add(new TabEntity("全部巡查"));
         mTabLayout.setTabData(tabEntities);

@@ -14,6 +14,7 @@ import com.tepia.base.CacheConsts;
 import com.tepia.base.http.BaseResponse;
 import com.tepia.base.http.RetrofitManager;
 import com.tepia.base.utils.Utils;
+import com.tepia.base.view.floatview.CollectionsUtil;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.UserInfoBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.AreaBean;
@@ -25,20 +26,25 @@ import com.tepia.photo_picker.utils.SPUtils;
 import com.yangj.dahemodule.APPCostant;
 import com.yangj.dahemodule.http.UserHttpService;
 import com.yangj.dahemodule.model.NewNoticeBean;
-import com.yangj.dahemodule.model.Report.ReportDataBean;
-import com.yangj.dahemodule.model.Report.ReportDetailDataBean;
 import com.yangj.dahemodule.model.UserBean;
 import com.yangj.dahemodule.model.UserDataBean;
 import com.yangj.dahemodule.model.UserLoginResponse;
 import com.yangj.dahemodule.model.WeatherWarnBean;
+import com.yangj.dahemodule.model.danger.DangerDataBean;
 import com.yangj.dahemodule.model.main.MainDataBean;
 import com.yangj.dahemodule.model.main.Route;
+import com.yangj.dahemodule.model.report.ReportDataBean;
+import com.yangj.dahemodule.model.report.ReportDetailDataBean;
+import com.yangj.dahemodule.model.user.RolesBean;
+import com.yangj.dahemodule.model.user.SysUser;
 import com.yangj.dahemodule.model.user.SysUserDataBean;
 import com.yangj.dahemodule.model.xuncha.ProtalDataBean;
 import com.yangj.dahemodule.model.xuncha.RecordDataBean;
 
 import org.litepal.crud.DataSupport;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -48,10 +54,13 @@ import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.schedulers.Schedulers;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 
-import static com.yangj.dahemodule.fragment.OperatesFragment.ALL_OPERATE;
-import static com.yangj.dahemodule.fragment.OperatesFragment.MINE_OPERATE;
+import static com.yangj.dahemodule.fragment.DealFragment.DEAL_COMPLETE;
+import static com.yangj.dahemodule.fragment.DealFragment.DEAL_DOING;
+import static com.yangj.dahemodule.fragment.operate.OperatesFragment.ALL_OPERATE;
+import static com.yangj.dahemodule.fragment.operate.OperatesFragment.MINE_OPERATE;
 
 /**
  * Created by Joeshould on 2018/5/22.
@@ -178,6 +187,46 @@ public class HttpManager {
     }
 
     /**
+     * 【查询】待处理险情列表
+     *
+     * @param dealType
+     * @param reservoirCode
+     * @param pageNum
+     * @param pageSize
+     * @param startDate
+     * @param endDate
+     * @param source
+     * @return
+     */
+    public Observable<DangerDataBean> getPendingHandleList(int dealType,String reservoirCode, int pageNum, int pageSize, String startDate, String endDate, String source) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        if (!TextUtils.isEmpty(reservoirCode))
+            hashMap.put("reservoirCode", reservoirCode);
+        if (!TextUtils.isEmpty(startDate)) {
+            hashMap.put("startDate", startDate);
+        }
+        if (!TextUtils.isEmpty(endDate)) {
+            hashMap.put("endDate", endDate);
+        }
+        if (!TextUtils.isEmpty(source)) {
+            hashMap.put("source", source);
+        }
+        hashMap.put("pageNum", pageNum + "");
+        hashMap.put("pageSize", pageSize + "");
+        if (dealType == DEAL_DOING) {
+            return mRetrofitService.getPendingHandleList(makeToken(), hashMap)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+        if (dealType == DEAL_COMPLETE) {
+            return mRetrofitService.getHandleList(makeToken(), hashMap)
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread());
+        }
+        return null;
+    }
+
+    /**
      * 【查询】巡检详情
      *
      * @param omRecordCode
@@ -222,6 +271,32 @@ public class HttpManager {
         if (!TextUtils.isEmpty(endDate))
             hashMap.put("endDate", endDate);
         return mRetrofitService.getReportList(makeToken(), hashMap)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread());
+    }
+
+    /**
+     * 【新增】险情反馈
+     *
+     * @param problemId
+     * @param feedbackContent
+     * @param files
+     * @return
+     */
+    public Observable<BaseResponse> feekBackProblem(String problemId, String feedbackContent, List<String> files) {
+        String token = makeToken();
+        Map<String, RequestBody> params = new HashMap<>();
+        params.put("problemId", RetrofitManager.convertToRequestBody(problemId));
+        params.put("feedbackContent", RetrofitManager.convertToRequestBody(feedbackContent));
+        List<File> beforefileList = new ArrayList<>();
+        if (!CollectionsUtil.isEmpty(files)) {
+            for (int i = 0; i < files.size(); i++) {
+                File file = new File(files.get(i));
+                beforefileList.add(file);
+            }
+        }
+        List<MultipartBody.Part> beforePathList = RetrofitManager.filesToMultipartBodyParts("pictures", beforefileList);
+        return mRetrofitService.feekBackProblem(token, params, beforePathList)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread());
     }
@@ -370,11 +445,30 @@ public class HttpManager {
         return JSON.parseObject(str, UserBean.class);
     }
 
+    public void saveSysUser(String str) {
+        SPUtils.getInstance().putString("SysUser", str);
+    }
+
+    public SysUser getSysUser() {
+        String str = SPUtils.getInstance().getString("SysUser", "");
+        return JSON.parseObject(str, SysUser.class);
+    }
+
+    public void saveRolesBean(String str) {
+        SPUtils.getInstance().putString("RolesBean", str);
+    }
+
+    public RolesBean getRolesBean() {
+        String str = SPUtils.getInstance().getString("RolesBean", "");
+        return JSON.parseObject(str, RolesBean.class);
+    }
+
     public String getToken() {
         UserBean userBean = getUser();
         if (userBean == null) return null;
         return userBean.getAccess_token();
     }
+
 
     /**
      * 根据水库id 查询离线数据实体

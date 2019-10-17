@@ -1,4 +1,4 @@
-package com.yangj.dahemodule.model.Report;
+package com.yangj.dahemodule.model.report;
 
 import com.yangj.dahemodule.model.BaseBean;
 import com.yangj.dahemodule.model.PageBean;

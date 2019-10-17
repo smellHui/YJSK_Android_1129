@@ -2,6 +2,7 @@ package com.tepia.base.http;
 
 
 
+import android.os.UserManager;
 import android.util.Log;
 
 import com.alibaba.android.arouter.launcher.ARouter;
@@ -89,6 +90,7 @@ public abstract class LoadingSubject<T extends BaseResponse> implements io.react
                 _onNext(o);
             }else if (1 == o.getCode()){
                 ARouter.getInstance().build(AppRoutePath.app_dahe_login).navigation();
+                AppManager.getInstance().finishAll();
             }else {
                 _onError(o.getMsg());
             }

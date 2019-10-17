@@ -1,24 +1,25 @@
 package com.yangj.dahemodule.activity;
 
 import android.content.Intent;
-import android.support.v7.widget.OrientationHelper;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.TextView;
 
-import com.arialyy.frame.util.TextUtil;
+import com.tepia.base.http.BaseResponse;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseActivity;
-import com.tepia.base.view.floatview.CollectionsUtil;
-import com.tepia.guangdong_module.amainguangdong.utils.EmptyLayoutUtil;
+import com.tepia.base.utils.ToastUtils;
+import com.tepia.photo_picker.PhotoPicker;
 import com.yangj.dahemodule.R;
-import com.yangj.dahemodule.adapter.PictureAdapter;
 import com.yangj.dahemodule.common.HttpManager;
-import com.yangj.dahemodule.model.Report.ReportBean;
-import com.yangj.dahemodule.model.Report.ReportDetailDataBean;
+import com.yangj.dahemodule.model.report.ReportBean;
+import com.yangj.dahemodule.model.report.ReportDetailDataBean;
+import com.yangj.dahemodule.model.user.RolesBean;
+import com.yangj.dahemodule.view.danger.CompleteView;
+import com.yangj.dahemodule.view.danger.DetailView;
+import com.yangj.dahemodule.view.danger.ReportedView;
+import com.yangj.dahemodule.view.danger.ResponseView;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -27,16 +28,16 @@ import java.util.List;
  * Date:2019/9/19
  * Description:
  */
-public class DangerReportDetailActivity extends BaseActivity {
+public class DangerReportDetailActivity extends BaseActivity implements ResponseView.FeekBackListener {
 
-    private TextView tv_title;
-    private TextView tv_description;
-    private TextView tv_photo_num_before;
-    private RecyclerView rv_add_photo_before;
-
-    private PictureAdapter pictureAdapter;
+    private DetailView detailView;
+    private ReportedView reportedView;
+    private ReportedView responseView;
+    private ResponseView feedView;
+    private CompleteView completeView;
 
     private String reportId;
+    private RolesBean role;
 
     @Override
     public int getLayoutId() {
@@ -49,20 +50,19 @@ public class DangerReportDetailActivity extends BaseActivity {
         if (intent != null) {
             reportId = intent.getStringExtra("reportId");
         }
+        role = HttpManager.getInstance().getRolesBean();
     }
 
     @Override
     public void initView() {
-        tv_title = findViewById(R.id.tv_title);
-        tv_description = findViewById(R.id.tv_description);
-        tv_photo_num_before = findViewById(R.id.tv_photo_num_before);
-        rv_add_photo_before = findViewById(R.id.rv_add_photo_before);
-
-        pictureAdapter = new PictureAdapter();
-        rv_add_photo_before.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
-        rv_add_photo_before.setAdapter(pictureAdapter);
-        pictureAdapter.setEmptyView(EmptyLayoutUtil.showTop("暂无图片"));
-
+        setLeftTitle("险情反馈");
+        showBack();
+        detailView = findViewById(R.id.view_detail);
+        reportedView = findViewById(R.id.view_report);
+        responseView = findViewById(R.id.view_response);
+        feedView = findViewById(R.id.view_feed);
+        completeView = findViewById(R.id.view_complete);
+        feedView.setFeekBackListener(this);
     }
 
     @Override
@@ -84,14 +84,26 @@ public class DangerReportDetailActivity extends BaseActivity {
                         if (reportDetailDataBean == null) return;
                         ReportBean reportBean = reportDetailDataBean.getData();
                         if (reportBean == null) return;
-                        tv_title.setText(reportBean.getTitle());
-                        tv_description.setText(reportBean.getDescription());
-                        String pictures = reportBean.getPictures();
-                        if (!TextUtils.isEmpty(pictures)) {
-                            String[] urls = pictures.split(",");
-                            pictureAdapter.setNewData(Arrays.asList(urls));
-                            if (!CollectionsUtil.isEmpty(pictures)) {
-                                tv_photo_num_before.setVisibility(View.GONE);
+                        detailView.setDate(reportBean.getTitle(), reportBean.getCreateTime(), reportBean.getDescription());
+                        List<String> reportImgs = convertImageData(reportBean.getPictures());
+                        reportedView.setDate("已上报", reportBean.getCreatorName(), reportBean.getCreateTime(), "", reportImgs);
+                        //已完结
+                        if (reportBean.isComplete()) {
+                            List<String> responseImgs = convertImageData(reportBean.getFeedbackPictures());
+                            responseView.setDate("已反馈", reportBean.getUpdaterName(), reportBean.getUpdateTime(), reportBean.getFeedback(), responseImgs);
+                            completeView.setData("已完结");
+                            feedView.setVisibility(View.GONE);
+                            responseView.setVisibility(View.VISIBLE);
+                            completeView.setVisibility(View.VISIBLE);
+                        } else {
+                            if (role.isXC()) {
+                                completeView.setData("待反馈");
+                                feedView.setVisibility(View.GONE);
+                                responseView.setVisibility(View.GONE);
+                                completeView.setVisibility(View.VISIBLE);
+                            } else {
+                                feedView.setVisibility(View.VISIBLE);
+                                completeView.setVisibility(View.GONE);
                             }
                         }
                     }
@@ -99,6 +111,44 @@ public class DangerReportDetailActivity extends BaseActivity {
                     @Override
                     protected void _onError(String message) {
 
+                    }
+                });
+    }
+
+    private List<String> convertImageData(String pictures) {
+        List<String> imgs = null;
+        if (!TextUtils.isEmpty(pictures)) {
+            String[] urls = pictures.split(",");
+            imgs = Arrays.asList(urls);
+        }
+        return imgs;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 100) {
+            if (data != null) {
+                ArrayList<String> photos = data.getStringArrayListExtra(PhotoPicker.KEY_SELECTED_PHOTOS);
+                feedView.setData(photos);
+            }
+
+        }
+    }
+
+    @Override
+    public void feekBackClick(String content, List<String> imgs) {
+        HttpManager.getInstance().feekBackProblem(reportId, content, imgs)
+                .subscribe(new LoadingSubject<BaseResponse>() {
+
+                    @Override
+                    protected void _onNext(BaseResponse baseResponse) {
+                        ToastUtils.shortToast("反馈成功");
+                        loadData();
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
                     }
                 });
     }

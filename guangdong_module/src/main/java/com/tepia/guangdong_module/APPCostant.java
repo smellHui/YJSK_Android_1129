@@ -23,7 +23,7 @@ public class APPCostant {
      *
      */
     public static String API_SERVER_URL = "http://47.110.70.104:10502/";
-//    public static String API_SERVER_URL = "http://192.168.4.163:10502/";
+//    public static String API_SERVER_URL = "http://192.168.4.97:10502/";
     /**
      * 图片服务器地址
      */

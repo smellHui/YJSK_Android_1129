@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
-import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
 import com.yangj.dahemodule.R;
 import com.yangj.dahemodule.model.main.ReservoirInfo;
 
@@ -18,6 +17,7 @@ public class BasicInfoView extends ViewBase {
 
     private TextView typeTv;
     private TextView damTv;
+    private TextView damTopElevationTv;
     private TextView damBotmMaxWidthTv;
     private TextView buildDateTv;
 
@@ -42,15 +42,17 @@ public class BasicInfoView extends ViewBase {
     public void initData() {
         typeTv = findViewById(R.id.tv_type);
         damTv = findViewById(R.id.tv_dam);
+        damTopElevationTv = findViewById(R.id.tv_damTopElevation);
         damBotmMaxWidthTv = findViewById(R.id.tv_damBotmMaxWidth);
         buildDateTv = findViewById(R.id.tv_build_date);
     }
 
     public void setData(ReservoirInfo reservoirInfo) {
         if (reservoirInfo == null) return;
-        typeTv.setText(reservoirInfo.getType());
-        damTv.setText(reservoirInfo.getDamHeight() + "m *" + reservoirInfo.getDamLength() + "m *" + reservoirInfo.getDamWidth() + "m");
-        damBotmMaxWidthTv.setText(reservoirInfo.getDamBotmMaxWidth() + "m");
-        buildDateTv.setText(reservoirInfo.getBuildStartDate() + " - " + reservoirInfo.getBuildEndDate());
+        typeTv.setText(reservoirInfo.getDamTypeLabel());
+        damTv.setText(reservoirInfo.getDamHeight() + " * " + reservoirInfo.getDamLength() + " * " + reservoirInfo.getDamWidth());
+        damBotmMaxWidthTv.setText(reservoirInfo.getMaxDamWidth());
+        damTopElevationTv.setText(reservoirInfo.getDamTopElevation());
+        buildDateTv.setText(reservoirInfo.getStartTime() + " / " + reservoirInfo.getEndTime());
     }
 }

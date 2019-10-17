@@ -1,5 +1,7 @@
 package com.yangj.dahemodule.model.main;
 
+import com.google.common.base.Strings;
+
 /**
  * Author:xch
  * Date:2019/9/4
@@ -7,95 +9,23 @@ package com.yangj.dahemodule.model.main;
  */
 public class ReservoirInfo {
 
-    private String status;
-    private String createBy;
-    private String createTime;
-    private String updateBy;
-    private String updateTime;
     private String id;
     private String code;
     private String name;
-    private String type;
-    private String introduce;
-    private String address;
     private String longitude;
     private String latitude;
-    private String mainFunction;
-    private String manageDepartment;
-    private String locatedBasin;
-    private String locatedRiver;
-    private String locatedBrook;
-    private String buildStartDate;
-    private String buildEndDate;
+    private String projectScale;
+    private String projectScaleLabel;
+    private String reservoirOverview;
     private String damType;
+    private String damTypeLabel;
     private String damLength;
     private String damHeight;
     private String damWidth;
-    private String damCrestElevation;
-    private String damBotmMaxWidth;
-    private String normalImpoundedLevel;
-    private String designFloodWaterLevel;
-    private String checkFloodWaterLevel;
-    private String deadWaterLevel;
-    private String waterLevelVolume;
-    private String effectiveVolume;
-    private String deathLevelVolume;
-    private String floodSeasonWaterLevel;
-    private String floodSeasonStartDate;
-    private String floodSeasonEndDate;
-    private String capacityCoefficient;
-    private String rainwaterCollectingArea;
-    private String lrrigatedFarmlandAre;
-    private String avgIrrigationWaterSupply;
-    private String drinkingWaterSupply;
-    private String avgTotalWaterSupply;
-    private String utilizationRateOfDevelopment;
-    private String spillwayType;
-    private String spillwayLength;
-    private String diversionCanalLength;
-    private String overflowMode;
-    private String canalBottomElevation;
-    private String weirCrestElevation;
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public String getCreateBy() {
-        return createBy;
-    }
-
-    public void setCreateBy(String createBy) {
-        this.createBy = createBy;
-    }
-
-    public String getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(String createTime) {
-        this.createTime = createTime;
-    }
-
-    public String getUpdateBy() {
-        return updateBy;
-    }
-
-    public void setUpdateBy(String updateBy) {
-        this.updateBy = updateBy;
-    }
-
-    public String getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(String updateTime) {
-        this.updateTime = updateTime;
-    }
+    private String damTopElevation;
+    private String startTime;
+    private String endTime;
+    private String maxDamWidth;
 
     public String getId() {
         return id;
@@ -121,30 +51,6 @@ public class ReservoirInfo {
         this.name = name;
     }
 
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public String getIntroduce() {
-        return introduce;
-    }
-
-    public void setIntroduce(String introduce) {
-        this.introduce = introduce;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
     public String getLongitude() {
         return longitude;
     }
@@ -161,60 +67,28 @@ public class ReservoirInfo {
         this.latitude = latitude;
     }
 
-    public String getMainFunction() {
-        return mainFunction;
+    public String getProjectScale() {
+        return projectScale;
     }
 
-    public void setMainFunction(String mainFunction) {
-        this.mainFunction = mainFunction;
+    public void setProjectScale(String projectScale) {
+        this.projectScale = projectScale;
     }
 
-    public String getManageDepartment() {
-        return manageDepartment;
+    public String getProjectScaleLabel() {
+        return projectScaleLabel;
     }
 
-    public void setManageDepartment(String manageDepartment) {
-        this.manageDepartment = manageDepartment;
+    public void setProjectScaleLabel(String projectScaleLabel) {
+        this.projectScaleLabel = projectScaleLabel;
     }
 
-    public String getLocatedBasin() {
-        return locatedBasin;
+    public String getReservoirOverview() {
+        return reservoirOverview;
     }
 
-    public void setLocatedBasin(String locatedBasin) {
-        this.locatedBasin = locatedBasin;
-    }
-
-    public String getLocatedRiver() {
-        return locatedRiver;
-    }
-
-    public void setLocatedRiver(String locatedRiver) {
-        this.locatedRiver = locatedRiver;
-    }
-
-    public String getLocatedBrook() {
-        return locatedBrook;
-    }
-
-    public void setLocatedBrook(String locatedBrook) {
-        this.locatedBrook = locatedBrook;
-    }
-
-    public String getBuildStartDate() {
-        return buildStartDate;
-    }
-
-    public void setBuildStartDate(String buildStartDate) {
-        this.buildStartDate = buildStartDate;
-    }
-
-    public String getBuildEndDate() {
-        return buildEndDate;
-    }
-
-    public void setBuildEndDate(String buildEndDate) {
-        this.buildEndDate = buildEndDate;
+    public void setReservoirOverview(String reservoirOverview) {
+        this.reservoirOverview = reservoirOverview;
     }
 
     public String getDamType() {
@@ -225,8 +99,16 @@ public class ReservoirInfo {
         this.damType = damType;
     }
 
+    public String getDamTypeLabel() {
+        return Strings.isNullOrEmpty(damTypeLabel) ? "--" : damTypeLabel;
+    }
+
+    public void setDamTypeLabel(String damTypeLabel) {
+        this.damTypeLabel = damTypeLabel;
+    }
+
     public String getDamLength() {
-        return damLength;
+        return Strings.isNullOrEmpty(damLength) ? "--" : damLength + "m";
     }
 
     public void setDamLength(String damLength) {
@@ -234,7 +116,7 @@ public class ReservoirInfo {
     }
 
     public String getDamHeight() {
-        return damHeight;
+        return Strings.isNullOrEmpty(damHeight) ? "--" : damHeight + "m";
     }
 
     public void setDamHeight(String damHeight) {
@@ -242,265 +124,65 @@ public class ReservoirInfo {
     }
 
     public String getDamWidth() {
-        return damWidth;
+        return Strings.isNullOrEmpty(damWidth) ? "--" : damWidth + "m";
     }
 
     public void setDamWidth(String damWidth) {
         this.damWidth = damWidth;
     }
 
-    public String getDamCrestElevation() {
-        return damCrestElevation;
+    public String getDamTopElevation() {
+        return Strings.isNullOrEmpty(damTopElevation) ? "--" : damTopElevation + "m";
     }
 
-    public void setDamCrestElevation(String damCrestElevation) {
-        this.damCrestElevation = damCrestElevation;
+    public void setDamTopElevation(String damTopElevation) {
+        this.damTopElevation = damTopElevation;
     }
 
-    public String getDamBotmMaxWidth() {
-        return damBotmMaxWidth;
+    public String getStartTime() {
+        return startTime;
     }
 
-    public void setDamBotmMaxWidth(String damBotmMaxWidth) {
-        this.damBotmMaxWidth = damBotmMaxWidth;
+    public void setStartTime(String startTime) {
+        this.startTime = startTime;
     }
 
-    public String getNormalImpoundedLevel() {
-        return normalImpoundedLevel;
+    public String getEndTime() {
+        return endTime;
     }
 
-    public void setNormalImpoundedLevel(String normalImpoundedLevel) {
-        this.normalImpoundedLevel = normalImpoundedLevel;
+    public void setEndTime(String endTime) {
+        this.endTime = endTime;
     }
 
-    public String getDesignFloodWaterLevel() {
-        return designFloodWaterLevel;
+    public String getMaxDamWidth() {
+        return Strings.isNullOrEmpty(maxDamWidth) ? "--" : maxDamWidth + "m";
     }
 
-    public void setDesignFloodWaterLevel(String designFloodWaterLevel) {
-        this.designFloodWaterLevel = designFloodWaterLevel;
-    }
-
-    public String getCheckFloodWaterLevel() {
-        return checkFloodWaterLevel;
-    }
-
-    public void setCheckFloodWaterLevel(String checkFloodWaterLevel) {
-        this.checkFloodWaterLevel = checkFloodWaterLevel;
-    }
-
-    public String getDeadWaterLevel() {
-        return deadWaterLevel;
-    }
-
-    public void setDeadWaterLevel(String deadWaterLevel) {
-        this.deadWaterLevel = deadWaterLevel;
-    }
-
-    public String getWaterLevelVolume() {
-        return waterLevelVolume;
-    }
-
-    public void setWaterLevelVolume(String waterLevelVolume) {
-        this.waterLevelVolume = waterLevelVolume;
-    }
-
-    public String getEffectiveVolume() {
-        return effectiveVolume;
-    }
-
-    public void setEffectiveVolume(String effectiveVolume) {
-        this.effectiveVolume = effectiveVolume;
-    }
-
-    public String getDeathLevelVolume() {
-        return deathLevelVolume;
-    }
-
-    public void setDeathLevelVolume(String deathLevelVolume) {
-        this.deathLevelVolume = deathLevelVolume;
-    }
-
-    public String getFloodSeasonWaterLevel() {
-        return floodSeasonWaterLevel;
-    }
-
-    public void setFloodSeasonWaterLevel(String floodSeasonWaterLevel) {
-        this.floodSeasonWaterLevel = floodSeasonWaterLevel;
-    }
-
-    public String getFloodSeasonStartDate() {
-        return floodSeasonStartDate;
-    }
-
-    public void setFloodSeasonStartDate(String floodSeasonStartDate) {
-        this.floodSeasonStartDate = floodSeasonStartDate;
-    }
-
-    public String getFloodSeasonEndDate() {
-        return floodSeasonEndDate;
-    }
-
-    public void setFloodSeasonEndDate(String floodSeasonEndDate) {
-        this.floodSeasonEndDate = floodSeasonEndDate;
-    }
-
-    public String getCapacityCoefficient() {
-        return capacityCoefficient;
-    }
-
-    public void setCapacityCoefficient(String capacityCoefficient) {
-        this.capacityCoefficient = capacityCoefficient;
-    }
-
-    public String getRainwaterCollectingArea() {
-        return rainwaterCollectingArea;
-    }
-
-    public void setRainwaterCollectingArea(String rainwaterCollectingArea) {
-        this.rainwaterCollectingArea = rainwaterCollectingArea;
-    }
-
-    public String getLrrigatedFarmlandAre() {
-        return lrrigatedFarmlandAre;
-    }
-
-    public void setLrrigatedFarmlandAre(String lrrigatedFarmlandAre) {
-        this.lrrigatedFarmlandAre = lrrigatedFarmlandAre;
-    }
-
-    public String getAvgIrrigationWaterSupply() {
-        return avgIrrigationWaterSupply;
-    }
-
-    public void setAvgIrrigationWaterSupply(String avgIrrigationWaterSupply) {
-        this.avgIrrigationWaterSupply = avgIrrigationWaterSupply;
-    }
-
-    public String getDrinkingWaterSupply() {
-        return drinkingWaterSupply;
-    }
-
-    public void setDrinkingWaterSupply(String drinkingWaterSupply) {
-        this.drinkingWaterSupply = drinkingWaterSupply;
-    }
-
-    public String getAvgTotalWaterSupply() {
-        return avgTotalWaterSupply;
-    }
-
-    public void setAvgTotalWaterSupply(String avgTotalWaterSupply) {
-        this.avgTotalWaterSupply = avgTotalWaterSupply;
-    }
-
-    public String getUtilizationRateOfDevelopment() {
-        return utilizationRateOfDevelopment;
-    }
-
-    public void setUtilizationRateOfDevelopment(String utilizationRateOfDevelopment) {
-        this.utilizationRateOfDevelopment = utilizationRateOfDevelopment;
-    }
-
-    public String getSpillwayType() {
-        return spillwayType;
-    }
-
-    public void setSpillwayType(String spillwayType) {
-        this.spillwayType = spillwayType;
-    }
-
-    public String getSpillwayLength() {
-        return spillwayLength;
-    }
-
-    public void setSpillwayLength(String spillwayLength) {
-        this.spillwayLength = spillwayLength;
-    }
-
-    public String getDiversionCanalLength() {
-        return diversionCanalLength;
-    }
-
-    public void setDiversionCanalLength(String diversionCanalLength) {
-        this.diversionCanalLength = diversionCanalLength;
-    }
-
-    public String getOverflowMode() {
-        return overflowMode;
-    }
-
-    public void setOverflowMode(String overflowMode) {
-        this.overflowMode = overflowMode;
-    }
-
-    public String getCanalBottomElevation() {
-        return canalBottomElevation;
-    }
-
-    public void setCanalBottomElevation(String canalBottomElevation) {
-        this.canalBottomElevation = canalBottomElevation;
-    }
-
-    public String getWeirCrestElevation() {
-        return weirCrestElevation;
-    }
-
-    public void setWeirCrestElevation(String weirCrestElevation) {
-        this.weirCrestElevation = weirCrestElevation;
+    public void setMaxDamWidth(String maxDamWidth) {
+        this.maxDamWidth = maxDamWidth;
     }
 
     @Override
     public String toString() {
         return "ReservoirInfo{" +
-                "status='" + status + '\'' +
-                ", createBy='" + createBy + '\'' +
-                ", createTime='" + createTime + '\'' +
-                ", updateBy='" + updateBy + '\'' +
-                ", updateTime='" + updateTime + '\'' +
-                ", id='" + id + '\'' +
+                "id='" + id + '\'' +
                 ", code='" + code + '\'' +
                 ", name='" + name + '\'' +
-                ", type='" + type + '\'' +
-                ", introduce='" + introduce + '\'' +
-                ", address='" + address + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", latitude='" + latitude + '\'' +
-                ", mainFunction='" + mainFunction + '\'' +
-                ", manageDepartment='" + manageDepartment + '\'' +
-                ", locatedBasin='" + locatedBasin + '\'' +
-                ", locatedRiver='" + locatedRiver + '\'' +
-                ", locatedBrook='" + locatedBrook + '\'' +
-                ", buildStartDate='" + buildStartDate + '\'' +
-                ", buildEndDate='" + buildEndDate + '\'' +
+                ", projectScale='" + projectScale + '\'' +
+                ", projectScaleLabel='" + projectScaleLabel + '\'' +
+                ", reservoirOverview='" + reservoirOverview + '\'' +
                 ", damType='" + damType + '\'' +
+                ", damTypeLabel='" + damTypeLabel + '\'' +
                 ", damLength='" + damLength + '\'' +
                 ", damHeight='" + damHeight + '\'' +
                 ", damWidth='" + damWidth + '\'' +
-                ", damCrestElevation='" + damCrestElevation + '\'' +
-                ", damBotmMaxWidth='" + damBotmMaxWidth + '\'' +
-                ", normalImpoundedLevel='" + normalImpoundedLevel + '\'' +
-                ", designFloodWaterLevel='" + designFloodWaterLevel + '\'' +
-                ", checkFloodWaterLevel='" + checkFloodWaterLevel + '\'' +
-                ", deadWaterLevel='" + deadWaterLevel + '\'' +
-                ", waterLevelVolume='" + waterLevelVolume + '\'' +
-                ", effectiveVolume='" + effectiveVolume + '\'' +
-                ", deathLevelVolume='" + deathLevelVolume + '\'' +
-                ", floodSeasonWaterLevel='" + floodSeasonWaterLevel + '\'' +
-                ", floodSeasonStartDate='" + floodSeasonStartDate + '\'' +
-                ", floodSeasonEndDate='" + floodSeasonEndDate + '\'' +
-                ", capacityCoefficient='" + capacityCoefficient + '\'' +
-                ", rainwaterCollectingArea='" + rainwaterCollectingArea + '\'' +
-                ", lrrigatedFarmlandAre='" + lrrigatedFarmlandAre + '\'' +
-                ", avgIrrigationWaterSupply='" + avgIrrigationWaterSupply + '\'' +
-                ", drinkingWaterSupply='" + drinkingWaterSupply + '\'' +
-                ", avgTotalWaterSupply='" + avgTotalWaterSupply + '\'' +
-                ", utilizationRateOfDevelopment='" + utilizationRateOfDevelopment + '\'' +
-                ", spillwayType='" + spillwayType + '\'' +
-                ", spillwayLength='" + spillwayLength + '\'' +
-                ", diversionCanalLength='" + diversionCanalLength + '\'' +
-                ", overflowMode='" + overflowMode + '\'' +
-                ", canalBottomElevation='" + canalBottomElevation + '\'' +
-                ", weirCrestElevation='" + weirCrestElevation + '\'' +
+                ", damTopElevation='" + damTopElevation + '\'' +
+                ", startTime='" + startTime + '\'' +
+                ", endTime='" + endTime + '\'' +
+                ", maxDamWidth='" + maxDamWidth + '\'' +
                 '}';
     }
 }

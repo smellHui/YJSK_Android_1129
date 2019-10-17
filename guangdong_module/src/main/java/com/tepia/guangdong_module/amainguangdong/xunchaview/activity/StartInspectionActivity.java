@@ -730,7 +730,8 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             String routeContent = routeListBean.getRouteContent();
             List<Point> result = new ArrayList();
             try {
-                List<Double[]> routes = JSON.parseArray(routeContent.replaceAll("\\{", "[").replaceAll("\\}", "]"), Double[].class);
+//                List<Double[]> routes = JSON.parseArray(routeContent.replaceAll("\\{", "[").replaceAll("\\}", "]"), Double[].class);
+                List<Double[]> routes = JSON.parseArray(routeContent, Double[].class);
                 for (Double[] route : routes) {
                     Point point = new Point(route[0], route[1], SpatialReference.create(4326));
                     result.add(point);
@@ -754,7 +755,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             setRoutePosition(dxcRoutePositions, picIds[0], dxcOverlay);
             setRoutePosition(yxcRoutePositions, picIds[1], yxcOverlay);
             //            searchNearbyRoutePosition(routePositions,locationPoint);
-            //巡查点添加文字
+            //巡查点添加文字app/patrol/add
             if (routePositions != null && routePositions.size() > 0) {
                 for (RoutePosition routePosition : routePositions) {
                     try {
@@ -1537,8 +1538,8 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             if (taskBean != null && "2".equals(taskBean.getExecuteStatus())) {
                 /*ContentValues values = new ContentValues();
                 values.put("executeStatus", "3");*/
-                taskBean.setExecuteStatus("3");
-                taskBean.updateAll("workOrderId = ?", workOrderId);
+//                taskBean.setExecuteStatus("3");
+                taskBean.delete();
 //                DataSupport.updateAll(TaskBean.class, values, "workOrderId = ?", workOrderId);
             }
 

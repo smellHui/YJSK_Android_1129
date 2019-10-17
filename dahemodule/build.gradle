@@ -140,6 +140,7 @@ dependencies {
     implementation 'com.bilibili:boxing-impl:1.0.4'
 
     implementation rootProject.ext.dependencies.xpopup
+    implementation rootProject.ext.dependencies.BigImageViewPager
 
     //arcgis
     implementation rootProject.ext.dependencies.arcgisandroid

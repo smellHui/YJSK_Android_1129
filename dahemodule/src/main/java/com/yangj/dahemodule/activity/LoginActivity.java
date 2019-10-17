@@ -10,12 +10,19 @@ import com.tepia.base.AppRoutePath;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.mvp.BaseActivity;
 import com.tepia.base.utils.LogUtil;
+import com.tepia.base.view.floatview.CollectionsUtil;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.yangj.dahemodule.R;
 import com.yangj.dahemodule.common.HttpManager;
 import com.yangj.dahemodule.model.UserBean;
 import com.yangj.dahemodule.model.UserDataBean;
+import com.yangj.dahemodule.model.user.RolesBean;
+import com.yangj.dahemodule.model.user.SysUser;
+import com.yangj.dahemodule.model.user.SysUserBean;
+import com.yangj.dahemodule.model.user.SysUserDataBean;
 import com.yangj.dahemodule.util.AesUtils;
+
+import java.util.List;
 
 /**
  * Author:xch
@@ -54,14 +61,13 @@ public class LoginActivity extends BaseActivity {
                         .subscribe(new LoadingSubject<UserDataBean>(true, "正在登录...") {
                             @Override
                             protected void _onNext(UserDataBean userLoginResponse) {
-                                LogUtil.v("userLoginResponse--->" + userLoginResponse.toString());
                                 if (userLoginResponse == null) return;
                                 UserBean userBean = userLoginResponse.getData();
                                 if (userBean == null) return;
                                 HttpManager.getInstance().saveUser(JSON.toJSONString(userBean));
                                 UserManager.getInstance().saveToken(userBean.getAccess_token());
                                 UserManager.getInstance().saveUserCode(phone);
-                                ARouter.getInstance().build(AppRoutePath.app_dahe_main).navigation();
+                                loadUserInfo();
                             }
 
                             @Override
@@ -80,6 +86,32 @@ public class LoginActivity extends BaseActivity {
                 e.printStackTrace();
             }
         });
+    }
+
+    private void loadUserInfo() {
+        HttpManager.getInstance().getUserInfo()
+                .subscribe(new LoadingSubject<SysUserDataBean>() {
+
+                    @Override
+                    protected void _onNext(SysUserDataBean sysUserDataBean) {
+                        SysUserBean sysUserBean = sysUserDataBean.getData();
+                        if (sysUserBean == null) return;
+                        SysUser sysUser = sysUserBean.getSysUser();
+                        if (sysUser != null) {
+                            HttpManager.getInstance().saveSysUser(JSON.toJSONString(sysUser));
+                        }
+                        List<RolesBean> roles = sysUserBean.getRoles();
+                        if (!CollectionsUtil.isEmpty(roles)) {
+                            HttpManager.getInstance().saveRolesBean(JSON.toJSONString(roles.get(0)));
+                        }
+                        ARouter.getInstance().build(AppRoutePath.app_dahe_main).navigation();
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
+
+                    }
+                });
     }
 
     @Override

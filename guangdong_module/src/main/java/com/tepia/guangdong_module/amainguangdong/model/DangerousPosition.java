@@ -16,7 +16,6 @@ public class DangerousPosition {
     private String reservoirCode;
     private String structureId;
     private String structurePath;
-    private String positionName;
     private String positionLongitude;
     private String positionLatitude;
     private String structureName;
@@ -93,14 +92,6 @@ public class DangerousPosition {
         this.structurePath = structurePath;
     }
 
-    public String getPositionName() {
-        return positionName;
-    }
-
-    public void setPositionName(String positionName) {
-        this.positionName = positionName;
-    }
-
     public String getPositionLongitude() {
         return positionLongitude;
     }
@@ -137,7 +128,6 @@ public class DangerousPosition {
                 ", reservoirCode='" + reservoirCode + '\'' +
                 ", structureId='" + structureId + '\'' +
                 ", structurePath='" + structurePath + '\'' +
-                ", positionName='" + positionName + '\'' +
                 ", positionLongitude='" + positionLongitude + '\'' +
                 ", positionLatitude='" + positionLatitude + '\'' +
                 ", structureName='" + structureName + '\'' +

@@ -1,4 +1,4 @@
-package com.yangj.dahemodule.fragment;
+package com.yangj.dahemodule.fragment.operate;
 
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -17,6 +17,7 @@ import com.tepia.guangdong_module.amainguangdong.route.TaskBean;
 import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
 import com.yangj.dahemodule.adapter.OperateAdapter;
 import com.yangj.dahemodule.common.HttpManager;
+import com.yangj.dahemodule.fragment.BaseListFragment;
 import com.yangj.dahemodule.model.main.ReservoirStructure;
 import com.yangj.dahemodule.model.xuncha.ProtalBean;
 import com.yangj.dahemodule.model.xuncha.ProtalDataBean;
@@ -42,6 +43,8 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
 
     private int pageType;
     private String startTime, endTime;
+    private String userCode;
+    private List<TaskBean> toDoLocalTask;
 
     private List<RecordBean> localRecordList;
 
@@ -61,8 +64,34 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
         }
 
         localRecordList = new ArrayList<>();
-        String userCode = UserManager.getInstance().getUserCode();
-        List<TaskBean> toDoLocalTask;
+        userCode = UserManager.getInstance().getUserCode();
+    }
+
+    @Override
+    protected void initRequestData() {
+        getRecordList();
+    }
+
+    private void getRecordList() {
+        HttpManager.getInstance().getRecordList(pageType, "", getPage(), 20, startTime, endTime)
+                .subscribe(new LoadingSubject<RecordDataBean>() {
+
+                    @Override
+                    protected void _onNext(RecordDataBean recordDataBean) {
+                        addLocalData();
+                        success(recordDataBean.getData());
+                    }
+
+                    @Override
+                    protected void _onError(String message) {
+                        addLocalData();
+                        ToastUtils.shortToast(message);
+                    }
+                });
+    }
+
+    private void addLocalData() {
+        localRecordList.clear();
         if (pageType == MINE_OPERATE) {
             toDoLocalTask = DataSupport.where("usercode=? and executeStatus != 3", userCode).find(TaskBean.class);
         } else {
@@ -77,32 +106,10 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
                 localRecordList.add(recordBean);
             }
         }
-
-    }
-
-    @Override
-    protected void initRequestData() {
         if (getPage() == 1 && !CollectionsUtil.isEmpty(localRecordList)) {
             getList().clear();
             getList().addAll(localRecordList);
         }
-        getRecordList();
-    }
-
-    private void getRecordList() {
-        HttpManager.getInstance().getRecordList(pageType, "", getPage(), 20, startTime, endTime)
-                .subscribe(new LoadingSubject<RecordDataBean>() {
-
-                    @Override
-                    protected void _onNext(RecordDataBean recordDataBean) {
-                        success(recordDataBean.getData());
-                    }
-
-                    @Override
-                    protected void _onError(String message) {
-                        ToastUtils.shortToast(message);
-                    }
-                });
     }
 
     public void refresh(String startTime, String endTime, int cate) {
@@ -157,8 +164,12 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
         String workOrderId = protalBean.getCode();
         List<ProtalItemBean> itemList = protalBean.getItemList();
         List<ReservoirStructure> reservoirStructureList = protalBean.getReservoirStructureList();
+        ReservoirBean selectedResrvoir = UserManager.getInstance().getDefaultReservoir();
+        if (selectedResrvoir == null) {
+            ToastUtils.shortToast("暂无水库信息");
+            return;
+        }
         if (touchTaskBean == null) {
-            ReservoirBean selectedResrvoir = UserManager.getInstance().getDefaultReservoir();
             String userCode = protalBean.getCreatorName();
             //本地不存在工单详情数据，则保存
             TaskBean taskBean = new TaskBean();

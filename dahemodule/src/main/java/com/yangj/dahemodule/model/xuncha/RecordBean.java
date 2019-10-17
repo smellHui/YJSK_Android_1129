@@ -1,5 +1,7 @@
 package com.yangj.dahemodule.model.xuncha;
 
+import com.google.common.base.Strings;
+
 /**
  * Author:xch
  * Date:2019/9/3
@@ -140,6 +142,15 @@ public class RecordBean {
 
     public void setExecuteStatus(String executeStatus) {
         this.executeStatus = executeStatus;
+    }
+
+    /**
+     * 正在执行中
+     *
+     * @return
+     */
+    public boolean isExecuting() {
+        return !Strings.isNullOrEmpty(executeStatus) && executeStatus.equals("1");
     }
 
     public String getRoutePath() {

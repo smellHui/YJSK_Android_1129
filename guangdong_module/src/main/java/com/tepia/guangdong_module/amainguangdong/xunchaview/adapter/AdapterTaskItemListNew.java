@@ -307,12 +307,7 @@ public class AdapterTaskItemListNew extends BaseQuickAdapter<TaskItemBean, BaseV
             item.updateAll("itemId=?",item.getItemId());
 
             refresh(item);
-            Intent intent = new Intent();
-//            intent.setClass(mContext, TroubleRecordActivity.class);
-            intent.setClass(mContext, DangerReportActivity.class);
-            intent.putExtra("item",item.getItemId());
-            intent.putExtra("executeResultType","1");
-            mContext.startActivity(intent);
+            goToTroubleRecordView(item.getItemId(),"1");
 
         });
         //已正常

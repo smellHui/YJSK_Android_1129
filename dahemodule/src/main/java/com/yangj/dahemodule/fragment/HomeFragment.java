@@ -87,11 +87,9 @@ public class HomeFragment extends BaseCommonFragment {
                             reservoirBean.setReservoirId(reservoirInfo.getId());
                             reservoirBean.setReservoirCode(reservoirInfo.getCode());
                             reservoirBean.setReservoir(reservoirInfo.getName());
-                            reservoirBean.setReservoirType(reservoirInfo.getType());
-                            reservoirBean.setReservoirAddress(reservoirInfo.getAddress());
+                            reservoirBean.setReservoirType(reservoirInfo.getDamType());
                             reservoirBean.setReservoirLongitude(reservoirInfo.getLongitude());
                             reservoirBean.setReservoirLatitude(reservoirInfo.getLatitude());
-                            reservoirBean.setManageDepId(reservoirInfo.getManageDepartment());
                             UserManager.getInstance().saveDefaultReservoir(reservoirBean);
                             basicInfoView.setData(reservoirInfo);
                         }

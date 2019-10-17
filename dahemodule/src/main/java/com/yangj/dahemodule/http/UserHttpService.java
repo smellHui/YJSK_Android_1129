@@ -7,18 +7,21 @@ import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirListRespo
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirOfflineResponse;
 import com.yangj.dahemodule.model.JsonBean;
 import com.yangj.dahemodule.model.NewNoticeBean;
-import com.yangj.dahemodule.model.Report.ReportDataBean;
-import com.yangj.dahemodule.model.Report.ReportDetailDataBean;
 import com.yangj.dahemodule.model.UserDataBean;
 import com.yangj.dahemodule.model.WeatherWarnBean;
+import com.yangj.dahemodule.model.danger.DangerDataBean;
 import com.yangj.dahemodule.model.main.MainDataBean;
+import com.yangj.dahemodule.model.report.ReportDataBean;
+import com.yangj.dahemodule.model.report.ReportDetailDataBean;
 import com.yangj.dahemodule.model.user.SysUserDataBean;
 import com.yangj.dahemodule.model.xuncha.ProtalDataBean;
 import com.yangj.dahemodule.model.xuncha.RecordDataBean;
 
+import java.util.List;
 import java.util.Map;
 
 import io.reactivex.Observable;
+import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.Field;
@@ -26,7 +29,10 @@ import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Headers;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 import retrofit2.http.QueryMap;
 
@@ -65,6 +71,27 @@ public interface UserHttpService {
     Observable<RecordDataBean> getRecordListByMe(@Header("Authorization") String token, @QueryMap Map<String, String> requestBody);
 
     /**
+     * 【查询】待处理险情列表
+     *
+     * @param token
+     * @param requestBody
+     * @return
+     */
+    @GET("app/problem/listPendingHandle")
+    Observable<DangerDataBean> getPendingHandleList(@Header("Authorization") String token, @QueryMap Map<String, String> requestBody);
+
+    /**
+     * 【查询】我处置过的险情
+     *
+     * @param token
+     * @param requestBody
+     * @return
+     */
+    @GET("app/problem/listHandle4Me")
+    Observable<DangerDataBean> getHandleList(@Header("Authorization") String token, @QueryMap Map<String, String> requestBody);
+
+
+    /**
      * 【查询】我上报的险情
      *
      * @param token
@@ -76,6 +103,7 @@ public interface UserHttpService {
 
     /**
      * 【查询】巡检详情
+     *
      * @param token
      * @param omRecordCode
      * @return
@@ -158,6 +186,20 @@ public interface UserHttpService {
     Observable<BaseResponse> updateNotice(@Header("Authorization") String token,
                                           @Field("id") String id,
                                           @Field("workOrderId") String workOrderId
+    );
+
+    /**
+     * 【新增】险情反馈
+     *
+     * @param token
+     * @return
+     */
+    @Multipart
+    @POST("app/problem/feedback")
+    Observable<BaseResponse> feekBackProblem(@Header("Authorization") String token,
+                                             @PartMap Map<String, RequestBody> params,
+                                             @Part List<MultipartBody.Part> beforePathList
+
     );
 
     /**

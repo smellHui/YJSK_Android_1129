@@ -68,7 +68,7 @@ public class OperateFragment extends BaseCommonFragment {
 
         swipeRefreshLayout = findView(R.id.layout_swipe_refresh);
         recyclerView = findView(R.id.rv);
-        operateMainAdapter = new OperateMainAdapter(null);
+        operateMainAdapter = new OperateMainAdapter();
         recyclerView.setLayoutManager(new WrapLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
         int zeroPx = Px2dpUtils.dip2px(getContext(), 0);
         recyclerView.setPadding(zeroPx, zeroPx, zeroPx, zeroPx);
@@ -115,11 +115,10 @@ public class OperateFragment extends BaseCommonFragment {
                             reservoirBean.setReservoirId(reservoirInfo.getId());
                             reservoirBean.setReservoirCode(reservoirInfo.getCode());
                             reservoirBean.setReservoir(reservoirInfo.getName());
-                            reservoirBean.setReservoirType(reservoirInfo.getType());
-                            reservoirBean.setReservoirAddress(reservoirInfo.getAddress());
+                            reservoirBean.setReservoirType(reservoirInfo.getDamType());
                             reservoirBean.setReservoirLongitude(reservoirInfo.getLongitude());
                             reservoirBean.setReservoirLatitude(reservoirInfo.getLatitude());
-                            reservoirBean.setManageDepId(reservoirInfo.getManageDepartment());
+                            reservoirBean.setManageDepId(reservoirInfo.getReservoirOverview());
                             UserManager.getInstance().saveDefaultReservoir(reservoirBean);
                         }
                     }

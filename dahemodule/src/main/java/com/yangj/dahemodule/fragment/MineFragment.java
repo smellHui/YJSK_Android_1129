@@ -1,26 +1,26 @@
 package com.yangj.dahemodule.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.TextView;
 
-import com.tepia.base.http.LoadingSubject;
+import com.alibaba.android.arouter.launcher.ARouter;
+import com.tepia.base.AppRoutePath;
 import com.tepia.base.mvp.BaseCommonFragment;
 import com.tepia.base.utils.AppManager;
-import com.tepia.guangdong_module.amainguangdong.LoginOfGDActivity;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
-import com.tepia.guangdong_module.amainguangdong.xunchaview.fragment.TabMainFragmentFactory;
 import com.yangj.dahemodule.R;
 import com.yangj.dahemodule.activity.DangerReportListActivity;
 import com.yangj.dahemodule.activity.LoginActivity;
+import com.yangj.dahemodule.activity.MyDealActivity;
 import com.yangj.dahemodule.activity.OperatesActivity;
 import com.yangj.dahemodule.activity.VersionActivity;
 import com.yangj.dahemodule.common.HttpManager;
+import com.yangj.dahemodule.model.UserBean;
+import com.yangj.dahemodule.model.user.RolesBean;
 import com.yangj.dahemodule.model.user.SysUser;
-import com.yangj.dahemodule.model.user.SysUserBean;
-import com.yangj.dahemodule.model.user.SysUserDataBean;
 
 /**
  * Author:xch
@@ -31,6 +31,9 @@ public class MineFragment extends BaseCommonFragment {
 
     private TextView nameTv;
     private TextView dateTv;
+    private String loginTime;
+
+    private RolesBean role;
 
     @Override
     protected int getLayoutId() {
@@ -39,7 +42,11 @@ public class MineFragment extends BaseCommonFragment {
 
     @Override
     protected void initData() {
-
+        role = HttpManager.getInstance().getRolesBean();
+        UserBean userBean = HttpManager.getInstance().getUser();
+        if (userBean != null) {
+            loginTime = userBean.getLoginTime();
+        }
     }
 
     @Override
@@ -50,7 +57,11 @@ public class MineFragment extends BaseCommonFragment {
             startActivity(new Intent(getContext(), OperatesActivity.class));
         });
         findView(R.id.ll_two).setOnClickListener(v -> {
-            startActivity(new Intent(getContext(), DangerReportListActivity.class));
+            if (role.isXC()) {
+                startActivity(new Intent(getContext(), DangerReportListActivity.class));
+            } else {
+                startActivity(new Intent(getContext(), MyDealActivity.class));
+            }
         });
         findView(R.id.ll_three).setOnClickListener(v -> {
             startActivity(new Intent(getContext(), VersionActivity.class));
@@ -58,40 +69,26 @@ public class MineFragment extends BaseCommonFragment {
         findView(R.id.ll_four).setOnClickListener(v -> {
             loginOutClick();
         });
+
+        SysUser sysUser = HttpManager.getInstance().getSysUser();
+        nameTv.setText(sysUser.getUsername());
+        if (!TextUtils.isEmpty(loginTime)) {
+            dateTv.setText(String.format("登录时间：%s", loginTime));
+        }
     }
 
     @Override
     protected void initRequestData() {
-        getUserInfo();
+
     }
 
-    public void getUserInfo() {
-        HttpManager.getInstance().getUserInfo()
-                .subscribe(new LoadingSubject<SysUserDataBean>() {
-
-                    @Override
-                    protected void _onNext(SysUserDataBean sysUserDataBean) {
-                        SysUserBean sysUserBean = sysUserDataBean.getData();
-                        if (sysUserBean == null) return;
-                        SysUser sysUser = sysUserBean.getSysUser();
-                        nameTv.setText(sysUser.getUsername());
-                        dateTv.setText("登录时间：" + sysUser.getUpdateTime());
-                    }
-
-                    @Override
-                    protected void _onError(String message) {
-
-                    }
-                });
-    }
-
-    private void loginOutClick(){
+    private void loginOutClick() {
         AlertDialog.Builder builder = new AlertDialog.Builder(getBaseActivity());
         builder.setMessage(com.example.guangdong_module.R.string.exit_message);
         builder.setCancelable(true);
         builder.setPositiveButton(com.example.guangdong_module.R.string.sure, (dialog, which) -> {
             UserManager.getInstance().clearCacheAndStopPush();
-            startActivity(new Intent(getActivity(), LoginActivity.class));
+            ARouter.getInstance().build(AppRoutePath.app_dahe_login).navigation();
             AppManager.getInstance().finishAll();
         });
         builder.setNegativeButton(com.example.guangdong_module.R.string.cancel, (dialog, which) -> {

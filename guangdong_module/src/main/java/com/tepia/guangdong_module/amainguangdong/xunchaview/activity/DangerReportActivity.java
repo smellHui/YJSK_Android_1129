@@ -91,7 +91,7 @@ public class DangerReportActivity extends BaseActivity {
         dangerousPositions = UserManager.getInstance().getDangerousPositions();
         if (!CollectionsUtil.isEmpty(dangerousPositions)) {
             for (int i = 0; i < dangerousPositions.size(); i++) {
-                items.add(dangerousPositions.get(i).getPositionName());
+                items.add(dangerousPositions.get(i).getStructureName());
             }
         }
 
@@ -136,14 +136,14 @@ public class DangerReportActivity extends BaseActivity {
 
             if (dangerBean == null) {
                 dangerBean = new DangerBean();
-                dangerBean.setPositionName(dangerousPosition.getPositionName());
+                dangerBean.setPositionName(dangerousPosition.getStructureName());
                 dangerBean.setProblemDescription(problemDescription + "\n" + problemDescriTianqi);
                 dangerBean.setReservoir(reservoirBean.getReservoir());
                 dangerBean.setReservoirId(reservoirId);
                 dangerBean.setPositionId(dangerousPosition.getId());
                 dangerBean.setUserCode(userCode);
             } else {
-                dangerBean.setPositionName(dangerousPosition.getPositionName());
+                dangerBean.setPositionName(dangerousPosition.getStructureName());
                 dangerBean.setPositionId(dangerousPosition.getId());
                 dangerBean.setProblemDescription(problemDescription);
                 dangerBean.saveOrUpdate("userCode=? and reservoirId=?", userCode, reservoirId);
@@ -329,7 +329,7 @@ public class DangerReportActivity extends BaseActivity {
 
         dialog.setOnOpenItemClickL((parent, view, position, id) -> {
             dangerousPosition = dangerousPositions.get(position);
-            mBinding.layoutDes.selectTv.setText(dangerousPosition.getPositionName());
+            mBinding.layoutDes.selectTv.setText(dangerousPosition.getStructureName());
             dialog.dismiss();
         });
     }

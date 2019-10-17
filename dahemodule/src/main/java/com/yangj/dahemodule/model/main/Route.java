@@ -17,6 +17,12 @@ public class Route {
     private String id;
     private String omType;
     private String reservoirCode;
+    /**
+     * 1：日常；
+     * 2：定期；
+     * 3：特别；
+     * 4：自定义
+     */
     private String type;
     private String name;
     private String path;

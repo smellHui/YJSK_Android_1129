@@ -2,7 +2,7 @@ package com.yangj.dahemodule.activity;
 
 import com.tepia.base.mvp.BaseActivity;
 import com.yangj.dahemodule.R;
-import com.yangj.dahemodule.fragment.DangerReportListFragment;
+import com.yangj.dahemodule.fragment.dangerReport.DangerReportListFragment;
 import com.yangj.dahemodule.view.SearchToolBar;
 
 /**
@@ -26,6 +26,7 @@ public class DangerReportListActivity extends BaseActivity implements SearchTool
 
     @Override
     public void initView() {
+
         searchToolBar = findViewById(R.id.view_search_tool_bar);
         searchToolBar.setDataSelectListener(this);
         fragment = DangerReportListFragment.newInstance();

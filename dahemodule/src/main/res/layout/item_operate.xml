@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
     android:background="@color/white"
     android:gravity="center_vertical"
     android:orientation="horizontal"
@@ -14,7 +15,7 @@
         android:background="@mipmap/blue"
         android:gravity="center"
         android:paddingBottom="8dp"
-        android:text="已巡查"
+        tools:text="已巡查"
         android:textColor="@color/white"
         android:textSize="12sp" />
 
@@ -29,7 +30,7 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="日常巡查"
+            tools:text="日常巡查"
             android:textColor="#232A39"
             android:textSize="16sp" />
 
@@ -38,7 +39,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="日常巡查"
+            tools:text="日常巡查"
             android:textColor="#979EAB"
             android:textSize="13sp" />
     </LinearLayout>
@@ -54,7 +55,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="0"
+            tools:text="0"
             android:textColor="#1785F8"
             android:textSize="24sp" />
 
@@ -62,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="3dp"
-            android:text="异常"
+            tools:text="异常"
             android:textColor="#1785F8"
             android:textSize="12sp" />
     </LinearLayout>

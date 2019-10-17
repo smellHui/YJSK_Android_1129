@@ -1,15 +1,11 @@
-package com.yangj.dahemodule.model.Report;
-
-import java.io.Serializable;
-import java.util.List;
+package com.yangj.dahemodule.model.danger;
 
 /**
  * Author:xch
- * Date:2019/9/3
- * Description:险情上报列表项
+ * Date:2019/10/15
+ * Description:险情处理
  */
-public class ReportBean implements Serializable {
-
+public class DangerBean {
     private String status;
     private String createBy;
     private String creatorName;
@@ -24,37 +20,8 @@ public class ReportBean implements Serializable {
     private String description;
     private String reportUserId;
     private String sourceId;
-    /**
-     * 问题状态：
-     * 1-待反馈；
-     * 2-已完结；
-     */
     private String problemStatus;
     private String feedback;
-    private String pictures;
-
-    @Override
-    public String toString() {
-        return "ReportBean{" +
-                "status='" + status + '\'' +
-                ", createBy='" + createBy + '\'' +
-                ", creatorName='" + creatorName + '\'' +
-                ", createTime='" + createTime + '\'' +
-                ", updateBy='" + updateBy + '\'' +
-                ", updaterName='" + updaterName + '\'' +
-                ", updateTime='" + updateTime + '\'' +
-                ", id='" + id + '\'' +
-                ", reservoirCode='" + reservoirCode + '\'' +
-                ", source='" + source + '\'' +
-                ", title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", reportUserId='" + reportUserId + '\'' +
-                ", sourceId='" + sourceId + '\'' +
-                ", problemStatus='" + problemStatus + '\'' +
-                ", feedback='" + feedback + '\'' +
-                ", pictures=" + pictures +
-                '}';
-    }
 
     public String getStatus() {
         return status;
@@ -184,11 +151,25 @@ public class ReportBean implements Serializable {
         this.feedback = feedback;
     }
 
-    public String getPictures() {
-        return pictures;
-    }
-
-    public void setPictures(String pictures) {
-        this.pictures = pictures;
+    @Override
+    public String toString() {
+        return "DangerBean{" +
+                "status='" + status + '\'' +
+                ", createBy='" + createBy + '\'' +
+                ", creatorName='" + creatorName + '\'' +
+                ", createTime='" + createTime + '\'' +
+                ", updateBy='" + updateBy + '\'' +
+                ", updaterName='" + updaterName + '\'' +
+                ", updateTime='" + updateTime + '\'' +
+                ", id='" + id + '\'' +
+                ", reservoirCode='" + reservoirCode + '\'' +
+                ", source='" + source + '\'' +
+                ", title='" + title + '\'' +
+                ", description='" + description + '\'' +
+                ", reportUserId='" + reportUserId + '\'' +
+                ", sourceId='" + sourceId + '\'' +
+                ", problemStatus='" + problemStatus + '\'' +
+                ", feedback='" + feedback + '\'' +
+                '}';
     }
 }
