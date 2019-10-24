@@ -463,6 +463,11 @@ public class HttpManager {
         return JSON.parseObject(str, RolesBean.class);
     }
 
+    public boolean isXC(){
+        RolesBean role = this.getRolesBean();
+        return role != null && role.isXC();
+    }
+
     public String getToken() {
         UserBean userBean = getUser();
         if (userBean == null) return null;

@@ -38,6 +38,7 @@ public class SelectDataView extends BasePopupView implements OnChangeLisener {
     private LayoutInflater mInflater;
 
     private RadioGroup radioGroup;
+    private RadioGroup dateGroup;
     private FrameLayout wheelLayout;
     private DatePicker mDatePicker;
     private RadioButton rbStart, rbEnd;
@@ -92,6 +93,15 @@ public class SelectDataView extends BasePopupView implements OnChangeLisener {
                 img_intercept.setVisibility(GONE);
             }
         });
+        dateGroup = findViewById(R.id.rg_date);
+        dateGroup.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rb_1) {
+                setStartDate(mDatePicker.getSelectDate());
+            }
+            if (checkedId == R.id.rb_2) {
+                setEndDate(mDatePicker.getSelectDate());
+            }
+        });
 
         mDatePicker = getDatePicker();
         this.wheelLayout.addView(mDatePicker);
@@ -99,13 +109,13 @@ public class SelectDataView extends BasePopupView implements OnChangeLisener {
         findViewById(R.id.btn_query).setOnClickListener(v -> {
             switch (cate) {
                 case 0://本年
-//                    listener.onDataSelectPickListener(TimeFormatUtils.getFirstDayOfYear(), TimeFormatUtils.getLastDayOfYear(), 0);
+                    listener.onDataSelectPickListener(TimeFormatUtils.getFirstDayOfYear(), TimeFormatUtils.getLastDayOfYear(), 0);
                     break;
                 case 1://本季
-//                    listener.onDataSelectPickListener(TimeFormatUtils.getThisQuarterStart(), TimeFormatUtils.getThisQuarterEnd(), 1);
+                    listener.onDataSelectPickListener(TimeFormatUtils.getThisQuarterStart(), TimeFormatUtils.getThisQuarterEnd(), 1);
                     break;
                 case 2://本月
-//                    listener.onDataSelectPickListener(TimeFormatUtils.getFirstDayOfMonth(), TimeFormatUtils.getLastDayOfMonth(), 2);
+                    listener.onDataSelectPickListener(TimeFormatUtils.getFirstDayOfMonth(), TimeFormatUtils.getLastDayOfMonth(), 2);
                     break;
                 case 3://其他
                     if (Strings.isNullOrEmpty(startTime)) {
@@ -144,15 +154,23 @@ public class SelectDataView extends BasePopupView implements OnChangeLisener {
     @Override
     public void onChanged(Date date) {
         if (rbStart.isChecked()) {
-            mStartDate = date;
-            startTime = TimeFormatUtils.dateToStr(date);
-            rbStart.setText(startTime);
+            setStartDate(date);
         }
         if (rbEnd.isChecked()) {
-            mEndDate = date;
-            endTime = TimeFormatUtils.dateToStr(date);
-            rbEnd.setText(endTime);
+            setEndDate(date);
         }
+    }
+
+    private void setStartDate(Date date) {
+        mStartDate = date;
+        startTime = TimeFormatUtils.dateToStr(date);
+        rbStart.setText(startTime);
+    }
+
+    private void setEndDate(Date date) {
+        mEndDate = date;
+        endTime = TimeFormatUtils.dateToStr(date);
+        rbEnd.setText(endTime);
     }
 
     public interface onDataSelectPickListener {

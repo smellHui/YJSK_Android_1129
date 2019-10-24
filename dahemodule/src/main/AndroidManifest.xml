@@ -21,6 +21,7 @@
         <activity android:name=".activity.VersionActivity" />
         <activity android:name=".activity.DangerReportDetailActivity" />
         <activity android:name=".activity.MyDealActivity"/>
+        <activity android:name=".activity.OperatesForJsActivity"/>
         <activity
             android:name="com.tepia.photo_picker.PhotoPickerActivity"
             android:screenOrientation="portrait" /> <!-- 图片查看 -->

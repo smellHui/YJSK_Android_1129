@@ -16,6 +16,7 @@ import com.yangj.dahemodule.activity.DangerReportListActivity;
 import com.yangj.dahemodule.activity.LoginActivity;
 import com.yangj.dahemodule.activity.MyDealActivity;
 import com.yangj.dahemodule.activity.OperatesActivity;
+import com.yangj.dahemodule.activity.OperatesForJsActivity;
 import com.yangj.dahemodule.activity.VersionActivity;
 import com.yangj.dahemodule.common.HttpManager;
 import com.yangj.dahemodule.model.UserBean;
@@ -31,9 +32,11 @@ public class MineFragment extends BaseCommonFragment {
 
     private TextView nameTv;
     private TextView dateTv;
+    private TextView tv_deal;
     private String loginTime;
 
     private RolesBean role;
+    private boolean isXC;
 
     @Override
     protected int getLayoutId() {
@@ -42,7 +45,9 @@ public class MineFragment extends BaseCommonFragment {
 
     @Override
     protected void initData() {
-        role = HttpManager.getInstance().getRolesBean();
+        RolesBean role = HttpManager.getInstance().getRolesBean();
+        isXC = role != null && role.isXC();
+
         UserBean userBean = HttpManager.getInstance().getUser();
         if (userBean != null) {
             loginTime = userBean.getLoginTime();
@@ -53,11 +58,17 @@ public class MineFragment extends BaseCommonFragment {
     protected void initView(View view) {
         nameTv = findView(R.id.tv_name);
         dateTv = findView(R.id.tv_date);
+        tv_deal = findView(R.id.tv_deal);
+        tv_deal.setText(isXC ? "险情上报记录" : "险情处置记录");
         findView(R.id.ll_one).setOnClickListener(v -> {
-            startActivity(new Intent(getContext(), OperatesActivity.class));
+            if (isXC) {
+                startActivity(new Intent(getContext(), OperatesActivity.class));
+            }else {
+                startActivity(new Intent(getContext(), OperatesForJsActivity.class));
+            }
         });
         findView(R.id.ll_two).setOnClickListener(v -> {
-            if (role.isXC()) {
+            if (isXC) {
                 startActivity(new Intent(getContext(), DangerReportListActivity.class));
             } else {
                 startActivity(new Intent(getContext(), MyDealActivity.class));

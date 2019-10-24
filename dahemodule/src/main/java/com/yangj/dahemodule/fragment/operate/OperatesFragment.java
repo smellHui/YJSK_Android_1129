@@ -93,22 +93,22 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
     private void addLocalData() {
         localRecordList.clear();
         if (pageType == MINE_OPERATE) {
-            toDoLocalTask = DataSupport.where("usercode=? and executeStatus != 3", userCode).find(TaskBean.class);
-        } else {
-            toDoLocalTask = DataSupport.where("usercode=? and executeStatus = 3", userCode).find(TaskBean.class);
-        }
-        if (!CollectionsUtil.isEmpty(toDoLocalTask)) {
-            for (TaskBean taskBean : toDoLocalTask) {
-                RecordBean recordBean = new RecordBean();
-                recordBean.setName(taskBean.getRouteName());
-                recordBean.setCreateTime(taskBean.getStartTime());
-                recordBean.setCode(taskBean.getWorkOrderId());
-                localRecordList.add(recordBean);
+            toDoLocalTask = DataSupport.where("userCode=? and executeStatus != 3", userCode)
+                    .order("id desc")
+                    .find(TaskBean.class);
+            if (!CollectionsUtil.isEmpty(toDoLocalTask)) {
+                for (TaskBean taskBean : toDoLocalTask) {
+                    RecordBean recordBean = new RecordBean();
+                    recordBean.setName(taskBean.getRouteName());
+                    recordBean.setCreateTime(taskBean.getStartTime());
+                    recordBean.setCode(taskBean.getWorkOrderId());
+                    localRecordList.add(recordBean);
+                }
             }
-        }
-        if (getPage() == 1 && !CollectionsUtil.isEmpty(localRecordList)) {
-            getList().clear();
-            getList().addAll(localRecordList);
+            if (getPage() == 1 && !CollectionsUtil.isEmpty(localRecordList)) {
+                getList().clear();
+                getList().addAll(localRecordList);
+            }
         }
     }
 

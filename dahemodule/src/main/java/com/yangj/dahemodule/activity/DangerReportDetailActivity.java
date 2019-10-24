@@ -37,7 +37,7 @@ public class DangerReportDetailActivity extends BaseActivity implements Response
     private CompleteView completeView;
 
     private String reportId;
-    private RolesBean role;
+    private boolean isXC;
 
     @Override
     public int getLayoutId() {
@@ -50,7 +50,8 @@ public class DangerReportDetailActivity extends BaseActivity implements Response
         if (intent != null) {
             reportId = intent.getStringExtra("reportId");
         }
-        role = HttpManager.getInstance().getRolesBean();
+        RolesBean role = HttpManager.getInstance().getRolesBean();
+        isXC = role != null && role.isXC();
     }
 
     @Override
@@ -96,7 +97,7 @@ public class DangerReportDetailActivity extends BaseActivity implements Response
                             responseView.setVisibility(View.VISIBLE);
                             completeView.setVisibility(View.VISIBLE);
                         } else {
-                            if (role.isXC()) {
+                            if (isXC) {
                                 completeView.setData("待反馈");
                                 feedView.setVisibility(View.GONE);
                                 responseView.setVisibility(View.GONE);

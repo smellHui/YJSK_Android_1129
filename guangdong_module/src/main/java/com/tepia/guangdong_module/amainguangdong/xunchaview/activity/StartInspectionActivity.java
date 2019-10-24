@@ -1407,45 +1407,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
     }
 
     /**
-     * 获取运维单项reservoirSuperviseId
-     *
-     * @param taskItemBeanList
-     * @return
-     */
-    private String getItemConfigString2(List<TaskItemBean> taskItemBeanList) {
-        String workOrderItemIds = "";
-        for (TaskItemBean bean : taskItemBeanList) {
-            if (bean.isSelected()) {
-                workOrderItemIds += bean.getItemId() + ",";
-            }
-        }
-        if (workOrderItemIds.endsWith(",")) {
-            workOrderItemIds = workOrderItemIds.substring(0, workOrderItemIds.lastIndexOf(','));
-        }
-        return workOrderItemIds;
-    }
-
-
-    /**
-     * 获取itemid数据
-     *
-     * @param taskItemBeanList
-     * @return
-     */
-    private String getItemConfigString3(List<TaskItemBean> taskItemBeanList) {
-        String itemIds = "";
-        for (TaskItemBean bean : taskItemBeanList) {
-            if (bean.isSelected()) {
-                itemIds += bean.getItemId() + ",";
-            }
-        }
-        if (itemIds.endsWith(",")) {
-            itemIds = itemIds.substring(0, itemIds.lastIndexOf(','));
-        }
-        return itemIds;
-    }
-
-    /**
      * 新建工单
      */
     public void newStartExecute(String workOrderId, String routeId, String startTime) {
@@ -1490,17 +1451,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                         }
                     }
                 }
-                /*List<TaskBean> templist = DataSupport.where("workOrderId=?", workOrderId).find(TaskBean.class);
-                if (!CollectionsUtil.isEmpty(templist)) {
-                    TaskBean taskBean = templist.get(0);
-                    if (taskBean != null) {
-                        List<TaskItemBean> taskItemBeanList = taskBean.getBizReservoirWorkOrderItems();
-                        if (taskBean.isHasStartExecute()) {
-                            //如果已经新建过工单了则直接提交
-                            mPresenter.commitTotal(adapterTaskItemList.getLocalData());
-                        }
-                    }
-                }*/
             }
         });
     }
@@ -1522,7 +1472,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             List<TaskBean> templist = DataSupport.where("workOrderId=?", workOrderId).find(TaskBean.class);
             if (!CollectionsUtil.isEmpty(templist)) {
                 showData(templist.get(0));
-
             }
         }
     }
@@ -1532,19 +1481,8 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
      */
     @Override
     public void endExecuteSucess() {
-        List<TaskBean> templist = DataSupport.where("workOrderId=?", workOrderId).find(TaskBean.class);
-        if (!CollectionsUtil.isEmpty(templist)) {
-            TaskBean taskBean = templist.get(0);
-            if (taskBean != null && "2".equals(taskBean.getExecuteStatus())) {
-                /*ContentValues values = new ContentValues();
-                values.put("executeStatus", "3");*/
-//                taskBean.setExecuteStatus("3");
-                taskBean.delete();
-//                DataSupport.updateAll(TaskBean.class, values, "workOrderId = ?", workOrderId);
-            }
-
-        }
-
+        DataSupport.deleteAll(TaskBean.class,"workOrderId=?", workOrderId);
+        DataSupport.deleteAll(TaskItemBean.class,"workOrderId=?", workOrderId);
         ToastUtils.shortToast("提交成功");
         finish();
     }

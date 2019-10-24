@@ -25,7 +25,7 @@ public class MainActivity extends BaseActivity {
     private BottomNavigationBar mBottomNavigation;
     private HorizontalViewPager mViewPagers;
 
-    private RolesBean role;
+    private boolean isXC;
 
     @Override
     public int getLayoutId() {
@@ -34,7 +34,7 @@ public class MainActivity extends BaseActivity {
 
     @Override
     public void initData() {
-        role = HttpManager.getInstance().getRolesBean();
+        isXC = HttpManager.getInstance().isXC();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class MainActivity extends BaseActivity {
     private void setViewPager() {
         CommonFragmentPagerAdapter adapter = new CommonFragmentPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new HomeFragment());
-        adapter.addFragment(role.isXC() ? new OperateFragment() : DealFragment.newInstance(DEAL_DOING));
+        adapter.addFragment(isXC ? new OperateFragment() : DealFragment.newInstance(DEAL_DOING));
         adapter.addFragment(new MineFragment());
         mViewPagers.setAdapter(adapter);
         mViewPagers.setOffscreenPageLimit(3);
@@ -79,7 +79,7 @@ public class MainActivity extends BaseActivity {
                 //默认背景色
                 .setBarBackgroundColor("#ffffff")
                 .addItem(new BottomNavigationItem(R.mipmap.icon_home_blue, "首页").setInactiveIconResource(R.mipmap.icon_home_grey))
-                .addItem(role.isXC() ? new BottomNavigationItem(R.mipmap.icon_patro_blue, "运维").setInactiveIconResource(R.mipmap.icon_patrol_gray) :
+                .addItem(isXC ? new BottomNavigationItem(R.mipmap.icon_patro_blue, "运维").setInactiveIconResource(R.mipmap.icon_patrol_gray) :
                         new BottomNavigationItem(R.mipmap.icon_patro_blue, "险情处置").setInactiveIconResource(R.mipmap.icon_patrol_gray))
                 .addItem(new BottomNavigationItem(R.mipmap.icon_my_blue, "我的").setInactiveIconResource(R.mipmap.icon_my_gray))
                 .setFirstSelectedPosition(0) //设置默认选中位置

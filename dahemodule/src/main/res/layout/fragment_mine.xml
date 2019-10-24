@@ -103,6 +103,7 @@
         app:layout_constraintTop_toBottomOf="@+id/view_two">
 
         <TextView
+            android:id="@+id/tv_deal"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"

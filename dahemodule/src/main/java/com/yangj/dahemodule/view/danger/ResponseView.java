@@ -71,7 +71,7 @@ public class ResponseView extends ViewBase {
         tv_createdTime = findViewById(R.id.tv_createdTime);
         et_content = findViewById(R.id.et_content);
 
-        tv_createdTime.setText(TimeFormatUtils.getStringToday());
+        tv_createdTime.setText(String.format("反馈时间：%s", TimeFormatUtils.getStringToday()));
 
         SysUser sysUser = HttpManager.getInstance().getSysUser();
         if (sysUser != null) {

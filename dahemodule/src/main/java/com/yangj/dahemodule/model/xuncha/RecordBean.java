@@ -150,7 +150,7 @@ public class RecordBean {
      * @return
      */
     public boolean isExecuting() {
-        return !Strings.isNullOrEmpty(executeStatus) && executeStatus.equals("1");
+        return Strings.isNullOrEmpty(executeStatus) || executeStatus.equals("1");
     }
 
     public String getRoutePath() {

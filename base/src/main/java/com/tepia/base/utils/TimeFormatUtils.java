@@ -208,9 +208,8 @@ public class TimeFormatUtils {
      */
     public static String getStringToday() {
         Date currentTime = new Date();
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMdd HHmmss");
-        String dateString = formatter.format(currentTime);
-        return dateString;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        return formatter.format(currentTime);
     }
 
     /**
@@ -500,6 +499,146 @@ public class TimeFormatUtils {
         return jj;
     }
 
+    /**
+     * 获取每年第一天
+     *
+     * @return
+     */
+    public static String getFirstDayOfYear() {
+        SimpleDateFormat dateFormater = new SimpleDateFormat(TIME_FORMAT);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_YEAR, 1);
+        return dateFormater.format(cal.getTime());
+    }
+
+    /**
+     * 获取每年最后一天
+     *
+     * @return
+     */
+    public static String getLastDayOfYear() {
+        SimpleDateFormat dateFormater = new SimpleDateFormat(TIME_FORMAT);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_YEAR, cal.getActualMaximum(Calendar.DAY_OF_YEAR));
+        return dateFormater.format(cal.getTime());
+    }
+
+    /**
+     * 本季度的第一天
+     */
+    public static String getThisQuarterStart() {
+        Calendar now = Calendar.getInstance();
+        int calendarMonth = now.get(Calendar.MONTH) + 1;
+        return getThisSeasonFirstTime(calendarMonth);
+    }
+
+    private static String getThisSeasonFirstTime(int month) {
+        int array[][] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+        int season = 1;
+        if (month >= 1 && month <= 3) {
+            season = 1;
+        }
+        if (month >= 4 && month <= 6) {
+            season = 2;
+        }
+        if (month >= 7 && month <= 9) {
+            season = 3;
+        }
+        if (month >= 10 && month <= 12) {
+            season = 4;
+        }
+        int start_month = array[season - 1][0];
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");// 可以方便地修改日期格式
+        String years = dateFormat.format(date);
+        int years_value = Integer.parseInt(years);
+
+        String seasonDate = years_value + "-" + (start_month < 10 ? "0" + start_month : start_month + "") + "-" + "01";
+        return seasonDate;
+
+    }
+
+    /**
+     * 本季度的最后一天
+     */
+    public static String getThisQuarterEnd() {
+        Calendar now = Calendar.getInstance();
+        int calendarMonth = now.get(Calendar.MONTH) + 1;
+        return getThisSeasonFinallyTime(calendarMonth);
+    }
+
+    private static String getThisSeasonFinallyTime(int month) {
+        int array[][] = {{1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12}};
+        int season = 1;
+        if (month >= 1 && month <= 3) {
+            season = 1;
+        }
+        if (month >= 4 && month <= 6) {
+            season = 2;
+        }
+        if (month >= 7 && month <= 9) {
+            season = 3;
+        }
+        if (month >= 10 && month <= 12) {
+            season = 4;
+        }
+        int end_month = array[season - 1][2];
+
+        Date date = new Date();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy");// 可以方便地修改日期格式
+        String years = dateFormat.format(date);
+        int years_value = Integer.parseInt(years);
+        int end_days = getLastDayOfMonth(years_value, end_month);
+        String seasonDate = years_value + "-" + end_month + "-" + end_days;
+        return seasonDate;
+    }
+
+    private static int getLastDayOfMonth(int year, int month) {
+        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8
+                || month == 10 || month == 12) {
+            return 31;
+        }
+        if (month == 4 || month == 6 || month == 9 || month == 11) {
+            return 30;
+        }
+        if (month == 2) {
+            if (isLeapYear(year)) {
+                return 29;
+            } else {
+                return 28;
+            }
+        }
+        return 0;
+    }
+
+    private static boolean isLeapYear(int year) {
+        return (year % 4 == 0 && year % 100 != 0) || (year % 400 == 0);
+    }
+
+    /**
+     * 获取每月第一天
+     *
+     * @return
+     */
+    public static String getFirstDayOfMonth() {
+        SimpleDateFormat dateFormater = new SimpleDateFormat(TIME_FORMAT);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, 1);
+        return dateFormater.format(cal.getTime());
+    }
+
+    /**
+     * 获取每月最后一天
+     *
+     * @return
+     */
+    public static String getLastDayOfMonth() {
+        SimpleDateFormat dateFormater = new SimpleDateFormat(TIME_FORMAT);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.DAY_OF_MONTH, cal.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return dateFormater.format(cal.getTime());
+    }
 
 
+    private static final String TIME_FORMAT = "yyyy-MM-dd";
 }

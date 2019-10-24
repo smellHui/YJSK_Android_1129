@@ -2,6 +2,7 @@ package com.yangj.dahemodule.fragment;
 
 import android.content.Intent;
 import android.view.View;
+import android.widget.TextView;
 
 import com.alibaba.android.arouter.launcher.ARouter;
 import com.alibaba.fastjson.JSON;
@@ -31,7 +32,10 @@ import java.util.List;
  */
 public class HomeFragment extends BaseCommonFragment {
 
+    private TextView btn_report;
     private BasicInfoView basicInfoView;
+
+    private boolean isXC;
 
     @Override
     protected int getLayoutId() {
@@ -40,14 +44,16 @@ public class HomeFragment extends BaseCommonFragment {
 
     @Override
     protected void initData() {
-
+        isXC = HttpManager.getInstance().isXC();
     }
 
     @Override
     protected void initView(View view) {
         basicInfoView = findView(R.id.view_basic_info);
 
-        findView(R.id.btn_report).setOnClickListener(v -> {
+        btn_report = findView(R.id.btn_report);
+        btn_report.setVisibility(isXC ? View.VISIBLE : View.GONE);
+        btn_report.setOnClickListener(v -> {
             startActivity(new Intent(getContext(), DangerReportActivity.class));
         });
 
