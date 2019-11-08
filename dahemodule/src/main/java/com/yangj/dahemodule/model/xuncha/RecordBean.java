@@ -28,9 +28,31 @@ public class RecordBean {
      * 4-已生成报告
      */
     private String executeStatus;
+    private String abnormalNum;
+    private String routeType;
     private String routePath;
     private String itemList;
     private String reservoirStructureList;
+
+    public String getRouteType() {
+        return Strings.isNullOrEmpty(routeType) ? "1" : routeType;
+    }
+
+    public void setRouteType(String routeType) {
+        this.routeType = routeType;
+    }
+
+    public String getAbnormalNum() {
+        return Strings.isNullOrEmpty(abnormalNum) ? "0" : abnormalNum;
+    }
+
+    public void setAbnormalNum(String abnormalNum) {
+        this.abnormalNum = abnormalNum;
+    }
+
+    public boolean isZeroAbnormal() {
+        return Strings.isNullOrEmpty(abnormalNum) || abnormalNum.equals("0");
+    }
 
     public String getStatus() {
         return status;
@@ -49,7 +71,7 @@ public class RecordBean {
     }
 
     public String getCreatorName() {
-        return creatorName;
+        return Strings.nullToEmpty(creatorName);
     }
 
     public void setCreatorName(String creatorName) {
@@ -137,7 +159,7 @@ public class RecordBean {
     }
 
     public String getExecuteStatus() {
-        return executeStatus;
+        return Strings.nullToEmpty(executeStatus);
     }
 
     public void setExecuteStatus(String executeStatus) {
@@ -194,6 +216,7 @@ public class RecordBean {
                 ", omRouteId='" + omRouteId + '\'' +
                 ", omPath='" + omPath + '\'' +
                 ", executeStatus='" + executeStatus + '\'' +
+                ", abnormalNum='" + abnormalNum + '\'' +
                 ", routePath='" + routePath + '\'' +
                 ", itemList='" + itemList + '\'' +
                 ", reservoirStructureList='" + reservoirStructureList + '\'' +

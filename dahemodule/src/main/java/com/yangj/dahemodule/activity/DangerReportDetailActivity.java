@@ -1,6 +1,8 @@
 package com.yangj.dahemodule.activity;
 
 import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -50,8 +52,7 @@ public class DangerReportDetailActivity extends BaseActivity implements Response
         if (intent != null) {
             reportId = intent.getStringExtra("reportId");
         }
-        RolesBean role = HttpManager.getInstance().getRolesBean();
-        isXC = role != null && role.isXC();
+        isXC = HttpManager.getInstance().isXC();
     }
 
     @Override
@@ -67,13 +68,18 @@ public class DangerReportDetailActivity extends BaseActivity implements Response
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        loadData();
+    }
+
+    @Override
     protected void initListener() {
 
     }
 
     @Override
     protected void initRequestData() {
-        loadData();
     }
 
     private void loadData() {

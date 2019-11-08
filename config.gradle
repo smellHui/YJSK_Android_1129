@@ -10,7 +10,7 @@ ext {
             buildToolsVersion: "28.0.3",
             minSdkVersion    : 19,
             targetSdkVersion : 27,
-            versionCode      : 124,
+            versionCode      : 128,
             versionName      : "1.1.11"
     ]
 
@@ -133,7 +133,8 @@ ext {
 
             fastjson : 'com.alibaba:fastjson:1.1.71.android',
 
-            BigImageViewPager:"com.github.SherlockGougou:BigImageViewPager:v4_4.1.0"
+            BigImageViewPager:"com.github.SherlockGougou:BigImageViewPager:v4_4.1.0",
+            discreteScrollview:'com.yarolegovich:discrete-scrollview:1.4.9'
 
     ]
 }

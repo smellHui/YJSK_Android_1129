@@ -47,7 +47,7 @@ public class RoutepointDataManager {
         }
         String temp = "[";
         for (RoutepointDataBean bean : data) {
-            temp = temp + "[" + bean.getLgtd() + "," + bean.getLttd() + "[" + ",";
+            temp = temp + "[" + bean.getLgtd() + "," + bean.getLttd() + "]" + ",";
         }
         if (data != null && data.size() > 0) {
             temp = temp.substring(0, temp.length() - 1);

@@ -23,10 +23,10 @@ public class DangerAdapter extends BaseQuickAdapter<DangerBean, BaseViewHolder> 
     @Override
     protected void convert(BaseViewHolder helper, DangerBean item) {
         TextView statusTv = helper.getView(R.id.tv_status);
-        String executeStatus = item.getStatus();
+        String executeStatus = item.getProblemStatus();
         if (!TextUtils.isEmpty(executeStatus)) {
-            statusTv.setText(executeStatus.equals("1") ? "巡查中" : "已巡查");
-            statusTv.setBackgroundResource(executeStatus.equals("1") ? R.mipmap.blue : R.mipmap.green);
+            statusTv.setText(executeStatus.equals("1") ? "待处置" : "已处置");
+            statusTv.setBackgroundResource(executeStatus.equals("1") ? R.mipmap.blue : R.mipmap.grey);
         }
         helper.setText(R.id.tv_name, item.getTitle());
         helper.setText(R.id.tv_createTime, item.getCreateTime());

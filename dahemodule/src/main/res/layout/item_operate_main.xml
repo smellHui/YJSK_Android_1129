@@ -37,17 +37,21 @@
             android:textSize="13sp" />
 
         <TextView
+            android:id="@+id/tv_btn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
+            android:background="@drawable/btn_corner_white"
+            android:gravity="center"
             android:text="开始巡检"
-            android:textColor="@color/white"
-            android:textSize="21sp" />
+            android:textColor="@color/color_9370E6"
+            android:textSize="13sp" />
     </LinearLayout>
 
     <ImageView
         android:id="@+id/img_cate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:src="@mipmap/btn_cir_1" />
 </LinearLayout>

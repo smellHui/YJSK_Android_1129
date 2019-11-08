@@ -5,7 +5,10 @@ import android.widget.ImageView;
 import com.bumptech.glide.Glide;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.tepia.base.utils.ImageLoaderUtil;
 import com.yangj.dahemodule.R;
+
+import cc.shinichi.library.tool.image.ImageUtil;
 
 /**
  * Author:xch
@@ -21,6 +24,6 @@ public class ImageSeeAdapter extends BaseQuickAdapter<String, BaseViewHolder> {
     @Override
     protected void convert(BaseViewHolder helper, String item) {
         ImageView img = helper.getView(R.id.img);
-        Glide.with(mContext).load(item).into(img);
+        ImageLoaderUtil.getInstance().loadImage(mContext,item,img);
     }
 }

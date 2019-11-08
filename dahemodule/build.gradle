@@ -149,6 +149,7 @@ dependencies {
     annotationProcessor rootProject.ext.dependencies.ariaCompiler
     implementation rootProject.ext.dependencies.MVVM2
     implementation rootProject.ext.dependencies.MPAndroidChart
+    implementation rootProject.ext.dependencies.discreteScrollview
 
     api rootProject.ext.dependencies.guava
 

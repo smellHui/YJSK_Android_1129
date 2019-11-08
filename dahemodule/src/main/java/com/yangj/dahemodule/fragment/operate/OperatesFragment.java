@@ -102,6 +102,7 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
                     recordBean.setName(taskBean.getRouteName());
                     recordBean.setCreateTime(taskBean.getStartTime());
                     recordBean.setCode(taskBean.getWorkOrderId());
+                    recordBean.setRouteType(taskBean.getRouteType());
                     localRecordList.add(recordBean);
                 }
             }
@@ -120,7 +121,7 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
 
     @Override
     public BaseQuickAdapter getBaseQuickAdapter() {
-        return new OperateAdapter();
+        return new OperateAdapter(pageType);
     }
 
     @Override
@@ -241,7 +242,7 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
             RouteListBean routeListBeanNew = new RouteListBean();
             routeListBeanNew.setWorkOrderId(workOrderId);
             routeListBeanNew.setId(protalBean.getOmRouteId());
-            routeListBeanNew.setRouteContent(protalBean.getRoutePath());
+            routeListBeanNew.setRouteContent(protalBean.getOmPath());
             routeListBeanNew.setUserCode(userCode);
             routeListBeanNew.setReservoirId(selectedResrvoir.getReservoirId());
             routeListBeanNew.setItemList(taskItemBeanList);

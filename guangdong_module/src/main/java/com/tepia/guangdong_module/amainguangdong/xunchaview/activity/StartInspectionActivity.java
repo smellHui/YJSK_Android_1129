@@ -730,7 +730,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
             String routeContent = routeListBean.getRouteContent();
             List<Point> result = new ArrayList();
             try {
-//                List<Double[]> routes = JSON.parseArray(routeContent.replaceAll("\\{", "[").replaceAll("\\}", "]"), Double[].class);
                 List<Double[]> routes = JSON.parseArray(routeContent, Double[].class);
                 for (Double[] route : routes) {
                     Point point = new Point(route[0], route[1], SpatialReference.create(4326));

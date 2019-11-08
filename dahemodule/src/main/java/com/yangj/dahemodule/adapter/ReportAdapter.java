@@ -23,7 +23,7 @@ public class ReportAdapter extends BaseQuickAdapter<ReportBean, BaseViewHolder> 
         TextView statusTv = helper.getView(R.id.tv_status);
         boolean isComplete = item.isComplete();
         statusTv.setText(isComplete ? "已完结" : "待反馈");
-        statusTv.setBackgroundResource(isComplete ? R.mipmap.green : R.mipmap.blue);
+        statusTv.setBackgroundResource(isComplete ? R.mipmap.grey : R.mipmap.blue);
         helper.setText(R.id.tv_name, item.getTitle());
         helper.setText(R.id.tv_createTime, item.getCreateTime());
     }

@@ -204,6 +204,7 @@ public class OperateFragment extends BaseCommonFragment {
         taskBean.setStartTime(startTime);
         taskBean.setExecuteStatus("2");
         taskBean.setRouteName(routeListBeanNew.getRouteName());
+        taskBean.setRouteType(route.getType());
         RouteListBean routeListBean_a = taskBean.getRouteListBeanByWorkId(workOrderId);
         if (save && routeListBean_a != null) {
             saveOther(workOrderId, routeListBeanNew, "0", userCode);
