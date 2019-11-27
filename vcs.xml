@@ -262,6 +262,14 @@
           <option name="url" value="https://github.com/AItsuki/SwipeMenuRecyclerView.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/thefuntasty/hauler.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/zerobranch/SwipeLayout.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="D:\code\android" />
