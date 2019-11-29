@@ -149,7 +149,7 @@ public class TyphoonRouteActivity extends MVPBaseActivity<TyphoonRouteContract.V
         arcGISMap.getOperationalLayers().add(webTitleLayer);
         arcGISMap.setMinScale(ArcgisLayout.minScale);
         arcGISMap.setMaxScale(ArcgisLayout.maxScale);
-        Point point1 = new com.esri.arcgisruntime.geometry.Point(1.1992433073197773E7, 4885139.106039485,
+        Point point1 = new Point(1.1992433073197773E7, 4885139.106039485,
                 SpatialReference.create(3857));
         Point point2 = new Point(1.3532164647994766E7, 2329702.2487083403, SpatialReference.create(3857));
         Envelope initEnvelope = new Envelope(point1, point2);

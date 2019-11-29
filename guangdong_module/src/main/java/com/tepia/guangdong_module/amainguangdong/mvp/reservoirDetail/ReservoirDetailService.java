@@ -60,7 +60,7 @@ public interface ReservoirDetailService {
      */
     @GET("app/appPictureR/listPictureRByReservoir")
     Observable<PicDetailBean> getPictureDetailList(@Header("Authorization") String token,
-                                                    @Query("reservoirId") String reservoirId,
-                                                    @Query("startDate") String startDate,
-                                                    @Query("endDate") String endDate);
+                                                   @Query("reservoirId") String reservoirId,
+                                                   @Query("startDate") String startDate,
+                                                   @Query("endDate") String endDate);
 }

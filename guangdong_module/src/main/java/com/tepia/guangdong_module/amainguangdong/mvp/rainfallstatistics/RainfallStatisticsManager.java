@@ -1,11 +1,10 @@
 package com.tepia.guangdong_module.amainguangdong.mvp.rainfallstatistics;
 
 import com.tepia.base.http.RetrofitManager;
+import com.tepia.guangdong_module.APPCostant;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.rainfallstatistics.RainfallListResponse;
 import com.tepia.guangdong_module.amainguangdong.model.rainfallstatistics.ReservoirNumResponse;
-import com.tepia.guangdong_module.amainguangdong.mvp.reserviorlistmvp.ReserviorManager;
-import com.yangj.dahemodule.APPCostant;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -34,7 +33,6 @@ public class RainfallStatisticsManager {
     }
 
     /**
-     *
      * 行政统计-雨量统计-水库数量
      *
      * @param startTime
@@ -49,7 +47,6 @@ public class RainfallStatisticsManager {
     }
 
     /**
-     *
      * 行政统计-雨量统计-列表
      *
      * @param pageSize
@@ -60,7 +57,7 @@ public class RainfallStatisticsManager {
      * @return
      */
     public Observable<RainfallListResponse> getRainfallList(int currentPage, int pageSize, String startTime,
-            String endTime, String period, String level) {
+                                                            String endTime, String period, String level) {
         String token = UserManager.getInstance().getToken();
         return mRetrofitService.getRainfallList(token, currentPage, pageSize, startTime, endTime, period, level)
                 .subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread());

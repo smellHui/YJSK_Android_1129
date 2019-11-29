@@ -5,9 +5,11 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.tepia.base.ConfigConsts;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.utils.LogUtil;
 import com.tepia.base.utils.ToastUtils;
+import com.tepia.base.utils.UUIDUtil;
 import com.tepia.base.view.floatview.CollectionsUtil;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
@@ -15,6 +17,8 @@ import com.tepia.guangdong_module.amainguangdong.model.xuncha.RouteListBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.RoutePosition;
 import com.tepia.guangdong_module.amainguangdong.route.TaskBean;
 import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
+import com.tepia.guangdong_module.amainguangdong.xunchaview.fragment.MainFragment;
+import com.tepia.photo_picker.entity.CheckTaskPicturesBean;
 import com.yangj.dahemodule.adapter.OperateAdapter;
 import com.yangj.dahemodule.common.HttpManager;
 import com.yangj.dahemodule.fragment.BaseListFragment;
@@ -130,7 +134,8 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
         if (recordBean == null) return;
         touchTaskBean = queryTaskBeanBySql(recordBean.getCode());
         if (touchTaskBean != null) {
-            UiHelper.goToStartInspectionView(getBaseActivity(), touchTaskBean.getWorkOrderId());
+            UiHelper.goToPatrolMapControlView(getBaseActivity(), touchTaskBean.getWorkOrderId());
+//            UiHelper.goToStartInspectionView(getBaseActivity(), touchTaskBean.getWorkOrderId());
         } else {
             loadPatrolDetail(recordBean.getCode());
         }
@@ -207,6 +212,7 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
                     taskItem.setResultType(protalItemBean.getOmItemResultType());
                     taskItem.setExecuteResultType(protalItemBean.getExecuteResultType());
                     taskItem.setExcuteDate(protalItemBean.getExecuteTime());
+                    taskItem.setCompleteStatus("1");
                     taskItem.setExcuteLatitude(protalItemBean.getExecuteLatitude());
                     taskItem.setExcuteLongitude(protalItemBean.getExecuteLongitude());
                     taskItem.setExecuteResultDescription(protalItemBean.getExecuteResultDescription());
@@ -215,11 +221,22 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
                     if (!TextUtils.isEmpty(pictures)) {
                         String[] paths = pictures.split(",");
                         List<TaskItemBean.ISysFileUploadsBean> iSysFileUploadsBeans = new ArrayList<>();
+                        List<CheckTaskPicturesBean> checkTaskPicturesBeans = new ArrayList<>();
                         for (String path : paths) {
                             TaskItemBean.ISysFileUploadsBean fileUploadsBean = new TaskItemBean.ISysFileUploadsBean();
                             fileUploadsBean.setFilePath(path);
                             iSysFileUploadsBeans.add(fileUploadsBean);
+
+                            CheckTaskPicturesBean checkTaskPicturesBean = new CheckTaskPicturesBean();
+                            checkTaskPicturesBean.setFilePath(path);
+                            LogUtil.e(MainFragment.class.getName(), "---------图片路径：" + path);
+                            checkTaskPicturesBean.setHasCheck("1");
+                            checkTaskPicturesBean.setBizType(ConfigConsts.picType_trouble);
+                            checkTaskPicturesBean.setItemId(taskItem.getItemId());
+                            checkTaskPicturesBean.setFileId(UUIDUtil.getUUID32());
+                            checkTaskPicturesBeans.add(checkTaskPicturesBean);
                         }
+                        DataSupport.saveAll(checkTaskPicturesBeans);
                         taskItem.setiSysFileUploads(iSysFileUploadsBeans);
                     }
                     taskItemBeanList.add(taskItem);
@@ -234,6 +251,8 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
                     routePosition.setUserCode(userCode);
                     routePosition.setReservoirId(selectedResrvoir.getReservoirId());
                     routePosition.setPositionId(reservoirStructure.getId());
+                    routePosition.setStructureName(reservoirStructure.getStructureName());
+                    routePosition.setStructurePath(reservoirStructure.getStructurePath());
                     routePosition.setPositionLgtd(reservoirStructure.getPositionLongitude());
                     routePosition.setPositionLttd(reservoirStructure.getPositionLatitude());
                     routePositions.add(routePosition);
@@ -256,9 +275,7 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
             RouteListBean routeListBean_a = taskBean.getRouteListBeanByWorkId(workOrderId);
 
             if (save && routeListBean_a != null) {
-//                MainFragment.saveOther(workOrderId, routeListBeanNew, "1", userCodeOfnet);
-//                goStart(workOrderId);
-                UiHelper.goToStartInspectionView(getBaseActivity(), workOrderId);
+                UiHelper.goToPatrolMapControlView(getBaseActivity(), workOrderId);
             }
         }
     }

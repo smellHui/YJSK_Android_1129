@@ -5,6 +5,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import com.bilibili.boxing_impl.view.SpacesItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.tepia.base.mvp.BaseCommonFragment;
 import com.tepia.base.view.dialog.permissiondialog.Px2dpUtils;
@@ -70,6 +71,7 @@ public abstract class BaseListFragment<K> extends BaseCommonFragment
         baseQuickAdapter.setEnableLoadMore(true);
         baseQuickAdapter.setOnLoadMoreListener(this::initRequestData, rv);
         rv.setLayoutManager(new WrapLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
+        rv.addItemDecoration(new SpacesItemDecoration(2));
         int zeroPx = Px2dpUtils.dip2px(getContext(), 0);
         rv.setPadding(zeroPx, zeroPx, zeroPx, zeroPx);
         rv.setAdapter(baseQuickAdapter);

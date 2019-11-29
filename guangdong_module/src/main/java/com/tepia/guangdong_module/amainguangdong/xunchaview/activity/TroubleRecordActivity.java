@@ -9,20 +9,15 @@ import android.support.v7.widget.OrientationHelper;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.TextUtils;
 import android.view.View;
-import android.widget.AdapterView;
 
-import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.example.guangdong_module.R;
-import com.example.guangdong_module.databinding.ActivityDangerReportBinding;
 import com.example.guangdong_module.databinding.ActivityTroubleReportBinding;
 import com.google.gson.Gson;
 import com.tepia.base.CacheConsts;
 import com.tepia.base.ConfigConsts;
 import com.tepia.base.mvp.BaseActivity;
-import com.tepia.base.utils.TimeFormatUtils;
 import com.tepia.base.utils.ToastUtils;
 import com.tepia.base.view.dialog.basedailog.ActionSheetDialog;
-import com.tepia.base.view.dialog.basedailog.OnOpenItemClick;
 import com.tepia.base.view.floatview.CollectionsUtil;
 import com.tepia.guangdong_module.amainguangdong.common.PhotoSelectAdapter;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
@@ -31,17 +26,18 @@ import com.tepia.guangdong_module.amainguangdong.common.pickview.PhotoRecycleVie
 import com.tepia.guangdong_module.amainguangdong.model.UserInfo;
 import com.tepia.guangdong_module.amainguangdong.model.UtilDataBaseOfGD;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.DataBeanOflistReservoirRoute;
-import com.tepia.guangdong_module.amainguangdong.model.xuncha.PersonDutyBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
 import com.tepia.guangdong_module.amainguangdong.route.TaskBean;
 import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
 import com.tepia.guangdong_module.amainguangdong.utils.EmptyLayoutUtil;
+import com.tepia.guangdong_module.amainguangdong.wrap.PatroltemEvent;
 import com.tepia.guangdong_module.amainguangdong.xunchaview.adapter.AdapterWorker;
 import com.tepia.photo_picker.PhotoPicker;
 import com.tepia.photo_picker.PhotoPreview;
 import com.tepia.photo_picker.entity.CheckTaskPicturesBean;
 import com.tepia.photo_picker.utils.SPUtils;
 
+import org.greenrobot.eventbus.EventBus;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
@@ -58,6 +54,9 @@ import java.util.List;
  **/
 public class TroubleRecordActivity extends BaseActivity {
 
+    public static final String TROUBLE_POSITION = "trouble_position";
+    public static final String TASK_ITEM_BEAN = "task_item_bean";
+
     ActivityTroubleReportBinding mBinding;
     AdapterWorker adapterWorker;
 
@@ -67,12 +66,6 @@ public class TroubleRecordActivity extends BaseActivity {
     private TaskItemBean taskItemBean;
     private ReservoirBean reservoirBean;
 
-    String userCode;
-    String reservoirId;
-    /**
-     * 唯一id,通过UUIDUtil.getUUID32() 生成
-     */
-    String itemId = "1";
     String[] items = new String[]{"坝体", "坝脚", "泄水设施", "输水设施", "其他"};
     DataBeanOflistReservoirRoute offlineDataBean;
     private List<UserInfo> userInfos;
@@ -80,6 +73,7 @@ public class TroubleRecordActivity extends BaseActivity {
 
     boolean isCompleteOfTaskBean;
 
+    private int patrolPosition;
 
     @Override
     public int getLayoutId() {
@@ -89,28 +83,26 @@ public class TroubleRecordActivity extends BaseActivity {
     @Override
     public void initData() {
 //        ToastUtils.shortToast("请填写异常信息，否则该项巡查将视为未完成");
-        executeResultType = getIntent().getStringExtra("executeResultType");
+        Intent intent = getIntent();
+        if (intent != null) {
+            executeResultType = intent.getStringExtra("executeResultType");
+            patrolPosition = intent.getIntExtra(TROUBLE_POSITION, -1);
+            taskItemBean = (TaskItemBean) intent.getSerializableExtra(TASK_ITEM_BEAN);
+        }
         mBinding = DataBindingUtil.bind(mRootView);
 
         mBinding.layoutDes.titleTv.setText("填写异常情况描述");
         mBinding.layoutDes.yichangTitleTv.setText("异常情况");
         mBinding.layoutDes.positionNameLy.setVisibility(View.GONE);
-        /**
-         * 需要上一页面传过来itemId，然后通过itemId去数据库中查找
-         */
-        itemId = getIntent().getStringExtra("item");
+
 
 //        itemId = UUIDUtil.getUUID32();
         /**
          * 险情图片类型约定
          */
         SPUtils.getInstance().putString(CacheConsts.bizType, ConfigConsts.picType_trouble);
-        SPUtils.getInstance().putString(CacheConsts.itemId, itemId);
+        SPUtils.getInstance().putString(CacheConsts.itemId, taskItemBean.getItemId());
         reservoirBean = UserManager.getInstance().getDefaultReservoir();
-//        userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
-        reservoirId = UserManager.getInstance().getReservoirId();
-        taskItemBean = DataSupport.where("reservoirId=? and itemId=?", reservoirId, itemId).findFirst(TaskItemBean.class);
-        userCode = taskItemBean.getUserCode();
         isCompleteOfTaskBean = stopClick(taskItemBean.getWorkOrderId());
         if (isCompleteOfTaskBean) {
             mBinding.reportTv.setVisibility(View.GONE);
@@ -161,8 +153,8 @@ public class TroubleRecordActivity extends BaseActivity {
         if (taskItemBean != null) {
             mBinding.layoutDes.selectTv.setText(taskItemBean.getPositionName());
             mBinding.layoutDes.desEt.setText(taskItemBean.getExecuteResultDescription());
+            mBinding.layoutTrouble.contentTv.setText(taskItemBean.getSuperviseItemContent());
         }
-        mBinding.layoutTrouble.contentTv.setText(taskItemBean.getSuperviseItemContent());
 
     }
 
@@ -220,24 +212,26 @@ public class TroubleRecordActivity extends BaseActivity {
                 return;
             }
 
-            if (taskItemBean != null) {
-                taskItemBean.setBeforelist(new Gson().toJson(selectPhotosBefore));
+//            if (taskItemBean != null) {
+//                taskItemBean.setBeforelist(new Gson().toJson(selectPhotosBefore));
+//
+//                taskItemBean.setPositionName(positionName);
+//                taskItemBean.setExecuteResultDescription(problemDescription);
+//
+//                if (!TextUtils.isEmpty(executeResultType)) {
+//                    taskItemBean.setExecuteResultType(executeResultType);
+//                }
+//                taskItemBean.setExcuteDate(TimeFormatUtils.getStringDate());
 
-                taskItemBean.setPositionName(positionName);
-                taskItemBean.setExecuteResultDescription(problemDescription);
-                taskItemBean.setCompleteStatus("1");
-
-                if (!TextUtils.isEmpty(executeResultType)) {
-                    taskItemBean.setExecuteResultType(executeResultType);
-                }
-                taskItemBean.setExcuteDate(TimeFormatUtils.getStringDate());
-
-                taskItemBean.updateAll("userCode=? and reservoirId=? and itemId=?", userCode, reservoirId, itemId);
-            }
+//                taskItemBean.updateAll("userCode=? and reservoirId=? and itemId=?", userCode, reservoirId, itemId);
+//            }
 
             ToastUtils.shortToast("提交成功");
-            Intent intent = new Intent();
-            TroubleRecordActivity.this.setResult(1000, intent);
+//            Intent intent = new Intent();
+//            TroubleRecordActivity.this.setResult(1000, intent);
+            if (patrolPosition != -1) {
+                EventBus.getDefault().post(new PatroltemEvent(patrolPosition, problemDescription, new Gson().toJson(selectPhotosBefore)));
+            }
             finish();
         });
     }
@@ -276,13 +270,13 @@ public class TroubleRecordActivity extends BaseActivity {
     List<CheckTaskPicturesBean> checkTaskPicturesBeanList = new ArrayList<>();
 
     private void initPhotoListView() {
-        {
+
             photoRecycleViewAdapterBefore = new PhotoSelectAdapter(getContext(), isCompleteOfTaskBean);
             mBinding.layoutPic.rvAddPhotoBefore.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
             mBinding.layoutPic.rvAddPhotoBefore.setAdapter(photoRecycleViewAdapterBefore);
 
             selectPhotosBefore.clear();
-            checkTaskPicturesBeanList = UtilDataBaseOfGD.getInstance().getCheckTaskPicturesBeanOfTrouble(ConfigConsts.picType_trouble, userCode, reservoirId, itemId);
+            checkTaskPicturesBeanList = UtilDataBaseOfGD.getInstance().getCheckTaskPicturesBeanOfTrouble(ConfigConsts.picType_trouble, taskItemBean.getItemId());
             for (CheckTaskPicturesBean checkTaskPicturesBean : checkTaskPicturesBeanList) {
                 if (checkTaskPicturesBean != null) {
                     selectPhotosBefore.add(checkTaskPicturesBean.getFilePath());
@@ -290,26 +284,23 @@ public class TroubleRecordActivity extends BaseActivity {
             }
             photoRecycleViewAdapterBefore.setLocalData(selectPhotosBefore);
             mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
-            photoRecycleViewAdapterBefore.setOnItemClickListener(new OnItemClickListener() {
-                @Override
-                public void onItemClick(View view, int position) {
-                    if (photoRecycleViewAdapterBefore.getItemViewType(position) == PhotoRecycleViewAdapter.TYPE_ADD) {
-                        if (!isCompleteOfTaskBean) {
-                            PhotoPicker.builder()
-                                    .setPhotoCount(5)
-                                    .setShowCamera(true)
-                                    .setPreviewEnabled(true)
-                                    .setSelected(selectPhotosBefore)
-                                    .start(TroubleRecordActivity.this, 100);
-                        }
-
-                    } else {
-                        PhotoPreview.builder()
-                                .setPhotos(photoRecycleViewAdapterBefore.getPhotoPaths())
-                                .setCurrentItem(position)
-                                .setShowDeleteButton(false)
-                                .start(TroubleRecordActivity.this, 101);
+            photoRecycleViewAdapterBefore.setOnItemClickListener((view, position) -> {
+                if (photoRecycleViewAdapterBefore.getItemViewType(position) == PhotoRecycleViewAdapter.TYPE_ADD) {
+                    if (!isCompleteOfTaskBean) {
+                        PhotoPicker.builder()
+                                .setPhotoCount(5)
+                                .setShowCamera(true)
+                                .setPreviewEnabled(true)
+                                .setSelected(selectPhotosBefore)
+                                .start(TroubleRecordActivity.this, 100);
                     }
+
+                } else {
+                    PhotoPreview.builder()
+                            .setPhotos(photoRecycleViewAdapterBefore.getPhotoPaths())
+                            .setCurrentItem(position)
+                            .setShowDeleteButton(false)
+                            .start(TroubleRecordActivity.this, 101);
                 }
             });
 
@@ -326,7 +317,6 @@ public class TroubleRecordActivity extends BaseActivity {
                     mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
                 });
             }
-        }
     }
 
     @Override
@@ -339,7 +329,7 @@ public class TroubleRecordActivity extends BaseActivity {
             }
 
             if (photos != null) {
-                checkTaskPicturesBeanList = UtilDataBaseOfGD.getInstance().getCheckTaskPicturesBeanOfTrouble(ConfigConsts.picType_trouble, userCode, reservoirId, itemId);
+                checkTaskPicturesBeanList = UtilDataBaseOfGD.getInstance().getCheckTaskPicturesBeanOfTrouble(ConfigConsts.picType_trouble, taskItemBean.getItemId());
                 selectPhotosBefore.clear();
 
                 for (CheckTaskPicturesBean checkTaskPicturesBean : checkTaskPicturesBeanList) {
@@ -351,10 +341,7 @@ public class TroubleRecordActivity extends BaseActivity {
                 mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
 
             }
-
         }
-
-
     }
 
     /**

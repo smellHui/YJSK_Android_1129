@@ -16,7 +16,7 @@ public class SeepageAnomalousContract {
 
     }
 
-    public interface Presenter extends BasePresenter<SeepageAnomalousContract.View> {
+    public interface Presenter extends BasePresenter<View> {
 
     }
 

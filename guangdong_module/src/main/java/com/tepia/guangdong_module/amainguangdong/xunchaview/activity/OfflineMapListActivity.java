@@ -20,7 +20,7 @@ import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
 import com.tepia.guangdong_module.amainguangdong.utils.EmptyLayoutUtil;
 import com.tepia.guangdong_module.amainguangdong.xunchaview.adapter.OfflineMapListAdapter;
-import com.yangj.dahemodule.APPCostant;
+import com.tepia.guangdong_module.APPCostant;
 
 import java.util.ArrayList;
 import java.util.HashMap;

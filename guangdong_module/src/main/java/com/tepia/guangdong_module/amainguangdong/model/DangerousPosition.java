@@ -1,11 +1,13 @@
 package com.tepia.guangdong_module.amainguangdong.model;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Author:xch
  * Date:2019/9/4
- * Description:
+ * Description:险情部位
  */
-public class DangerousPosition {
+public class DangerousPosition extends DataSupport {
 
     private String status;
     private String createBy;

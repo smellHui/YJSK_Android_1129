@@ -1,11 +1,13 @@
 package com.yangj.dahemodule.model.main;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Author:xch
  * Date:2019/9/4
  * Description:
  */
-public class ReservoirStructure {
+public class ReservoirStructure extends DataSupport {
 
     private String status;
     private String createBy;

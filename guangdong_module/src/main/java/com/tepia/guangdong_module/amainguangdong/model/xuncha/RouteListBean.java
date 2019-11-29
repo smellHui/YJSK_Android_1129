@@ -29,7 +29,6 @@ import java.util.List;
  **/
 public class RouteListBean extends DataSupport implements Serializable {
 
-
     @Override
     public synchronized boolean saveOrUpdate(String... conditions) {
         for (TaskItemBean taskItemBean : itemList) {

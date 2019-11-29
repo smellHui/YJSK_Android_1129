@@ -4,6 +4,7 @@ import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.text.TextUtils;
 
+import com.chad.library.adapter.base.entity.MultiItemEntity;
 import com.tepia.base.view.floatview.CollectionsUtil;
 
 import org.litepal.annotation.Column;
@@ -14,17 +15,29 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
-  * Created by      Android studio
-  *
-  * @author :ly (from Center Of Wuhan)
-  * 创建时间 :
-  * 更新时间 :
-  * Version :1.0
-  * 功能描述 :
+ * Created by      Android studio
+ *
+ * @author :ly (from Center Of Wuhan)
+ * 创建时间 :
+ * 更新时间 :
+ * Version :1.0
+ * 功能描述 :
  **/
 
-public class TaskItemBean extends DataSupport implements Serializable {
+public class TaskItemBean extends DataSupport implements Serializable, MultiItemEntity {
 
+    //步骤索引(0-第一次操作 1-正常 2-异常)
+    private int stepIndex;
+
+    @Override
+    public int getItemType() {
+        if (executeResultType == null) {
+            stepIndex = 0;
+        } else {
+            stepIndex = isNormal() ? 1 : 2;
+        }
+        return stepIndex;
+    }
 
     @Override
     public synchronized boolean saveOrUpdate(String... conditions) {
@@ -75,7 +88,6 @@ public class TaskItemBean extends DataSupport implements Serializable {
     //0 正常 1 异常 2 已正常 3仍异常
 
     private String operationLevel;//1：一般项 2：报警项
-
 
     private boolean isSelected;
     private String lastExcuteDate;
@@ -160,9 +172,6 @@ public class TaskItemBean extends DataSupport implements Serializable {
     private String completeStatus;
 
 
-
-
-
     /**
      * 用于存储本地编辑的数据，本地是否已经提交
      */
@@ -177,8 +186,6 @@ public class TaskItemBean extends DataSupport implements Serializable {
     public void setSuperviseItemContent(String superviseItemContent) {
         this.superviseItemContent = superviseItemContent;
     }
-
-
 
 
     public String getSuperviseItemResultType() {
@@ -198,7 +205,6 @@ public class TaskItemBean extends DataSupport implements Serializable {
     }
 
 
-
     public String getBeforelist() {
         return beforelist;
     }
@@ -206,9 +212,6 @@ public class TaskItemBean extends DataSupport implements Serializable {
     public void setBeforelist(String beforelist) {
         this.beforelist = beforelist;
     }
-
-
-
 
 
     public String getItemId() {
@@ -234,7 +237,6 @@ public class TaskItemBean extends DataSupport implements Serializable {
     public void setReservoirId(String reservoirId) {
         this.reservoirId = reservoirId;
     }
-
 
 
     public String getWorkOrderId() {
@@ -318,7 +320,6 @@ public class TaskItemBean extends DataSupport implements Serializable {
     }
 
 
-
     public String getCompleteStatus() {
         return completeStatus;
     }
@@ -336,7 +337,7 @@ public class TaskItemBean extends DataSupport implements Serializable {
     }
 
     public String getExecuteResultDescription() {
-        return executeResultDescription;
+        return TextUtils.isEmpty(executeResultDescription) ? "" : executeResultDescription;
     }
 
     public void setExecuteResultDescription(String executeResultDescription) {
@@ -373,5 +374,26 @@ public class TaskItemBean extends DataSupport implements Serializable {
 
     public void setLastExcuteDate(String lastExcuteDate) {
         this.lastExcuteDate = lastExcuteDate;
+    }
+
+    /**
+     * 正常，异常
+     *
+     * @return
+     */
+    public boolean isNormal() {
+        if (executeResultType != null) {
+            return executeResultType.equals("") || executeResultType.equals("0") || executeResultType.equals("2");
+        }
+        return false;
+    }
+
+    /**
+     * 是否已巡查
+     *
+     * @return
+     */
+    public boolean isCompleted() {
+        return completeStatus != null && completeStatus.equals("1");
     }
 }

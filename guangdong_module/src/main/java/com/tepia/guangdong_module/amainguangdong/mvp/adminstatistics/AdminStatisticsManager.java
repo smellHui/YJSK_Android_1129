@@ -7,8 +7,7 @@ import com.tepia.guangdong_module.amainguangdong.model.adminstatistics.RealTimeM
 import com.tepia.guangdong_module.amainguangdong.model.adminstatistics.SafetyIdentifyResponse;
 import com.tepia.guangdong_module.amainguangdong.model.adminstatistics.ThreeKeyPointResponse;
 import com.tepia.guangdong_module.amainguangdong.model.adminstatistics.ThreePersonsResponse;
-import com.tepia.guangdong_module.amainguangdong.mvp.typhoonroute.TyphoonRouteHttpService;
-import com.yangj.dahemodule.APPCostant;
+import com.tepia.guangdong_module.APPCostant;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;

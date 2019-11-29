@@ -1,5 +1,7 @@
 package com.yangj.dahemodule.model.main;
 
+import org.litepal.crud.DataSupport;
+
 import java.util.List;
 
 /**
@@ -7,7 +9,7 @@ import java.util.List;
  * Date:2019/9/4
  * Description:
  */
-public class Route {
+public class Route extends DataSupport {
 
     private int status;
     private String createBy;

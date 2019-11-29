@@ -344,7 +344,7 @@ public class ChangeReservoirActivity extends BaseActivity {
                     addPic(picId, point,attrs);
                     //水库图标上方添加文字
                     int color = ContextCompat.getColor(getContext(), R.color.text_map_bg);
-                    ArcgisLayout.setTextMarker(point, reservoirOverlay, reservoir, color,attrs,18);
+//                    ArcgisLayout.setTextMarker(point, reservoirOverlay, reservoir, color,attrs,18);
                 } catch (Exception e) {
 
                 }

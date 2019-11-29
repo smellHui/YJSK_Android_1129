@@ -156,12 +156,9 @@ public abstract class BaseActivity extends AppCompatActivity {
         //setNavigationIcon必须在setSupportActionBar(toolbar);方法后面加入
         loToolbarCommon.setNavigationIcon(null);
         tvLeftText.setVisibility(View.VISIBLE);
-        tvLeftText.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (!isFastClick()) {
-                    finish();
-                }
+        tvLeftText.setOnClickListener(view -> {
+            if (!isFastClick()) {
+                finish();
             }
         });
 

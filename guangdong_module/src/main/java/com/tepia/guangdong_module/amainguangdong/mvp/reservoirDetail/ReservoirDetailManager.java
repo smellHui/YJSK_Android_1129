@@ -6,7 +6,7 @@ import com.tepia.guangdong_module.amainguangdong.model.reservoirdetail.PicDetail
 import com.tepia.guangdong_module.amainguangdong.model.reservoirdetail.RainDetailBean;
 import com.tepia.guangdong_module.amainguangdong.model.reservoirdetail.WaterRegimeDetailBean;
 import com.tepia.photo_picker.utils.SPUtils;
-import com.yangj.dahemodule.APPCostant;
+import com.tepia.guangdong_module.APPCostant;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;
