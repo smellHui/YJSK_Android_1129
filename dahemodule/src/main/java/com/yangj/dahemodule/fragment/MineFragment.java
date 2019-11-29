@@ -17,6 +17,7 @@ import com.yangj.dahemodule.activity.LoginActivity;
 import com.yangj.dahemodule.activity.MyDealActivity;
 import com.yangj.dahemodule.activity.OperatesActivity;
 import com.yangj.dahemodule.activity.OperatesForJsActivity;
+import com.yangj.dahemodule.activity.PatrolMapControlActivity;
 import com.yangj.dahemodule.activity.VersionActivity;
 import com.yangj.dahemodule.common.HttpManager;
 import com.yangj.dahemodule.model.UserBean;
@@ -76,6 +77,7 @@ public class MineFragment extends BaseCommonFragment {
         });
         findView(R.id.ll_three).setOnClickListener(v -> {
             startActivity(new Intent(getContext(), VersionActivity.class));
+//            startActivity(new Intent(getContext(), PatrolMapControlActivity.class));
         });
         findView(R.id.ll_four).setOnClickListener(v -> {
             loginOutClick();

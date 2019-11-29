@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.yangj.dahemodule">
 
+    <uses-permission android:name="android.permission.VIBRATE" />
     <application
         android:launchMode="singleTask"
         android:theme="@style/AppTheme">
@@ -22,6 +23,9 @@
         <activity android:name=".activity.DangerReportDetailActivity" />
         <activity android:name=".activity.MyDealActivity"/>
         <activity android:name=".activity.OperatesForJsActivity"/>
+        <activity android:name=".activity.PatrolMapControlActivity"/>
+        <activity android:name=".activity.PatrolMapControlActivity1"/>
+        <activity android:name=".activity.PatrolUpControlActivity"/>
         <activity
             android:name="com.tepia.photo_picker.PhotoPickerActivity"
             android:screenOrientation="portrait" /> <!-- 图片查看 -->

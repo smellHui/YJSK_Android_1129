@@ -35,10 +35,10 @@ public class RainfallStatisticsContract {
         void showRainfallList(RainfallListResponse data);
     }
 
-    public interface Presenter extends BasePresenter<RainfallStatisticsContract.View> {
-        void getReservoirNum(String startTime, String endTime, String period,boolean isshowing, String msg);
+    public interface Presenter extends BasePresenter<View> {
+        void getReservoirNum(String startTime, String endTime, String period, boolean isshowing, String msg);
 
         void getRainfallList(int currentPage, int pageSize, String startTime, String endTime, String period,
-                String level,boolean isshowing, String msg);
+                             String level, boolean isshowing, String msg);
     }
 }

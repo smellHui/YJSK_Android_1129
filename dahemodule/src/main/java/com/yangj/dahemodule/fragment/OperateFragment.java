@@ -153,6 +153,8 @@ public class OperateFragment extends BaseCommonFragment {
                 routePosition.setWorkOrderId(workOrderId);
                 routePosition.setUserCode(userCode);
                 routePosition.setReservoirId(reservoirBean.getReservoirId());
+                routePosition.setStructureName(reservoirStructure.getStructureName());
+                routePosition.setStructurePath(reservoirStructure.getStructurePath());
                 routePosition.setPositionId(reservoirStructure.getId());
                 routePosition.setPositionLgtd(reservoirStructure.getPositionLongitude());
                 routePosition.setPositionLttd(reservoirStructure.getPositionLatitude());
@@ -210,7 +212,8 @@ public class OperateFragment extends BaseCommonFragment {
             saveOther(workOrderId, routeListBeanNew, "0", userCode);
             boolean issave = taskBean.save();
             if (issave) {
-                UiHelper.goToStartInspectionView(getBaseActivity(), workOrderId);
+//                UiHelper.goToStartInspectionView(getBaseActivity(), workOrderId);
+                UiHelper.goToPatrolMapControlView(getBaseActivity(), workOrderId);
             }
         }
     }
@@ -292,7 +295,8 @@ public class OperateFragment extends BaseCommonFragment {
             routePosition.setPositionLgtd(routePosition1.getPositionLgtd());
             routePosition.setPositionLttd(routePosition1.getPositionLttd());
             routePosition.setPositionId(routePosition1.getPositionId());
-
+            routePosition.setStructurePath(routePosition1.getStructurePath());
+            routePosition.setStructureName(routePosition1.getStructureName());
 
 //            String userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
 //            String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");

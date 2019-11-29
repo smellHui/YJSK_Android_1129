@@ -15,8 +15,8 @@ import static com.tepia.guangdong_module.amainguangdong.mvp.typhoonroute.Typhoon
  * Time:    10:47
  * Describe:
  */
-public class TyphoonRoutePresenter extends BasePresenterImpl<TyphoonRouteContract.View>
-        implements TyphoonRouteContract.Presenter {
+public class TyphoonRoutePresenter extends BasePresenterImpl<View>
+        implements Presenter {
 
     /**
      *

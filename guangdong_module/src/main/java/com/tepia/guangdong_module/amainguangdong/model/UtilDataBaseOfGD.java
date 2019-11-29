@@ -63,7 +63,12 @@ public class UtilDataBaseOfGD {
         return checkTaskPicturesBeanList;
     }
 
+    public List<CheckTaskPicturesBean> getCheckTaskPicturesBeanOfTrouble(String bizType,String itemId) {
 
+        List<CheckTaskPicturesBean> checkTaskPicturesBeanList = DataSupport.where("bizType=? and itemId=?", bizType,itemId).find(CheckTaskPicturesBean.class);
+
+        return checkTaskPicturesBeanList;
+    }
 
     public CheckTaskPicturesBean getCheckTaskPicturesBean(String bizKey, String bizType,String path){
         CheckTaskPicturesBean checkTaskPicturesBeanList = DataSupport.where("bizKey=? and biztype=? and filePath=?", bizKey, bizType,path).findFirst(CheckTaskPicturesBean.class);

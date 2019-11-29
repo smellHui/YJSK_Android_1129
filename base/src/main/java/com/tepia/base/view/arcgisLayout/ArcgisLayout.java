@@ -6,7 +6,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
-import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
@@ -30,6 +29,9 @@ import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.layers.ArcGISTiledLayer;
 import com.esri.arcgisruntime.layers.OpenStreetMapLayer;
 import com.esri.arcgisruntime.layers.WebTiledLayer;
+import com.esri.arcgisruntime.loadable.LoadStatus;
+import com.esri.arcgisruntime.loadable.LoadStatusChangedEvent;
+import com.esri.arcgisruntime.loadable.LoadStatusChangedListener;
 import com.esri.arcgisruntime.location.LocationDataSource;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.Basemap;
@@ -48,7 +50,6 @@ import com.esri.arcgisruntime.symbology.TextSymbol;
 import com.esri.arcgisruntime.util.ListenableList;
 import com.tepia.base.R;
 import com.tepia.base.utils.NetUtil;
-import com.tepia.base.utils.ToastUtils;
 import com.tepia.base.utils.Utils;
 
 import java.util.ArrayList;
@@ -62,18 +63,18 @@ import java.util.concurrent.ExecutionException;
  * @author 44822
  */
 public class ArcgisLayout extends RelativeLayout {
+    //默认地图缩放级别
+    private final int DEFAULT_SCALE = 5000;
 
-    //    public double itemScale = 72223.819286;
-    public double itemScale = 50000;
     public double groupScale = 1155581.108577;
     private LocationDisplay mLocationDisplay;
     private Point currentPoint;
     private Polyline polyline;
     public int mapHeight;
     public boolean isLoaded = false;
-    public static double minScale = 7.335451152802595E7* 0.5* 0.5;
+    public static double minScale = 7.335451152802595E7 * 0.5 * 0.5;
     public static double maxScale = 2647.4016185056967;
-    public Point mapCenterPoint = new Point(11620672.230780,4930386.331908, 0.000000);//中国地图中心点
+    public Point mapCenterPoint = new Point(11620672.230780, 4930386.331908, 0.000000);//中国地图中心点
     private WebTiledLayer imgTitleLayer;
     private GraphicsOverlay locationOverlay;
 
@@ -104,7 +105,7 @@ public class ArcgisLayout extends RelativeLayout {
     /**
      * 自定义地图点击实现
      */
-    public interface OnMapViewClickListener{
+    public interface OnMapViewClickListener {
         void onClick(MotionEvent e, MapView mapView);
     }
 
@@ -166,7 +167,7 @@ public class ArcgisLayout extends RelativeLayout {
         ArcGISTiledLayer imgLayer = new ArcGISTiledLayer("https://services.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer");
 //        imgLayer.setVisible(false);
 //        layer.setVisible(false);
-        OpenStreetMapLayer streetlayer=new OpenStreetMapLayer();
+        OpenStreetMapLayer streetlayer = new OpenStreetMapLayer();
         //google影像图
         imgTitleLayer = GoogleMapLayer.createWebTiteLayer(GoogleMapLayer.Type.IMAGE);
         WebTiledLayer webTitleLayer = GoogleMapLayer.createWebTiteLayer(GoogleMapLayer.Type.IMAGE_ANNOTATION);
@@ -176,10 +177,9 @@ public class ArcgisLayout extends RelativeLayout {
         arcGISMap.getOperationalLayers().add(imgTitleLayer);
         arcGISMap.getOperationalLayers().add(webTitleLayer);
 //        arcGISMap.getOperationalLayers().add(imgLayer);
-        arcGISMap.setMinScale(ArcgisLayout.minScale);
-        Point point1 = new Point(1.1992433073197773E7, 4885139.106039485,SpatialReference.create(3857));
-        Point point2 = new Point(1.3532164647994766E7, 2329702.2487083403,SpatialReference.create(3857));
-        Envelope initEnvelope = new Envelope(point1,point2);
+        Point point1 = new Point(1.1992433073197773E7, 4885139.106039485, SpatialReference.create(3857));
+        Point point2 = new Point(1.3532164647994766E7, 2329702.2487083403, SpatialReference.create(3857));
+        Envelope initEnvelope = new Envelope(point1, point2);
         arcGISMap.setInitialViewpoint(new Viewpoint(initEnvelope));
         arcGISMap.setMinScale(minScale);
         mapView.setMap(arcGISMap);
@@ -189,6 +189,21 @@ public class ArcgisLayout extends RelativeLayout {
         //添加覆盖物
         graphicsOverlay = new GraphicsOverlay();
         mapView.getGraphicsOverlays().add(graphicsOverlay);
+        imgTitleLayer.addDoneLoadingListener(() -> {
+            if (loadBaseLayoutListener == null) return;
+            if (imgTitleLayer.getLoadStatus() == LoadStatus.LOADED) {
+                loadBaseLayoutListener.loaded();
+            }
+            if (imgTitleLayer.getLoadStatus() == LoadStatus.LOADING) {
+                loadBaseLayoutListener.loading();
+            }
+            if (imgTitleLayer.getLoadStatus() == LoadStatus.NOT_LOADED) {
+                loadBaseLayoutListener.notLoad();
+            }
+            if (imgTitleLayer.getLoadStatus() == LoadStatus.FAILED_TO_LOAD) {
+                loadBaseLayoutListener.failLoad();
+            }
+        });
         //设置地图点击事件
         mapView.setOnTouchListener(new DefaultMapViewOnTouchListener(getContext(), mapView) {
             @Override
@@ -201,8 +216,8 @@ public class ArcgisLayout extends RelativeLayout {
 //                Point clickPoint = mapView.screenToLocation(screenPoint);
 //                LogUtil.i("地图坐标："+clickPoint.toString());
                 handleSingleTapEvent(e);
-                if (onMapViewClickListener!=null){
-                    onMapViewClickListener.onClick(e,mapView);
+                if (onMapViewClickListener != null) {
+                    onMapViewClickListener.onClick(e, mapView);
                 }
                 return super.onSingleTapConfirmed(e);
             }
@@ -225,12 +240,32 @@ public class ArcgisLayout extends RelativeLayout {
                         mapHeight = mapView.getHeight();
                     }
                 });
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
         }
 
         initLocation();
+    }
+
+    private LoadBaseLayoutListener loadBaseLayoutListener;
+
+    public LoadBaseLayoutListener getLoadBaseLayoutListener() {
+        return loadBaseLayoutListener;
+    }
+
+    public void setLoadBaseLayoutListener(LoadBaseLayoutListener loadBaseLayoutListener) {
+        this.loadBaseLayoutListener = loadBaseLayoutListener;
+    }
+
+    public interface LoadBaseLayoutListener {
+        void loading();
+
+        void loaded();
+
+        void notLoad();
+
+        void failLoad();
     }
 
     /**
@@ -252,7 +287,7 @@ public class ArcgisLayout extends RelativeLayout {
 //            LogUtil.i(" LocationDataSource.Location:"+location.getPosition());
 //            LogUtil.i("point:"+point.toString());
             Point locationPoint = transformationPoint(position.getX(), position.getY());
-            addLocationPic(locationOverlay, R.drawable.google_location,locationPoint);
+            addLocationPic(locationOverlay, R.drawable.google_location, locationPoint);
 //            LogUtil.i("point:"+point.toString());
             if (onAddLocationChangedListener != null) {
                 onAddLocationChangedListener.getLocation(currentPoint);
@@ -264,9 +299,10 @@ public class ArcgisLayout extends RelativeLayout {
 
     /**
      * 添加定位图标
+     *
      * @param graphicsOverlay
      * @param id
-     * @param point  地图的坐标系
+     * @param point           地图的坐标系
      */
     public void addLocationPic(GraphicsOverlay graphicsOverlay, int id, Point point) {
         PictureMarkerSymbol pictureMarkerSymbol1 = null;
@@ -282,9 +318,9 @@ public class ArcgisLayout extends RelativeLayout {
             pictureMarkerSymbol1 = PictureMarkerSymbol.createAsync(new BitmapDrawable(getResources(), result)).get();
             Graphic picGraphic = new Graphic(point, pictureMarkerSymbol1);
             ListenableList<Graphic> graphics = graphicsOverlay.getGraphics();
-            if (graphics!=null&&graphics.size()>0){
-                graphics.set(0,picGraphic);
-            }else {
+            if (graphics != null && graphics.size() > 0) {
+                graphics.set(0, picGraphic);
+            } else {
                 graphicsOverlay.getGraphics().add(picGraphic);
             }
         } catch (InterruptedException e) {
@@ -360,14 +396,14 @@ public class ArcgisLayout extends RelativeLayout {
         if (i == R.id.zoomBtnIn) {
             if (mapView != null) {
                 //放大
-                if (isLoaded){
+                if (isLoaded) {
                     mapViewZoomIn();
                 }
             }
         } else if (i == R.id.zoomBtnOut) {
             if (mapView != null) {
                 //缩小
-                if (isLoaded){
+                if (isLoaded) {
                     mapViewZoomOut();
                 }
             }
@@ -389,8 +425,10 @@ public class ArcgisLayout extends RelativeLayout {
         PictureMarkerSymbol pictureMarkerSymbol1 = null;
         try {
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), id);
-            if (bitmap == null) {return;}
-            Bitmap result =   Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight()*2, Bitmap.Config.ARGB_8888);
+            if (bitmap == null) {
+                return;
+            }
+            Bitmap result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight() * 2, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(result);
             canvas.drawBitmap(bitmap, 0, 0, null);
 //            canvas.drawBitmap(bitmap, bitmap.getHeight(), 0, null);
@@ -413,23 +451,36 @@ public class ArcgisLayout extends RelativeLayout {
      * @param attributes 要素传值
      */
     public void addPic(int id, Point point, Map<String, Object> attributes) {
-        PictureMarkerSymbol pictureMarkerSymbol1 = null;
+        PictureMarkerSymbol pictureMarkerSymbol1 = createPictureMarkerSymbol(id);
+        Point point1 = transformationPoint(point.getX(), point.getY());
+        if (pictureMarkerSymbol1 == null) {
+            return;
+        }
+        Graphic picGraphic = new Graphic(point1, attributes, pictureMarkerSymbol1);
+        graphicsOverlay.getGraphics().add(picGraphic);
+    }
+
+    /**
+     * 创建图标
+     *
+     * @param imgRes
+     * @return
+     */
+    public PictureMarkerSymbol createPictureMarkerSymbol(int imgRes) {
+        PictureMarkerSymbol pictureMarkerSymbol = null;
+        Bitmap bitmap = BitmapFactory.decodeResource(getResources(), imgRes);
+        if (bitmap == null) {
+            return null;
+        }
+        Bitmap result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight() * 2, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(result);
+        canvas.drawBitmap(bitmap, 0, 0, null);
         try {
-            Point point1 = transformationPoint(point.getX(), point.getY());
-            Bitmap bitmap = BitmapFactory.decodeResource(getResources(), id);
-            if (bitmap == null) {return;}
-            Bitmap result =   Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight()*2, Bitmap.Config.ARGB_8888);
-            Canvas canvas = new Canvas(result);
-            canvas.drawBitmap(bitmap, 0, 0, null);
-//            canvas.drawBitmap(bitmap, bitmap.getHeight(), 0, null);
-            pictureMarkerSymbol1 = PictureMarkerSymbol.createAsync(new BitmapDrawable(getResources(), result)).get();
-            Graphic picGraphic = new Graphic(point1, attributes, pictureMarkerSymbol1);
-            graphicsOverlay.getGraphics().add(picGraphic);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
+            pictureMarkerSymbol = PictureMarkerSymbol.createAsync(new BitmapDrawable(getResources(), result)).get();
+        } catch (ExecutionException | InterruptedException e) {
             e.printStackTrace();
         }
+        return pictureMarkerSymbol;
     }
 
     /**
@@ -444,7 +495,7 @@ public class ArcgisLayout extends RelativeLayout {
     public void addPolyline(List<Point> points, SimpleLineSymbol.Style style, int color, float width, Map<String, Object> attributes) {
         try {
             List<Point> pointList = new ArrayList<>();
-            if (points!=null&&points.size()>0){
+            if (points != null && points.size() > 0) {
                 for (int i = 0; i < points.size(); i++) {
                     Point point = points.get(i);
                     Point point1 = transformationPoint(point.getX(), point.getY());
@@ -459,7 +510,7 @@ public class ArcgisLayout extends RelativeLayout {
             polyline = new Polyline(coloradoCorners);
             SimpleLineSymbol lineSymbol = new SimpleLineSymbol(style, color, width);
             graphicsOverlay.getGraphics().add(new Graphic(polyline, attributes, lineSymbol));
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
@@ -476,7 +527,7 @@ public class ArcgisLayout extends RelativeLayout {
     public void addPolyline(List<Point> points, SimpleLineSymbol.Style style, int color, float width) {
         try {
             List<Point> pointList = new ArrayList<>();
-            if (points.size()>0){
+            if (points.size() > 0) {
                 for (int i = 0; i < points.size(); i++) {
                     Point point = points.get(i);
                     Point point1 = transformationPoint(point.getX(), point.getY());
@@ -490,7 +541,7 @@ public class ArcgisLayout extends RelativeLayout {
                 SimpleLineSymbol lineSymbol = new SimpleLineSymbol(style, color, width);
                 graphicsOverlay.getGraphics().add(new Graphic(polyline, lineSymbol));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -503,10 +554,10 @@ public class ArcgisLayout extends RelativeLayout {
      * @param color  线的颜色
      * @param width  线的宽度
      */
-    public void addPolylineToGraphicsOverlay(GraphicsOverlay mGraphicsOverlay,List<Point> points, SimpleLineSymbol.Style style, int color, float width) {
+    public void addPolylineToGraphicsOverlay(GraphicsOverlay mGraphicsOverlay, List<Point> points, SimpleLineSymbol.Style style, int color, float width) {
         try {
             List<Point> pointList = new ArrayList<>();
-            if (points.size()>0){
+            if (points.size() > 0) {
                 for (int i = 0; i < points.size(); i++) {
                     Point point = points.get(i);
                     Point point1 = transformationPoint(point.getX(), point.getY());
@@ -521,17 +572,18 @@ public class ArcgisLayout extends RelativeLayout {
                 SimpleLineSymbol lineSymbol = new SimpleLineSymbol(style, color, width);
                 mGraphicsOverlay.getGraphics().add(new Graphic(polyline, lineSymbol));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
 
     Polyline polylineNew;
     SimpleLineSymbol lineSymbolNew;
-    public void addPolylineToGraphicsOverlayNew(GraphicsOverlay mGraphicsOverlay,Point pointsStart, Point pointsEnd,SimpleLineSymbol.Style style, int color, float width) {
+
+    public void addPolylineToGraphicsOverlayNew(GraphicsOverlay mGraphicsOverlay, Point pointsStart, Point pointsEnd, SimpleLineSymbol.Style style, int color, float width) {
         try {
             List<Point> pointList = new ArrayList<>();
-            if (pointsStart != null && pointsEnd != null){
+            if (pointsStart != null && pointsEnd != null) {
                 Point pointStartOftrans = transformationPoint(pointsStart.getX(), pointsStart.getY());
                 Point pointEndOftrans = transformationPoint(pointsEnd.getX(), pointsEnd.getY());
                 pointList.add(pointStartOftrans);
@@ -554,7 +606,7 @@ public class ArcgisLayout extends RelativeLayout {
 
                 mGraphicsOverlay.getGraphics().add(new Graphic(polylineNew, lineSymbolNew));
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -572,7 +624,7 @@ public class ArcgisLayout extends RelativeLayout {
             Point point1 = transformationPoint(point.getX(), point.getY());
             SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(style, color, width);
             graphicsOverlay.getGraphics().add(new Graphic(point1, markerSymbol));
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -590,11 +642,7 @@ public class ArcgisLayout extends RelativeLayout {
      * @param scale
      */
     public void setMapScale(double scale) {
-        try {
-            mapView.setViewpointScaleAsync(scale);
-        }catch (Exception e){
-
-        }
+        mapView.setViewpointScaleAsync(scale);
     }
 
     /**
@@ -607,16 +655,10 @@ public class ArcgisLayout extends RelativeLayout {
     /**
      * 设置地图中心点
      *
-     * @param point  统一4326坐标系
+     * @param point 统一4326坐标系
      */
     public void setCenterPoint(Point point) {
-        try {
-            Point point1 = transformationPoint(point.getX(), point.getY());
-            mapView.setViewpointCenterAsync(point1);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-
+        setCenterPoint(point, mapView.getMapScale());
     }
 
     /**
@@ -629,7 +671,7 @@ public class ArcgisLayout extends RelativeLayout {
         try {
             Point point1 = transformationPoint(point.getX(), point.getY());
             mapView.setViewpointCenterAsync(point1, scale);
-        }catch (Exception e){
+        } catch (Exception e) {
 //            e.printStackTrace();
         }
 
@@ -644,7 +686,7 @@ public class ArcgisLayout extends RelativeLayout {
             double mScale = mapView.getMapScale();
             try {
                 mapView.setViewpointScaleAsync(mScale * 2);
-            }catch (Exception e){
+            } catch (Exception e) {
 //                e.printStackTrace();
             }
         }
@@ -659,7 +701,7 @@ public class ArcgisLayout extends RelativeLayout {
                 //放大
                 double mScale = mapView.getMapScale();
                 mapView.setViewpointScaleAsync(mScale * 0.5);
-            }catch (Exception e){
+            } catch (Exception e) {
 //                e.printStackTrace();
             }
         }
@@ -679,7 +721,7 @@ public class ArcgisLayout extends RelativeLayout {
                     graphicsOverlay.getGraphics().add(new Graphic(polyline, lineSymbol));
                 }
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -704,7 +746,7 @@ public class ArcgisLayout extends RelativeLayout {
             callout.getStyle().setLeaderLength(10);
             callout.setLocation(point);
             callout.show();
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -712,12 +754,12 @@ public class ArcgisLayout extends RelativeLayout {
     /**
      * 设置地图的可见范围
      *
-     * @param points   统一4326坐标系
+     * @param points 统一4326坐标系
      */
     public void setMapViewVisibleExtent(List<Point> points) {
         try {
             if (points != null && points.size() > 0) {
-                List<Point>  pointList = new ArrayList<>();
+                List<Point> pointList = new ArrayList<>();
                 for (int i = 0; i < points.size(); i++) {
                     Point point = points.get(i);
                     Point point1 = transformationPoint(point.getX(), point.getY());
@@ -744,10 +786,10 @@ public class ArcgisLayout extends RelativeLayout {
 //            envelope.setXMax(maxPoint.getX() + xcen / 10);
 //            envelope.setYMax(maxPoint.getY() + ycen / 10);
 //            mapView.setExtent(envelope);
-                Envelope envelope = new Envelope(minx - xcen / 10, miny- ycen / 10, numx+ xcen / 10, numy+ ycen / 10, SpatialReference.create(3857));
+                Envelope envelope = new Envelope(minx - xcen / 10, miny - ycen / 10, numx + xcen / 10, numy + ycen / 10, SpatialReference.create(3857));
                 mapView.setViewpointGeometryAsync(envelope);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -760,10 +802,10 @@ public class ArcgisLayout extends RelativeLayout {
      * @return
      */
     public static Point transformationPoint(double lgtd, double lttd) {
-        Point point1 = new Point(lgtd, lttd, SpatialReference.create(4326));
+//        Point point1 = new Point(lgtd, lttd, SpatialReference.create(4326));
 //        Google地图偏移
         double[] doubles = ArcgisGpsUtils.gps84_To_Gcj02(lttd, lgtd);
-        Point point = (Point) GeometryEngine.project(new Point(doubles[1],doubles[0],SpatialReference.create(4326)), SpatialReferences.getWebMercator());
+        Point point = (Point) GeometryEngine.project(new Point(doubles[1], doubles[0], SpatialReference.create(4326)), SpatialReferences.getWebMercator());
 //        Point point = (Point) GeometryEngine.project(point1, SpatialReferences.getWebMercator());
         return point;
     }
@@ -794,14 +836,16 @@ public class ArcgisLayout extends RelativeLayout {
      * @param point      坐标点  统一4326坐标系
      * @param attributes 要素传值
      */
-    public void addPicToGraphicsOverlay(GraphicsOverlay graphicsOverlay,int id, Point point, Map<String, Object> attributes) {
+    public void addPicToGraphicsOverlay(GraphicsOverlay graphicsOverlay, int id, Point point, Map<String, Object> attributes) {
         PictureMarkerSymbol pictureMarkerSymbol1 = null;
         try {
 //            Point point1 = (Point) GeometryEngine.project(point, SpatialReferences.getWebMercator());
             Point point1 = transformationPoint(point.getX(), point.getY());
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), id);
-            if (bitmap == null) {return;}
-            Bitmap result =   Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight()*2, Bitmap.Config.ARGB_8888);
+            if (bitmap == null) {
+                return;
+            }
+            Bitmap result = Bitmap.createBitmap(bitmap.getWidth(), bitmap.getHeight() * 2, Bitmap.Config.ARGB_8888);
             Canvas canvas = new Canvas(result);
             canvas.drawBitmap(bitmap, 0, 0, null);
 //            canvas.drawBitmap(bitmap, bitmap.getHeight(), 0, null);
@@ -815,9 +859,9 @@ public class ArcgisLayout extends RelativeLayout {
         }
     }
 
-    public static void setTextMarker(Point point,GraphicsOverlay graphicsOverlay,String text,int color,Map<String, Object> attributes,float offset) {
+    public void setTextMarker(Point point, GraphicsOverlay graphicsOverlay, String text, int color, Map<String, Object> attributes, float offset) {
         try {
-            if (point!=null&& !TextUtils.isEmpty(text)){
+            if (point != null && !TextUtils.isEmpty(text)) {
                 Point point1 = transformationPoint(point.getX(), point.getY());
                 TextSymbol textSymbol = new TextSymbol();
                 textSymbol.setText(text);
@@ -831,17 +875,17 @@ public class ArcgisLayout extends RelativeLayout {
 //        textSymbol.setHaloWidth(2);
                 textSymbol.setOffsetY(offset);
 //        Point point = new Point(12806494.859502, 2727777.731402, SpatialReference.create(3857));
-                Graphic graphic = new Graphic(point1,attributes,textSymbol);
+                Graphic graphic = new Graphic(point1, attributes, textSymbol);
                 graphicsOverlay.getGraphics().add(graphic);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
 
-    public static void setTextMarker(Point point,GraphicsOverlay graphicsOverlay,String text,int color) {
+    public static void setTextMarker(Point point, GraphicsOverlay graphicsOverlay, String text, int color) {
         try {
-            if (point != null){
+            if (point != null) {
                 Point point1 = transformationPoint(point.getX(), point.getY());
                 TextSymbol textSymbol = new TextSymbol();
                 if (TextUtils.isEmpty(text)) {
@@ -858,10 +902,10 @@ public class ArcgisLayout extends RelativeLayout {
 //        textSymbol.setHaloWidth(2);
                 textSymbol.setOffsetY(28);
 //        Point point = new Point(12806494.859502, 2727777.731402, SpatialReference.create(3857));
-                Graphic graphic = new Graphic(point1,textSymbol);
+                Graphic graphic = new Graphic(point1, textSymbol);
                 graphicsOverlay.getGraphics().add(graphic);
             }
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }

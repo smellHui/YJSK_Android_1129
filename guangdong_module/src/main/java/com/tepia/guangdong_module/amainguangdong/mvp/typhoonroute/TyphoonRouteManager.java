@@ -4,7 +4,7 @@ import com.tepia.base.http.RetrofitManager;
 import com.tepia.guangdong_module.amainguangdong.common.UserManager;
 import com.tepia.guangdong_module.amainguangdong.model.typhoonroute.TyphoonDetailResponse;
 import com.tepia.guangdong_module.amainguangdong.model.typhoonroute.TyphoonListResponse;
-import com.yangj.dahemodule.APPCostant;
+import com.tepia.guangdong_module.APPCostant;
 
 import io.reactivex.Observable;
 import io.reactivex.android.schedulers.AndroidSchedulers;

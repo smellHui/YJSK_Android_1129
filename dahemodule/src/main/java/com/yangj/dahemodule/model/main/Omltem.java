@@ -1,11 +1,13 @@
 package com.yangj.dahemodule.model.main;
 
+import org.litepal.crud.DataSupport;
+
 /**
  * Author:xch
  * Date:2019/9/4
  * Description:
  */
-public class Omltem {
+public class Omltem extends DataSupport {
 
     private String positionName;
     private String structurePath;

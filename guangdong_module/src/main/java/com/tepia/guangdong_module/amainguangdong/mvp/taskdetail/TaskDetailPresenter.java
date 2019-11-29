@@ -34,6 +34,26 @@ import java.util.List;
 
 public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.View> implements TaskDetailContract.Presenter {
 
+    private SubmitFormListener submitFormListener;
+
+    public SubmitFormListener getSubmitFormListener() {
+        return submitFormListener;
+    }
+
+    public void setSubmitFormListener(SubmitFormListener submitFormListener) {
+        this.submitFormListener = submitFormListener;
+    }
+
+    public interface SubmitFormListener{
+        void submitFormCallback();
+    }
+
+    public TaskDetailPresenter() {
+    }
+
+    public TaskDetailPresenter(SubmitFormListener submitFormListener) {
+        this.submitFormListener = submitFormListener;
+    }
 
     /**
      * 修改工单状态为执行中
@@ -76,6 +96,9 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
                 if (mView != null) {
                     mView.endExecuteSucess();
                 }
+                if (submitFormListener != null){
+                    submitFormListener.submitFormCallback();
+                }
             }
 
             @Override
@@ -113,7 +136,7 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
             }
             simpleLoadDialog.show();
             simpleLoadDialog.setMessage("正在提交第" + (count + 1) + "/" + size + "项离线数据");
-            appReservoirWorkOrderItemCommitOne(localData, count, files, false, "正在提交第" + (count + 1) + "/" + size + "项离线数据", mContext);
+            appReservoirWorkOrderItemCommitOne(localData, count, files, true, "正在提交第" + (count + 1) + "/" + size + "项离线数据", mContext);
         } else {
             /**
              * 一项一项提交完成后执行
@@ -121,7 +144,12 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
             if (simpleLoadDialog != null) {
                 simpleLoadDialog.dismiss();
             }
-            mView.appReservoirWorkOrderItemCommitOneByOneSuccess();
+            if (mView != null) {
+                mView.appReservoirWorkOrderItemCommitOneByOneSuccess();
+            }
+            if (submitFormListener != null){
+                submitFormListener.submitFormCallback();
+            }
         }
 
     }
@@ -148,7 +176,7 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
         if (files.size() == 0) {
             TaskItemBean taskItemBean = localData.get(count);
             TaskManager.getInstance().appReservoirWorkOrderItemCommitOne(taskItemBean, files)
-                    .subscribe(new LoadingSubject<BaseResponse>(isShow, msg) {
+                    .subscribe(new LoadingSubject<BaseResponse>(true, msg) {
                         @Override
                         protected void _onNext(BaseResponse response) {
                             if (response.getCode() == 0) {
@@ -161,14 +189,12 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
 
                         @Override
                         protected void _onError(String message) {
-                            LoadingDialog.with(AppManager.getInstance().getCurrentActivity()).dismiss();
+//                            LoadingDialog.with(AppManager.getInstance().getCurrentActivity()).dismiss();
                             if (message.contains("重复")) {
                                 appReservoirWorkOrderItemCommitOneByOne(localData, count + 1, mContext);
                                 return;
                             }
                             ToastUtils.shortToast(message);
-
-
                         }
                     });
         } else {

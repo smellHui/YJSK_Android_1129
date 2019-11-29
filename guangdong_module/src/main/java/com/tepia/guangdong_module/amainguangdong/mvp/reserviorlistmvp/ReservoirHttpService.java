@@ -47,7 +47,7 @@ interface ReservoirHttpService {
      */
     @GET("app/appReservoirBase/getUserReservoirCount")
     Observable<UserReservoirCount> getUserReservoirCount(@Header("Authorization") String token
-                                                  );
+    );
 
     /**
      * 行政统计-实时监测统计
@@ -56,5 +56,5 @@ interface ReservoirHttpService {
      */
     @GET("app/appReservoirBase/getAreaReservoirCount")
     Observable<AreaReservoirCountBean> getAreaReservoirCount(@Header("Authorization") String token
-                                                  );
+    );
 }

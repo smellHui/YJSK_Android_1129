@@ -19,8 +19,8 @@ public class ReservoirDetailContract {
     }
 
     interface  Presenter extends BasePresenter<View> {
-        void getRainDetailList(String reservoirId, String startDate, String endDate,String selectType);
-        void getReservoirWaterList(String reservoirId,String startDate,String endDate,boolean isShow);
-        void getPictureDetailList(String reservoirId,String startDate,String endDate,boolean isShow);
+        void getRainDetailList(String reservoirId, String startDate, String endDate, String selectType);
+        void getReservoirWaterList(String reservoirId, String startDate, String endDate, boolean isShow);
+        void getPictureDetailList(String reservoirId, String startDate, String endDate, boolean isShow);
     }
 }

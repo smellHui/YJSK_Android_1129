@@ -30,11 +30,11 @@ public class ReservoirRegimenContract {
         void showList(ReservoirRegimenResponse data);
     }
 
-    public interface Presenter extends BasePresenter<ReservoirRegimenContract.View> {
+    public interface Presenter extends BasePresenter<View> {
 
         /**
          * 获取水情列表
          */
-       void getReservoirRegimenList(int currentPage,int pageSize, String type,String identifyType,String startTime,String endTime,boolean isShow, String msg) throws ParseException;
+       void getReservoirRegimenList(int currentPage, int pageSize, String type, String identifyType, String startTime, String endTime, boolean isShow, String msg) throws ParseException;
     }
 }

@@ -15,13 +15,13 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
-  * Created by      Android studio
-  *
-  * @author :ly (from Center Of Wuhan)
-  * 创建时间 :2019-5-8
-  * 更新时间 :
-  * Version :1.0
-  * 功能描述 :工单
+ * Created by      Android studio
+ *
+ * @author :ly (from Center Of Wuhan)
+ * 创建时间 :2019-5-8
+ * 更新时间 :
+ * Version :1.0
+ * 功能描述 :工单
  **/
 
 public class TaskBean extends DataSupport implements Serializable {
@@ -79,7 +79,6 @@ public class TaskBean extends DataSupport implements Serializable {
     private String routeType;
 
 
-
     /**
      * 工单执行人code
      */
@@ -92,28 +91,23 @@ public class TaskBean extends DataSupport implements Serializable {
     private String reservoirName;
 
 
-
-
-
     /**
      * 路线信息
      */
     private RouteListBean routeListBean;
+
     public RouteListBean getRouteListBean() {
 
         String userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
         String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
-        routeListBean =  DataSupport.where("onlyid=? and usercode=? and reservoirid=?",routeId,workOrderId,userCode,reservoirId).findFirst(RouteListBean.class);
+        routeListBean = DataSupport.where("onlyid=? and usercode=? and reservoirid=?", routeId, workOrderId, userCode, reservoirId).findFirst(RouteListBean.class);
 
 
         return routeListBean;
     }
 
     public RouteListBean getRouteListBeanByWorkId(String workOrderId) {
-
-        RouteListBean routeListBeanNew =  DataSupport.where("workorderid=?",workOrderId).findFirst(RouteListBean.class);
-
-
+        RouteListBean routeListBeanNew = DataSupport.where("workorderid=?", workOrderId).findFirst(RouteListBean.class);
         return routeListBeanNew;
     }
 
@@ -121,14 +115,21 @@ public class TaskBean extends DataSupport implements Serializable {
         this.routeListBean = routeListBean;
     }
 
-    private boolean hasStartExecute;
+    private boolean hasCreated;
 
-    public boolean isHasStartExecute() {
-        return hasStartExecute;
+    public boolean isHasCreated() {
+        return hasCreated;
     }
 
-    public void setHasStartExecute(boolean hasStartExecute) {
-        this.hasStartExecute = hasStartExecute;
+    public void setHasCreated(boolean hasCreated) {
+        this.hasCreated = hasCreated;
+    }
+
+    /**
+     *  判断是否已完成
+     */
+    public boolean isHasExecuted() {
+        return executeStatus != null && executeStatus.equals("3");
     }
 
     public String getReservoirId() {
@@ -180,7 +181,6 @@ public class TaskBean extends DataSupport implements Serializable {
     public void setWorkOrderId(String workOrderId) {
         this.workOrderId = workOrderId;
     }
-
 
 
     public String getExecuteStatus() {

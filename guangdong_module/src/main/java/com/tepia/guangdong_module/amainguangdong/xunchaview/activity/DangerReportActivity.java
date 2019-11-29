@@ -91,7 +91,7 @@ public class DangerReportActivity extends BaseActivity {
         dangerousPositions = UserManager.getInstance().getDangerousPositions();
         if (!CollectionsUtil.isEmpty(dangerousPositions)) {
             for (int i = 0; i < dangerousPositions.size(); i++) {
-                items.add(dangerousPositions.get(i).getStructureName());
+                items.add(dangerousPositions.get(i).getStructurePath());
             }
         }
 
@@ -329,7 +329,7 @@ public class DangerReportActivity extends BaseActivity {
 
         dialog.setOnOpenItemClickL((parent, view, position, id) -> {
             dangerousPosition = dangerousPositions.get(position);
-            mBinding.layoutDes.selectTv.setText(dangerousPosition.getStructureName());
+            mBinding.layoutDes.selectTv.setText(dangerousPosition.getStructurePath());
             dialog.dismiss();
         });
     }

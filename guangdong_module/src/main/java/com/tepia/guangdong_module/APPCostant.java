@@ -1,4 +1,4 @@
-package com.yangj.dahemodule;
+package com.tepia.guangdong_module;
 
 /**
  * 用于定义 全局变量 常量
@@ -22,8 +22,8 @@ public class APPCostant {
      *（2）映射外网（测试环境）：202.99.52.110:19261
      *
      */
-    public static String API_SERVER_URL = "http://47.110.70.104:10502/";
-//    public static String API_SERVER_URL = "http://192.168.4.97:10502/";
+    public static String API_SERVER_URL = "http://47.111.76.230:10502/";
+//    public static String API_SERVER_URL = "http://192.168.4.61:10502/";
     /**
      * 图片服务器地址
      */

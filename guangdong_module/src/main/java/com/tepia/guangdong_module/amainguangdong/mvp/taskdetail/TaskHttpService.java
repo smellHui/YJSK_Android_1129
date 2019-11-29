@@ -59,7 +59,7 @@ interface TaskHttpService {
     Observable<BaseResponse> appReservoirWorkOrderItemCommitOne(@Header("Authorization") String token,
                                                                 @PartMap Map<String, RequestBody> params,
                                                                 @Part List<MultipartBody.Part> beforePathList
-                                                              );
+    );
 
 
     /**
@@ -79,8 +79,8 @@ interface TaskHttpService {
     @FormUrlEncoded
     @POST("app/patrolAppWorkOrder/endExcute")
     Observable<BaseResponse> endExecuteNew(@Header("Authorization") String token,
-                                        @Field("workOrderId") String workOrderId
-                                        );
+                                           @Field("workOrderId") String workOrderId
+    );
 
 
     @POST("app/patrol/add")
@@ -91,8 +91,8 @@ interface TaskHttpService {
     @Multipart
     @POST("app/problem/report")
     Observable<BaseResponse> reportProblem(@Header("Authorization") String token,
-                                                 @PartMap Map<String, RequestBody> params,
-                                                 @Part List<MultipartBody.Part> beforePathList
+                                           @PartMap Map<String, RequestBody> params,
+                                           @Part List<MultipartBody.Part> beforePathList
 
     );
 
@@ -125,7 +125,7 @@ interface TaskHttpService {
                                                        @Query("endDate") String endDate,
                                                        @Query("currentPage") int currentPage,
                                                        @Query("pageSize") int pageSize
-                                                );
+    );
     @GET("app/patrolAppQueryData/getWorkOrderDetailInfo")
     Observable<TaskItemBeanFromNet> getWorkOrderDetailInfo(@Header("Authorization") String token,
                                                            @Query("workOrderId") String workOrderId);

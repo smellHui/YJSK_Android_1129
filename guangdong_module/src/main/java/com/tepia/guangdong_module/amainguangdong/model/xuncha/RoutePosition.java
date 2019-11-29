@@ -5,9 +5,11 @@ import android.text.TextUtils;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReference;
 
+import org.litepal.annotation.Column;
 import org.litepal.crud.DataSupport;
 
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  * Created by      Android studio
@@ -18,6 +20,7 @@ import java.io.Serializable;
  * 功能描述 : 巡查点
  **/
 public class RoutePosition extends DataSupport implements Serializable {
+
     @Override
     public synchronized boolean saveOrUpdate(String... conditions) {
         return super.saveOrUpdate(conditions);
@@ -53,11 +56,39 @@ public class RoutePosition extends DataSupport implements Serializable {
     }
 
     private String positionId;
+    private String structureName;
+    private String structurePath;
     private String positionLttd;
     private String positionLgtd;
     private String workOrderId;
     private String uuid;
+    //0 未邻近；1 已临近
+    @Column(ignore = true)
+    private int isNear;
 
+    public int getIsNear() {
+        return isNear;
+    }
+
+    public void setIsNear(int isNear) {
+        this.isNear = isNear;
+    }
+
+    public String getStructureName() {
+        return TextUtils.isEmpty(structureName) ? "" : structureName;
+    }
+
+    public void setStructureName(String structureName) {
+        this.structureName = structureName;
+    }
+
+    public String getStructurePath() {
+        return TextUtils.isEmpty(structurePath) ? "" : structurePath;
+    }
+
+    public void setStructurePath(String structurePath) {
+        this.structurePath = structurePath;
+    }
 
     public String getUuid() {
         return uuid;

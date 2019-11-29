@@ -88,7 +88,7 @@ public abstract class LoadingSubject<T extends BaseResponse> implements io.react
         try {
             if (0 == o.getCode()) {
                 _onNext(o);
-            }else if (1 == o.getCode()){
+            }else if (-10000 == o.getCode()){
                 ARouter.getInstance().build(AppRoutePath.app_dahe_login).navigation();
                 AppManager.getInstance().finishAll();
             }else {

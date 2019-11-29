@@ -16,8 +16,8 @@ import java.util.List;
 
 public class ContentRecyclerView extends RecyclerView {
 
-    private final ContentRecyclerView.CompositeScrollListener compositeScrollListener =
-            new ContentRecyclerView.CompositeScrollListener();
+    private final CompositeScrollListener compositeScrollListener =
+            new CompositeScrollListener();
 
     public ContentRecyclerView(Context context) {
         super(context);

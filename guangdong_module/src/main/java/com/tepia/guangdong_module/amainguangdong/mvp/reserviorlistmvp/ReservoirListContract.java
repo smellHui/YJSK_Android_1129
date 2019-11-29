@@ -26,7 +26,7 @@ public class ReservoirListContract {
         void showRealTimeMonitor(RealTimeMonitorResponse data);
     }
 
-    interface  Presenter extends BasePresenter<ReservoirListContract.View> {
+    interface  Presenter extends BasePresenter<View> {
         /**
          * 行政统计-水库列表
          * @param reservoir
@@ -36,7 +36,7 @@ public class ReservoirListContract {
          * @param pageSize
          * @param isshowing
          */
-        void listReservoirInfo(String reservoir, String reservoirType,String areaCode,int currentPage,int pageSize,boolean isshowing);
+        void listReservoirInfo(String reservoir, String reservoirType, String areaCode, int currentPage, int pageSize, boolean isshowing);
 
         /**
          * 行政统计-实时监测统计

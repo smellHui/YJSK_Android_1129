@@ -27,13 +27,13 @@ import java.util.Map;
   * Version :1.0
   * 功能描述 : 主页 - 水库检索 适配器
  **/
-public class AdapterReserList extends BaseQuickAdapter<ReserviorListBean.DataBean.ListBean, BaseViewHolder> {
-    public AdapterReserList(int layoutResId, @Nullable List<ReserviorListBean.DataBean.ListBean> data) {
+public class AdapterReserList extends BaseQuickAdapter<ListBean, BaseViewHolder> {
+    public AdapterReserList(int layoutResId, @Nullable List<ListBean> data) {
         super(layoutResId, data);
     }
 
     @Override
-    protected void convert(BaseViewHolder helper, ReserviorListBean.DataBean.ListBean item) {
+    protected void convert(BaseViewHolder helper, ListBean item) {
         ReservoirListLayoutBinding mBinding = DataBindingUtil.bind(helper.itemView);
 
         int position = helper.getAdapterPosition();

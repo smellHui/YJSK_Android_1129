@@ -50,7 +50,7 @@ public class QTabView extends TabView {
         setMinimumHeight(DisplayUtil.dp2px(mContext,25));
         if (mTitle == null) {
             mTitle = new TextView(mContext);
-            FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.MATCH_PARENT);
+            LayoutParams params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
             params.gravity = Gravity.CENTER;
             params.topMargin= DisplayUtil.dp2px(mContext, 5);
             params.bottomMargin= DisplayUtil.dp2px(mContext, 5);

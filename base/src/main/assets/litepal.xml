@@ -10,9 +10,6 @@
 
         <mapping class="com.tepia.photo_picker.entity.CheckTaskPicturesBean"/>
 
-
-
-
         <!--巡查app数据库表-->
         <mapping class="com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean"/>
         <mapping class="com.tepia.guangdong_module.amainguangdong.route.TaskBean"/>
@@ -30,6 +27,10 @@
         <mapping class="com.tepia.guangdong_module.amainguangdong.model.xuncha.SpecialNoticeBean"/>
 
 
+        <mapping class="com.yangj.dahemodule.model.main.Route"/>
+        <mapping class="com.yangj.dahemodule.model.main.Omltem"/>
+        <mapping class="com.yangj.dahemodule.model.main.ReservoirStructure"/>
+        <mapping class="com.tepia.guangdong_module.amainguangdong.model.DangerousPosition"/>
 
 
     </list>

@@ -65,7 +65,7 @@ public class AreaReservoirCountActivity extends MVPBaseActivity<ReservoirListCon
                 "<font color=\"#373737\">水库总数：</font><font color=\"#3951ad\">%1$s</font><font color=\"#373737\">宗　</font>"
                         + "<font color=\"#373737\">监测：</font><font color=\"#3951ad\">%2$s</font><font color=\"#373737\">宗　</font>"
                         + "<font color=\"#373737\">数据上报：</font><font color=\"#36b23\">%3$s</font><font color=\"#373737\">宗</font>";
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
             binding.tongjiTv.setText(
                     Html.fromHtml(String.format(contentTimeMonitor, "--", "--", "--"), Html.FROM_HTML_MODE_LEGACY));
         } else {
@@ -174,7 +174,7 @@ public class AreaReservoirCountActivity extends MVPBaseActivity<ReservoirListCon
     public void showRealTimeMonitor(RealTimeMonitorResponse data) {
         RealTimeMonitorBean bean = data.getData();
         if (bean != null) {
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 realTimeMonitorBean = bean;
                 binding.tongjiTv.setText(Html.fromHtml(String.format(contentTimeMonitor, bean.getAllCount(),
                                 bean.getMonitorCount(), bean.getReportCount()), Html.FROM_HTML_MODE_LEGACY));

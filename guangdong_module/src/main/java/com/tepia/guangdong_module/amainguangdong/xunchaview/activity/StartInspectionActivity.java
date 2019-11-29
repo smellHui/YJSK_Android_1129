@@ -767,7 +767,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                             String positionTreeNames = taskItemBean.getPositionTreeNames();
                             Map<String, Object> attrs = new HashMap<>();
                             attrs.put("positionId", routePosition.getPositionId());
-                            ArcgisLayout.setTextMarker(point, textGraphics, positionTreeNames, color, attrs, 28);
+//                            ArcgisLayout.setTextMarker(point, textGraphics, positionTreeNames, color, attrs, 28);
                         }
                     } catch (Exception e) {
 
@@ -1021,11 +1021,11 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 
     @Override
     protected void initListener() {
-        boolean is_xiaomi = com.tepia.base.utils.OSUtils.ROM_TYPE.MIUI.name().equals(OSUtils.getRomType().name());
+        boolean is_xiaomi = OSUtils.ROM_TYPE.MIUI.name().equals(OSUtils.getRomType().name());
         boolean hasset = SPUtils.getInstance(ResUtils.getContext()).getBoolean("go_set", false);
 
         if (is_xiaomi && !hasset) {
-            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle(R.string.xiaomiMind);
             builder.setMessage(R.string.whiteCard);
             builder.setCancelable(false);
@@ -1376,7 +1376,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
 
             TaskBean taskBean = DataSupport.where("workOrderId=?", workOrderId).findFirst(TaskBean.class);
             if (taskBean != null) {
-                if (taskBean.isHasStartExecute()) {
+                if (taskBean.isHasCreated()) {
                     //如果已经新建过工单了则直接提交
 //                        List<TaskItemBean> taskItemBeanList = DataSupport.where("workOrderId=?", workOrderId).find(TaskItemBean.class);
                     List<TaskItemBean> localTaskItemBeanList = adapterTaskItemList.getLocalData(workOrderId);
@@ -1394,7 +1394,6 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                         } else {
                             finish();
                         }
-
                     }
                 } else {
                     newStartExecute(taskBean.getWorkOrderId(), taskBean.getRouteId(), taskBean.getStartTime());
@@ -1425,11 +1424,10 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                                 /*taskBean.setHasStartExecute(true);
                                 taskBean.update();*/
                                 ContentValues values = new ContentValues();
-                                values.put("hasStartExecute", true);
+                                values.put("hasCreated", true);
                                 DataSupport.updateAll(TaskBean.class, values, "workOrderId = ?", StartInspectionActivity.this.workOrderId);
                             }
                         }
-
                         mPresenter.commitTotal(adapterTaskItemList.getLocalData(workOrderId), StartInspectionActivity.this);
                     }
                 }
@@ -1443,7 +1441,7 @@ public class StartInspectionActivity extends MVPBaseActivity<TaskDetailContract.
                     if (!CollectionsUtil.isEmpty(templist)) {
                         TaskBean taskBean = templist.get(0);
                         if (taskBean != null) {
-                            if (taskBean.isHasStartExecute()) {
+                            if (taskBean.isHasCreated()) {
                                 //如果已经新建过工单了则直接提交
                                 mPresenter.commitTotal(adapterTaskItemList.getLocalData(workOrderId), StartInspectionActivity.this);
                             }

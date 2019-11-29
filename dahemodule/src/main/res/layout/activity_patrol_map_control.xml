@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
-    <include layout="@layout/toolbar"/>
+    <include layout="@layout/toolbar" />
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -14,23 +15,37 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <FrameLayout
+            <com.tepia.base.view.arcgisLayout.ArcgisLayout
+                android:id="@+id/arcgis_layout"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
-                android:layout_weight="1"
-                android:background="@mipmap/grey"/>
+                android:layout_weight="1" />
 
-            <View
+            <com.yangj.dahemodule.view.ForecastView
+                android:id="@+id/view_forecast"
                 android:layout_width="match_parent"
-                android:layout_height="120dp"
-                android:background="@color/color_red"/>
+                android:layout_height="140dp"
+                android:scaleType="centerInside" />
+
         </LinearLayout>
+
+        <com.yangj.dahemodule.view.PatrolRateView
+            android:id="@+id/view_patrol_rate"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/img_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           android:src="@mipmap/login_ps_new"
+            android:layout_marginTop="200dp"/>
 
         <com.yarolegovich.discretescrollview.DiscreteScrollView
             android:id="@+id/part_picker"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            android:layout_marginBottom="60dp" />
+            android:layout_marginBottom="40dp" />
     </FrameLayout>
 </LinearLayout>

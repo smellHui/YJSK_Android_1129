@@ -118,6 +118,7 @@ dependencies {
     implementation project(':photopicker')
     implementation project(':base')
     implementation project(':picktime')
+    implementation project(':arcgismap')
     implementation project(':guangdong_module')
 
     implementation 'com.github.BLiYing:GaodeLiabrary:v2.0.0'
@@ -152,5 +153,7 @@ dependencies {
     implementation rootProject.ext.dependencies.discreteScrollview
 
     api rootProject.ext.dependencies.guava
-
+    implementation 'com.lxj:xpopup:1.8.10'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'com.samigehi:loadingview:1.1'
 }

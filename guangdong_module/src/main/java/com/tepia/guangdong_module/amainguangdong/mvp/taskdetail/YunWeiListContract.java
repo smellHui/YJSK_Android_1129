@@ -22,7 +22,7 @@ public class YunWeiListContract {
     }
 
     interface  Presenter extends BasePresenter<View> {
-        void getTaskBeanList(String reservoirId, String startDate,String endDate,int currentPage,int pageSize,boolean isshowing);
+        void getTaskBeanList(String reservoirId, String startDate, String endDate, int currentPage, int pageSize, boolean isshowing);
         void getByworkOrderId(String workOrderId);
     }
 }

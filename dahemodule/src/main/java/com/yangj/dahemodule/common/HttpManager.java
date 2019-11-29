@@ -23,7 +23,7 @@ import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirListResponse;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirOfflineResponse;
 import com.tepia.photo_picker.utils.SPUtils;
-import com.yangj.dahemodule.APPCostant;
+import com.tepia.guangdong_module.APPCostant;
 import com.yangj.dahemodule.http.UserHttpService;
 import com.yangj.dahemodule.model.NewNoticeBean;
 import com.yangj.dahemodule.model.UserBean;
