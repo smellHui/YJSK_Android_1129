@@ -65,7 +65,7 @@ public class PatrolUpControlView extends FullScreenPopupView implements
         patrolControlAdapter = new PatrolControlAdapter(isCompleteOfTaskBean);
         patrolControlAdapter.setOnItemChildClickListener(this::onItemChildClick);
         rv.setLayoutManager(new WrapLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false));
-        rv.addItemDecoration(new SpacesItemDecoration(4));
+        rv.addItemDecoration(new SpacesItemDecoration(2));
         int zeroPx = Px2dpUtils.dip2px(getContext(), 0);
         rv.setPadding(zeroPx, zeroPx, zeroPx, zeroPx);
         rv.setAdapter(patrolControlAdapter);
@@ -90,17 +90,15 @@ public class PatrolUpControlView extends FullScreenPopupView implements
 
     @Override
     public void onCurrentItemChanged(@Nullable RecyclerView.ViewHolder holder, int position) {
-        if (holder != null) {
-            forecastView.setForecast(routePositions.get(position));
-            this.patrolIndex = position;
-            RoutePosition routePosition = routePositions.get(position);
-            if (routePosition == null) {
-                patrolControlAdapter.setNewData(null);
-                return;
-            }
-            List<TaskItemBean> taskItemBeans = SqlManager.getInstance().queryTaskItem(routePosition.getWorkOrderId(), routePosition.getPositionId());
-            patrolControlAdapter.setNewData(taskItemBeans);
+        forecastView.setForecast(routePositions.get(position));
+        this.patrolIndex = position;
+        RoutePosition routePosition = routePositions.get(position);
+        if (routePosition == null) {
+            patrolControlAdapter.setNewData(null);
+            return;
         }
+        List<TaskItemBean> taskItemBeans = SqlManager.getInstance().queryTaskItem(routePosition.getWorkOrderId(), routePosition.getPositionId());
+        patrolControlAdapter.setNewData(taskItemBeans);
     }
 
     @Override
@@ -174,9 +172,8 @@ public class PatrolUpControlView extends FullScreenPopupView implements
     }
 
     public void scrollToPosition(int position) {
-        this.patrolIndex = position;
-        if (partCardAdapter != null)
-            partPicker.scrollToPosition(patrolIndex);
+        partPicker.scrollToPosition(position);
+        onCurrentItemChanged(null, position);
     }
 
     private UpdatePatroPickListener updatePatroPickListener;

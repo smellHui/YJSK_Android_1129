@@ -1,4 +1,4 @@
-package com.yangj.dahemodule.inteface;
+package com.yangj.dahemodule.intefaces;
 
 import android.view.View;
 

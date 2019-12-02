@@ -25,6 +25,7 @@ import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.tepia.arcgismap.layer.core.IPoly;
 import com.tepia.base.mvp.BaseActivity;
 import com.tepia.base.view.arcgisLayout.ArcgisLayout;
@@ -40,6 +41,7 @@ import com.tepia.guangdong_module.amainguangdong.utils.SqlManager;
 import com.tepia.guangdong_module.amainguangdong.wrap.PatroltemEvent;
 import com.yangj.dahemodule.R;
 import com.yangj.dahemodule.adapter.PartCardAdapter;
+import com.yangj.dahemodule.intefaces.PatrolPickerCallback;
 import com.yangj.dahemodule.util.GaodeHelper;
 import com.yangj.dahemodule.view.ForecastView;
 import com.yangj.dahemodule.view.PatrolRateView;
@@ -261,9 +263,10 @@ public class PatrolMapControlActivity extends BaseActivity implements
     @Override
     public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
         new XPopup.Builder(getContext())
+                .setPopupCallback(new PatrolPickerCallback(patrolUpControlView, position))
                 .asCustom(patrolUpControlView)
                 .show();
-        patrolUpControlView.scrollToPosition(position);
+
     }
 
     private void startLocation() {

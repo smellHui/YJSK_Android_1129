@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="135dp"
     android:layout_marginLeft="13dp"
-    android:layout_marginTop="20dp"
+    android:layout_marginTop="10dp"
     android:layout_marginRight="13dp"
     android:background="@mipmap/btn_1"
     android:gravity="center_vertical"

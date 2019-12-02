@@ -13,7 +13,7 @@ import com.tepia.base.ConfigConsts;
 import com.tepia.base.utils.Utils;
 import com.tepia.photo_picker.utils.AndroidLifecycleUtils;
 import com.yangj.dahemodule.R;
-import com.yangj.dahemodule.inteface.OnItemClickListener;
+import com.yangj.dahemodule.intefaces.OnItemClickListener;
 
 import java.io.File;
 import java.util.ArrayList;

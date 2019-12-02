@@ -9,7 +9,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.tepia.base.mvp.BaseActivity;
 import com.tepia.base.view.dialog.permissiondialog.Px2dpUtils;
 import com.yangj.dahemodule.R;
-import com.yangj.dahemodule.inteface.NetListListener;
+import com.yangj.dahemodule.intefaces.NetListListener;
 import com.yangj.dahemodule.model.PageBean;
 import com.yangj.dahemodule.view.WrapLayoutManager;
 
