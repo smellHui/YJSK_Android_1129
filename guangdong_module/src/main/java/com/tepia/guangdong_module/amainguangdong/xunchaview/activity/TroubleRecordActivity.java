@@ -30,6 +30,7 @@ import com.tepia.guangdong_module.amainguangdong.model.xuncha.ReservoirBean;
 import com.tepia.guangdong_module.amainguangdong.route.TaskBean;
 import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
 import com.tepia.guangdong_module.amainguangdong.utils.EmptyLayoutUtil;
+import com.tepia.guangdong_module.amainguangdong.utils.SqlManager;
 import com.tepia.guangdong_module.amainguangdong.wrap.PatroltemEvent;
 import com.tepia.guangdong_module.amainguangdong.xunchaview.adapter.AdapterWorker;
 import com.tepia.photo_picker.PhotoPicker;
@@ -55,6 +56,7 @@ import java.util.List;
 public class TroubleRecordActivity extends BaseActivity {
 
     public static final String TROUBLE_POSITION = "trouble_position";
+    public static final String PICKER_INDEX = "picker_index";
     public static final String TASK_ITEM_BEAN = "task_item_bean";
 
     ActivityTroubleReportBinding mBinding;
@@ -69,11 +71,11 @@ public class TroubleRecordActivity extends BaseActivity {
     String[] items = new String[]{"坝体", "坝脚", "泄水设施", "输水设施", "其他"};
     DataBeanOflistReservoirRoute offlineDataBean;
     private List<UserInfo> userInfos;
-    String executeResultType = "";
 
     boolean isCompleteOfTaskBean;
 
     private int patrolPosition;
+    private int patrolIndex;
 
     @Override
     public int getLayoutId() {
@@ -85,8 +87,8 @@ public class TroubleRecordActivity extends BaseActivity {
 //        ToastUtils.shortToast("请填写异常信息，否则该项巡查将视为未完成");
         Intent intent = getIntent();
         if (intent != null) {
-            executeResultType = intent.getStringExtra("executeResultType");
             patrolPosition = intent.getIntExtra(TROUBLE_POSITION, -1);
+            patrolIndex = intent.getIntExtra(PICKER_INDEX, -1);
             taskItemBean = (TaskItemBean) intent.getSerializableExtra(TASK_ITEM_BEAN);
         }
         mBinding = DataBindingUtil.bind(mRootView);
@@ -211,28 +213,17 @@ public class TroubleRecordActivity extends BaseActivity {
                 ToastUtils.shortToast("请上传图片");
                 return;
             }
-
-//            if (taskItemBean != null) {
-//                taskItemBean.setBeforelist(new Gson().toJson(selectPhotosBefore));
-//
-//                taskItemBean.setPositionName(positionName);
-//                taskItemBean.setExecuteResultDescription(problemDescription);
-//
-//                if (!TextUtils.isEmpty(executeResultType)) {
-//                    taskItemBean.setExecuteResultType(executeResultType);
-//                }
-//                taskItemBean.setExcuteDate(TimeFormatUtils.getStringDate());
-
-//                taskItemBean.updateAll("userCode=? and reservoirId=? and itemId=?", userCode, reservoirId, itemId);
-//            }
-
-            ToastUtils.shortToast("提交成功");
-//            Intent intent = new Intent();
-//            TroubleRecordActivity.this.setResult(1000, intent);
-            if (patrolPosition != -1) {
-                EventBus.getDefault().post(new PatroltemEvent(patrolPosition, problemDescription, new Gson().toJson(selectPhotosBefore)));
-            }
-            finish();
+            if (taskItemBean == null) return;
+            if (patrolPosition == -1) return;
+            taskItemBean.setExecuteResultDescription(problemDescription);
+            taskItemBean.setBeforelist(new Gson().toJson(selectPhotosBefore));
+            taskItemBean.setExecuteResultType("1");
+            taskItemBean.setCompleteStatus("1");
+            SqlManager.getInstance().updateTaskItemAsyn(taskItemBean, (updateOrDeleteCallback) -> {
+                ToastUtils.shortToast("提交成功");
+                EventBus.getDefault().post(new PatroltemEvent(patrolPosition, patrolIndex, taskItemBean));
+                finish();
+            });
         });
     }
 
@@ -271,52 +262,52 @@ public class TroubleRecordActivity extends BaseActivity {
 
     private void initPhotoListView() {
 
-            photoRecycleViewAdapterBefore = new PhotoSelectAdapter(getContext(), isCompleteOfTaskBean);
-            mBinding.layoutPic.rvAddPhotoBefore.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
-            mBinding.layoutPic.rvAddPhotoBefore.setAdapter(photoRecycleViewAdapterBefore);
+        photoRecycleViewAdapterBefore = new PhotoSelectAdapter(getContext(), isCompleteOfTaskBean);
+        mBinding.layoutPic.rvAddPhotoBefore.setLayoutManager(new StaggeredGridLayoutManager(4, OrientationHelper.VERTICAL));
+        mBinding.layoutPic.rvAddPhotoBefore.setAdapter(photoRecycleViewAdapterBefore);
 
-            selectPhotosBefore.clear();
-            checkTaskPicturesBeanList = UtilDataBaseOfGD.getInstance().getCheckTaskPicturesBeanOfTrouble(ConfigConsts.picType_trouble, taskItemBean.getItemId());
-            for (CheckTaskPicturesBean checkTaskPicturesBean : checkTaskPicturesBeanList) {
-                if (checkTaskPicturesBean != null) {
-                    selectPhotosBefore.add(checkTaskPicturesBean.getFilePath());
-                }
+        selectPhotosBefore.clear();
+        checkTaskPicturesBeanList = UtilDataBaseOfGD.getInstance().getCheckTaskPicturesBeanOfTrouble(ConfigConsts.picType_trouble, taskItemBean.getItemId());
+        for (CheckTaskPicturesBean checkTaskPicturesBean : checkTaskPicturesBeanList) {
+            if (checkTaskPicturesBean != null) {
+                selectPhotosBefore.add(checkTaskPicturesBean.getFilePath());
             }
-            photoRecycleViewAdapterBefore.setLocalData(selectPhotosBefore);
-            mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
-            photoRecycleViewAdapterBefore.setOnItemClickListener((view, position) -> {
-                if (photoRecycleViewAdapterBefore.getItemViewType(position) == PhotoRecycleViewAdapter.TYPE_ADD) {
-                    if (!isCompleteOfTaskBean) {
-                        PhotoPicker.builder()
-                                .setPhotoCount(5)
-                                .setShowCamera(true)
-                                .setPreviewEnabled(true)
-                                .setSelected(selectPhotosBefore)
-                                .start(TroubleRecordActivity.this, 100);
-                    }
-
-                } else {
-                    PhotoPreview.builder()
-                            .setPhotos(photoRecycleViewAdapterBefore.getPhotoPaths())
-                            .setCurrentItem(position)
-                            .setShowDeleteButton(false)
-                            .start(TroubleRecordActivity.this, 101);
+        }
+        photoRecycleViewAdapterBefore.setLocalData(selectPhotosBefore);
+        mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
+        photoRecycleViewAdapterBefore.setOnItemClickListener((view, position) -> {
+            if (photoRecycleViewAdapterBefore.getItemViewType(position) == PhotoRecycleViewAdapter.TYPE_ADD) {
+                if (!isCompleteOfTaskBean) {
+                    PhotoPicker.builder()
+                            .setPhotoCount(5)
+                            .setShowCamera(true)
+                            .setPreviewEnabled(true)
+                            .setSelected(selectPhotosBefore)
+                            .start(TroubleRecordActivity.this, 100);
                 }
+
+            } else {
+                PhotoPreview.builder()
+                        .setPhotos(photoRecycleViewAdapterBefore.getPhotoPaths())
+                        .setCurrentItem(position)
+                        .setShowDeleteButton(false)
+                        .start(TroubleRecordActivity.this, 101);
+            }
+        });
+
+        if (!isCompleteOfTaskBean) {
+            photoRecycleViewAdapterBefore.setDeleteListener(position -> {
+                if (selectPhotosBefore.size() > 0 && selectPhotosBefore.size() > position) {
+                    String bizType = SPUtils.getInstance().getString(CacheConsts.bizType, "");
+                    String userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
+                    String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
+                    UtilDataBaseOfGD.getInstance().deletePic(bizType, selectPhotosBefore.get(position), userCode, reservoirId);
+                    selectPhotosBefore.remove(position);
+                }
+                photoRecycleViewAdapterBefore.setLocalData(selectPhotosBefore);
+                mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
             });
-
-            if (!isCompleteOfTaskBean) {
-                photoRecycleViewAdapterBefore.setDeleteListener(position -> {
-                    if (selectPhotosBefore.size() > 0 && selectPhotosBefore.size() > position) {
-                        String bizType = SPUtils.getInstance().getString(CacheConsts.bizType, "");
-                        String userCode = SPUtils.getInstance().getString(CacheConsts.userCode, "");
-                        String reservoirId = SPUtils.getInstance().getString(CacheConsts.reservoirId, "");
-                        UtilDataBaseOfGD.getInstance().deletePic(bizType, selectPhotosBefore.get(position), userCode, reservoirId);
-                        selectPhotosBefore.remove(position);
-                    }
-                    photoRecycleViewAdapterBefore.setLocalData(selectPhotosBefore);
-                    mBinding.layoutPic.tvPhotoNumBefore.setText(photoRecycleViewAdapterBefore.getPhotoPaths().size() + "/5");
-                });
-            }
+        }
     }
 
     @Override

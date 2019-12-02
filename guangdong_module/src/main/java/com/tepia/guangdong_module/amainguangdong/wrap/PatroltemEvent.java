@@ -1,5 +1,7 @@
 package com.tepia.guangdong_module.amainguangdong.wrap;
 
+import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
+
 /**
  * Author:xch
  * Date:2019/11/27
@@ -8,13 +10,13 @@ package com.tepia.guangdong_module.amainguangdong.wrap;
 public class PatroltemEvent {
 
     private int position;
-    private String problemDescription;
-    private String imgPaths;
+    private int patrolIndex;
+    private TaskItemBean taskItemBean;
 
-    public PatroltemEvent(int position, String problemDescription, String imgPaths) {
+    public PatroltemEvent(int position,int patrolIndex,TaskItemBean taskItemBean) {
         this.position = position;
-        this.problemDescription = problemDescription;
-        this.imgPaths = imgPaths;
+        this.patrolIndex = patrolIndex;
+        this.taskItemBean = taskItemBean;
     }
 
     public int getPosition() {
@@ -25,19 +27,19 @@ public class PatroltemEvent {
         this.position = position;
     }
 
-    public String getProblemDescription() {
-        return problemDescription;
+    public int getPatrolIndex() {
+        return patrolIndex;
     }
 
-    public void setProblemDescription(String problemDescription) {
-        this.problemDescription = problemDescription;
+    public void setPatrolIndex(int patrolIndex) {
+        this.patrolIndex = patrolIndex;
     }
 
-    public String getImgPaths() {
-        return imgPaths;
+    public TaskItemBean getTaskItemBean() {
+        return taskItemBean;
     }
 
-    public void setImgPaths(String imgPaths) {
-        this.imgPaths = imgPaths;
+    public void setTaskItemBean(TaskItemBean taskItemBean) {
+        this.taskItemBean = taskItemBean;
     }
 }

@@ -80,6 +80,7 @@ public abstract class BaseListFragment<K> extends BaseCommonFragment
         addHeadView();
         setEmptyDefauleView();
         baseQuickAdapter.setOnItemClickListener(this::setOnItemClickListener);
+        baseQuickAdapter.setOnItemLongClickListener(this::onItemLongClick);
         baseQuickAdapter.setOnItemChildClickListener(this::setOnItemChildClickListener);
     }
 
@@ -106,6 +107,10 @@ public abstract class BaseListFragment<K> extends BaseCommonFragment
 
     public void setOnItemChildClickListener(BaseQuickAdapter adapter, View view, int position) {
 
+    }
+
+    public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+        return false;
     }
 
     @Override

@@ -43,7 +43,7 @@ android {
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                 // apk_渠道名-版本号-版本名称-编译时间.apk
-                def fileName = "dahe-${defaultConfig.versionCode}-v${defaultConfig.versionName}-${buildTime()}.apk"
+                def fileName = "大河水库_v${defaultConfig.versionName}-${buildTime()}.apk"
                 outputFileName = fileName
             }
         }

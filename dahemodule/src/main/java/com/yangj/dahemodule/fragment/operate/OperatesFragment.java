@@ -5,6 +5,8 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.lxj.xpopup.XPopup;
+import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.tepia.base.ConfigConsts;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.utils.LogUtil;

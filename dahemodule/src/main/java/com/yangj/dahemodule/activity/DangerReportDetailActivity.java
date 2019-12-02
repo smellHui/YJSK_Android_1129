@@ -146,7 +146,7 @@ public class DangerReportDetailActivity extends BaseActivity implements Response
     @Override
     public void feekBackClick(String content, List<String> imgs) {
         HttpManager.getInstance().feekBackProblem(reportId, content, imgs)
-                .subscribe(new LoadingSubject<BaseResponse>() {
+                .subscribe(new LoadingSubject<BaseResponse>(true,"反馈中...") {
 
                     @Override
                     protected void _onNext(BaseResponse baseResponse) {

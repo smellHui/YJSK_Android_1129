@@ -1,5 +1,6 @@
 package com.tepia.guangdong_module.amainguangdong.utils;
 
+import android.support.annotation.NonNull;
 import android.text.TextUtils;
 
 import com.tepia.base.view.floatview.CollectionsUtil;
@@ -135,6 +136,17 @@ public class SqlManager {
      */
     public List<TaskItemBean> queryLocalData(String workorderid) {
         return DataSupport.where("workorderid=? and iscommitlocal=?", workorderid, "0").find(TaskItemBean.class);
+    }
+
+    /**
+     *
+     * @param workOrderId
+     */
+    public void deleteTask(@NonNull String workOrderId){
+        DataSupport.deleteAll(TaskBean.class, "workOrderId=?", workOrderId);
+        DataSupport.deleteAll(TaskItemBean.class, "workOrderId=?", workOrderId);
+        DataSupport.deleteAll(RouteListBean.class, "workOrderId=?", workOrderId);
+        DataSupport.deleteAll(RoutePosition.class, "workOrderId=?", workOrderId);
     }
 
 }
