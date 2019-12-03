@@ -1,9 +1,9 @@
 package com.yangj.dahemodule.adapter;
 
-import android.widget.TextView;
-
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.BaseViewHolder;
+import com.lxj.xpopup.XPopup;
+import com.tepia.guangdong_module.amainguangdong.utils.SqlManager;
 import com.yangj.dahemodule.R;
 import com.yangj.dahemodule.model.xuncha.RecordBean;
 
@@ -36,9 +36,21 @@ public class OperateAdapter extends BaseQuickAdapter<RecordBean, BaseViewHolder>
         helper.setVisible(R.id.tv_creatorName, pageType == ALL_OPERATE);
         helper.setText(R.id.tv_creatorName, item.getCreatorName());
 
-        String routeType = item.getRouteType();
         boolean isExecuting = item.isExecuting();
         helper.setText(R.id.tv_status, isExecuting ? "巡查中" : "已巡查");
         helper.setBackgroundRes(R.id.tv_status, isExecuting ? R.mipmap.blue : R.mipmap.grey);
+        //长按删除本地数据
+        if (isExecuting) {
+            //必须要在事件发生之前就watch
+            final XPopup.Builder builder = new XPopup.Builder(mContext).watchView(helper.itemView);
+            helper.itemView.setOnLongClickListener(v -> {
+                builder.asAttachList(new String[]{"删除"}, null, 0, 10, (position, text) -> {
+                    SqlManager.getInstance().deleteTask(item.getCode());
+                    getData().remove(helper.getAdapterPosition());
+                    notifyItemRemoved(helper.getAdapterPosition());
+                }).show();
+                return true;
+            });
+        }
     }
 }

@@ -10,7 +10,7 @@ import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.tepia.base.mvp.BaseCommonFragment;
 import com.tepia.base.view.dialog.permissiondialog.Px2dpUtils;
 import com.yangj.dahemodule.R;
-import com.yangj.dahemodule.inteface.NetListListener;
+import com.yangj.dahemodule.intefaces.NetListListener;
 import com.yangj.dahemodule.model.PageBean;
 import com.yangj.dahemodule.view.WrapLayoutManager;
 
@@ -80,6 +80,7 @@ public abstract class BaseListFragment<K> extends BaseCommonFragment
         addHeadView();
         setEmptyDefauleView();
         baseQuickAdapter.setOnItemClickListener(this::setOnItemClickListener);
+        baseQuickAdapter.setOnItemLongClickListener(this::onItemLongClick);
         baseQuickAdapter.setOnItemChildClickListener(this::setOnItemChildClickListener);
     }
 
@@ -106,6 +107,10 @@ public abstract class BaseListFragment<K> extends BaseCommonFragment
 
     public void setOnItemChildClickListener(BaseQuickAdapter adapter, View view, int position) {
 
+    }
+
+    public boolean onItemLongClick(BaseQuickAdapter adapter, View view, int position) {
+        return false;
     }
 
     @Override

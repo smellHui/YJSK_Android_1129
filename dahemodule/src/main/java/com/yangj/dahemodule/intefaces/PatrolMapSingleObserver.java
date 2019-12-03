@@ -1,4 +1,4 @@
-package com.yangj.dahemodule.inteface;
+package com.yangj.dahemodule.intefaces;
 
 import android.view.MotionEvent;
 
@@ -10,7 +10,6 @@ import com.tepia.arcgismap.layer.core.IMap;
 import com.tepia.arcgismap.layer.observer.IMapSingleTapConfirmedObserver;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Author:xch
