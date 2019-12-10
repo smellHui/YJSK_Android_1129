@@ -294,6 +294,10 @@
           <option name="url" value="https://github.com/iammert/CameraVideoButton.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="https://github.com/duanhong169/Camera.git" />
+          <option name="userName" value="" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="D:\code\android" />
