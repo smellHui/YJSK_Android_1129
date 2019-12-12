@@ -208,26 +208,15 @@ public class ArcgisLayout extends RelativeLayout {
         mapView.setOnTouchListener(new DefaultMapViewOnTouchListener(getContext(), mapView) {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent e) {
-//                if (!NetUtil.isNetworkConnected(Utils.getContext())) {
-//                    ToastUtils.shortToast("当前无网络，无法查看地图");
-//                    return super.onSingleTapConfirmed(e);
-//                }
-//                android.graphics.Point screenPoint = new android.graphics.Point(Math.round(e.getX()), Math.round(e.getY()));
-//                Point clickPoint = mapView.screenToLocation(screenPoint);
-//                LogUtil.i("地图坐标："+clickPoint.toString());
                 handleSingleTapEvent(e);
                 if (onMapViewClickListener != null) {
                     onMapViewClickListener.onClick(e, mapView);
                 }
                 return super.onSingleTapConfirmed(e);
             }
+
         });
-        basemap.addDoneLoadingListener(new Runnable() {
-            @Override
-            public void run() {
-                isLoaded = true;
-            }
-        });
+        basemap.addDoneLoadingListener(() -> isLoaded = true);
 
         if (!NetUtil.isNetworkConnected(Utils.getContext())) {
             try {

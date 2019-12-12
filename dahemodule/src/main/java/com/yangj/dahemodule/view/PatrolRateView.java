@@ -1,5 +1,6 @@
 package com.yangj.dahemodule.view;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -7,16 +8,10 @@ import android.util.AttributeSet;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.tepia.base.http.BaseResponse;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.utils.ResUtils;
 import com.tepia.base.utils.ToastUtils;
-import com.tepia.base.view.dialog.loading.SimpleLoadDialog;
 import com.tepia.base.view.floatview.CollectionsUtil;
-import com.tepia.guangdong_module.amainguangdong.model.xuncha.RouteListBean;
-import com.tepia.guangdong_module.amainguangdong.model.xuncha.RoutePosition;
 import com.tepia.guangdong_module.amainguangdong.mvp.taskdetail.TaskDetailPresenter;
 import com.tepia.guangdong_module.amainguangdong.mvp.taskdetail.TaskManager;
 import com.tepia.guangdong_module.amainguangdong.route.RoutepointDataManager;
@@ -24,16 +19,12 @@ import com.tepia.guangdong_module.amainguangdong.route.TaskBean;
 import com.tepia.guangdong_module.amainguangdong.route.TaskDetailResponse;
 import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
 import com.tepia.guangdong_module.amainguangdong.utils.SqlManager;
-import com.tepia.guangdong_module.amainguangdong.xunchaview.activity.StartInspectionActivity;
 import com.yangj.dahemodule.R;
-import com.zxy.tiny.Tiny;
-import com.zxy.tiny.callback.FileBatchCallback;
+import com.yangj.dahemodule.wrap.SubmitTaskWrap;
 
-import org.litepal.crud.DataSupport;
+import org.greenrobot.eventbus.EventBus;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -72,11 +63,10 @@ public class PatrolRateView extends ViewBase {
         tv_abnormal_num = findViewById(R.id.tv_abnormal_num);
         btn_submit = findViewById(R.id.btn_submit);
         btn_submit.setOnClickListener(v -> {
-            ToastUtils.shortToast("提交");
             TaskBean taskBean = SqlManager.getInstance().queryTaskSqlByWorkOrderId(workOrderId);
             if (taskBean != null) {
                 if (taskBean.isHasCreated()) {
-
+                    uploadForm();
                 } else {
                     createOrder(taskBean);
                 }
@@ -84,6 +74,7 @@ public class PatrolRateView extends ViewBase {
         });
     }
 
+    @SuppressLint("DefaultLocale")
     public void setWorkOrderId(String workOrderId, boolean isCompleteOfTaskBean) {
         int abnormalNum = SqlManager.getInstance().getNormalTaskById(workOrderId, false);
         if (isCompleteOfTaskBean) {
@@ -115,29 +106,35 @@ public class PatrolRateView extends ViewBase {
                 if (taskDetailResponse.getCode() != 0) return;
                 taskBean.setHasCreated(true);
                 SqlManager.getInstance().updateTaskAsyn(taskBean, null);
-                List<TaskItemBean> taskItemBeans = SqlManager.getInstance().queryLocalData(workOrderId);
-                new TaskDetailPresenter(this::SubmitFormCallback).commitTotal(taskItemBeans, mContext);
+                uploadForm();
             }
 
-            private void SubmitFormCallback() {
-                String temp = RoutepointDataManager.getInstance().getRoutePointListString(workOrderId);
-                new TaskDetailPresenter(this::endFormCallback).endExecute(workOrderId, temp, false, ResUtils.getString(com.example.guangdong_module.R.string.data_loading));
-            }
-
-            private void endFormCallback() {
-                DataSupport.deleteAll(TaskBean.class, "workOrderId=?", workOrderId);
-                DataSupport.deleteAll(TaskItemBean.class, "workOrderId=?", workOrderId);
-                DataSupport.deleteAll(RouteListBean.class, "workOrderId=?", workOrderId);
-                DataSupport.deleteAll(RoutePosition.class, "workOrderId=?", workOrderId);
-                ToastUtils.shortToast("提交成功");
-                ((Activity) mContext).finish();
-            }
 
             @Override
             protected void _onError(String message) {
-
+                ToastUtils.shortToast(message);
             }
         });
+    }
+
+    private void uploadForm() {
+        List<TaskItemBean> taskItemBeans = SqlManager.getInstance().queryLocalData(workOrderId);
+        if (CollectionsUtil.isEmpty(taskItemBeans)) {
+            SubmitFormCallback();
+        } else {
+            new TaskDetailPresenter(this::SubmitFormCallback).commitTotal(taskItemBeans, mContext);
+        }
+    }
+
+    private void SubmitFormCallback() {
+        String temp = RoutepointDataManager.getInstance().getRoutePointListString(workOrderId);
+        new TaskDetailPresenter(this::endFormCallback).endExecute(workOrderId, temp, false, ResUtils.getString(com.example.guangdong_module.R.string.data_loading));
+    }
+
+    private void endFormCallback() {
+        SqlManager.getInstance().deleteTask(workOrderId);
+        ToastUtils.shortToast("提交成功");
+        EventBus.getDefault().post(new SubmitTaskWrap());
     }
 
 }

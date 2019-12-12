@@ -10,17 +10,12 @@ import com.tepia.base.mvp.BasePresenterImpl;
 import com.tepia.base.utils.AppManager;
 import com.tepia.base.utils.LogUtil;
 import com.tepia.base.utils.ToastUtils;
-import com.tepia.base.utils.Utils;
 import com.tepia.base.view.dialog.loading.LoadingDialog;
 import com.tepia.base.view.dialog.loading.SimpleLoadDialog;
 import com.tepia.base.view.floatview.CollectionsUtil;
-import com.tepia.base.CacheConsts;
 import com.tepia.guangdong_module.amainguangdong.route.TaskItemBean;
-import com.tepia.photo_picker.utils.SPUtils;
 import com.zxy.tiny.Tiny;
 import com.zxy.tiny.callback.FileBatchCallback;
-
-import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -44,7 +39,7 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
         this.submitFormListener = submitFormListener;
     }
 
-    public interface SubmitFormListener{
+    public interface SubmitFormListener {
         void submitFormCallback();
     }
 
@@ -96,7 +91,7 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
                 if (mView != null) {
                     mView.endExecuteSucess();
                 }
-                if (submitFormListener != null){
+                if (submitFormListener != null) {
                     submitFormListener.submitFormCallback();
                 }
             }
@@ -141,17 +136,20 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
             /**
              * 一项一项提交完成后执行
              */
-            if (simpleLoadDialog != null) {
-                simpleLoadDialog.dismiss();
-            }
+            dismiss();
             if (mView != null) {
                 mView.appReservoirWorkOrderItemCommitOneByOneSuccess();
             }
-            if (submitFormListener != null){
+            if (submitFormListener != null) {
                 submitFormListener.submitFormCallback();
             }
         }
 
+    }
+
+    private void dismiss() {
+        if (simpleLoadDialog == null) return;
+        simpleLoadDialog.dismiss();
     }
 
 
@@ -189,6 +187,7 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
 
                         @Override
                         protected void _onError(String message) {
+                            dismiss();
 //                            LoadingDialog.with(AppManager.getInstance().getCurrentActivity()).dismiss();
                             if (message.contains("重复")) {
                                 appReservoirWorkOrderItemCommitOneByOne(localData, count + 1, mContext);
@@ -227,6 +226,7 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
 
                                     @Override
                                     protected void _onError(String message) {
+                                        dismiss();
                                         if (message.contains("重复")) {
                                             appReservoirWorkOrderItemCommitOneByOne(localData, count + 1, mContext);
                                             return;
@@ -235,7 +235,7 @@ public class TaskDetailPresenter extends BasePresenterImpl<TaskDetailContract.Vi
                                     }
                                 });
                     } else {
-
+                        dismiss();
                         ToastUtils.shortToast("图片压缩失败");
                     }
                 }

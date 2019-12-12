@@ -1,5 +1,7 @@
 package com.tepia.guangdong_module.amainguangdong.route;
 
+import com.tepia.base.view.floatview.CollectionsUtil;
+
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
@@ -25,7 +27,7 @@ public class RoutepointDataManager {
 
     public List<RoutepointDataBean> getRoutePointList(String wordOrderId) {
         List<RoutepointDataBean> data = DataSupport.order("id asc").where("wordOrderId=?", wordOrderId).find(RoutepointDataBean.class);
-        List<RoutepointDataBean> temp = new Douglas((ArrayList<RoutepointDataBean>) data, 1).compress();
+        List<RoutepointDataBean> temp = new Douglas((ArrayList<RoutepointDataBean>) data, 10).compress();
         for (RoutepointDataBean bean : data) {
             if (temp.contains(bean)) {
             } else {
@@ -42,17 +44,14 @@ public class RoutepointDataManager {
 
     public String getRoutePointListString(String wordOrderId) {
         List<RoutepointDataBean> data = getRoutePointList(wordOrderId);
-        if (data == null) {
+        if (CollectionsUtil.isEmpty(data)) {
             return null;
         }
         String temp = "[";
         for (RoutepointDataBean bean : data) {
             temp = temp + "[" + bean.getLgtd() + "," + bean.getLttd() + "]" + ",";
         }
-        if (data != null && data.size() > 0) {
-            temp = temp.substring(0, temp.length() - 1);
-        }
-
+        temp = temp.substring(0, temp.length() - 1);
         temp = temp + "]";
         return temp;
     }

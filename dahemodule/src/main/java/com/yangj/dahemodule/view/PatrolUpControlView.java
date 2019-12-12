@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.bilibili.boxing_impl.view.SpacesItemDecoration;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.esri.arcgisruntime.geometry.Point;
 import com.lxj.xpopup.impl.FullScreenPopupView;
 import com.tepia.base.view.dialog.permissiondialog.Px2dpUtils;
 import com.tepia.base.view.floatview.CollectionsUtil;
@@ -38,6 +39,7 @@ public class PatrolUpControlView extends FullScreenPopupView implements
 
     private boolean isCompleteOfTaskBean;
     private int patrolIndex;
+    private Point locationPoint;
     private List<RoutePosition> routePositions;
     private DiscreteScrollView partPicker;
     private ForecastView forecastView;
@@ -123,12 +125,16 @@ public class PatrolUpControlView extends FullScreenPopupView implements
     public void onItemChildClick(BaseQuickAdapter adapter, View view, int position) {
         TaskItemBean taskItemBean = (TaskItemBean) adapter.getItem(position);
         if (taskItemBean == null) return;
+        if (locationPoint != null) {
+            taskItemBean.setExcuteLatitude(locationPoint.getY() + "");
+            taskItemBean.setExcuteLongitude(locationPoint.getX() + "");
+        }
         int id = view.getId();
         if (id == R.id.btn_normal) {
             updateStatuClick(taskItemBean, (rowsAffected) -> {
                 controlCallback(position, taskItemBean);
-                if (updatePatroPickListener != null) {
-                    updatePatroPickListener.updatePatroPick(patrolIndex);
+                if (updatePatrolPickListener != null) {
+                    updatePatrolPickListener.updatePatrolPick(patrolIndex);
                 }
             });
         }
@@ -138,8 +144,8 @@ public class PatrolUpControlView extends FullScreenPopupView implements
         if (id == R.id.btn_to_normal) {
             updateStatuClick(taskItemBean, (rowsAffected) -> {
                 controlCallback(position, taskItemBean);
-                if (updatePatroPickListener != null) {
-                    updatePatroPickListener.updatePatroPick(patrolIndex);
+                if (updatePatrolPickListener != null) {
+                    updatePatrolPickListener.updatePatrolPick(patrolIndex);
                 }
             });
         }
@@ -165,6 +171,10 @@ public class PatrolUpControlView extends FullScreenPopupView implements
         SqlManager.getInstance().updateTaskItemAsyn(taskItemBean, updateOrDeleteCallback);
     }
 
+    public void setLocationPoint(Point locationPoint) {
+        this.locationPoint = locationPoint;
+    }
+
     public void controlCallback(int position, @NonNull TaskItemBean taskItemBean) {
         patrolControlAdapter.setData(position, taskItemBean);
         partCardAdapter.notifyItemChanged(patrolIndex);
@@ -176,14 +186,14 @@ public class PatrolUpControlView extends FullScreenPopupView implements
         onCurrentItemChanged(null, position);
     }
 
-    private UpdatePatroPickListener updatePatroPickListener;
+    private UpdatePatrolPickListener updatePatrolPickListener;
 
-    public void setUpdatePatroPickListener(UpdatePatroPickListener updatePatroPickListener) {
-        this.updatePatroPickListener = updatePatroPickListener;
+    public void setUpdatePatrolPickListener(UpdatePatrolPickListener updatePatrolPickListener) {
+        this.updatePatrolPickListener = updatePatrolPickListener;
     }
 
-    public interface UpdatePatroPickListener {
-        void updatePatroPick(int patrolIndex);
+    public interface UpdatePatrolPickListener {
+        void updatePatrolPick(int patrolIndex);
     }
 
 }

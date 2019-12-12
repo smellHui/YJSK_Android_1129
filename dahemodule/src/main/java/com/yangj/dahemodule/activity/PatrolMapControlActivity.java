@@ -24,10 +24,13 @@ import com.esri.arcgisruntime.mapping.view.IdentifyGraphicsOverlayResult;
 import com.esri.arcgisruntime.mapping.view.MapView;
 import com.esri.arcgisruntime.symbology.PictureMarkerSymbol;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
+import com.example.gaodelibrary.OSUtils;
+import com.example.gaodelibrary.XiaomiDeviceUtil;
 import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.XPopupCallback;
 import com.tepia.arcgismap.layer.core.IPoly;
 import com.tepia.base.mvp.BaseActivity;
+import com.tepia.base.utils.ResUtils;
+import com.tepia.base.utils.SPUtils;
 import com.tepia.base.view.arcgisLayout.ArcgisLayout;
 import com.tepia.base.view.floatview.CollectionsUtil;
 import com.tepia.guangdong_module.amainguangdong.model.xuncha.RouteListBean;
@@ -46,6 +49,7 @@ import com.yangj.dahemodule.util.GaodeHelper;
 import com.yangj.dahemodule.view.ForecastView;
 import com.yangj.dahemodule.view.PatrolRateView;
 import com.yangj.dahemodule.view.PatrolUpControlView;
+import com.yangj.dahemodule.wrap.SubmitTaskWrap;
 import com.yarolegovich.discretescrollview.DSVOrientation;
 import com.yarolegovich.discretescrollview.DiscreteScrollView;
 import com.yarolegovich.discretescrollview.transform.ScaleTransformer;
@@ -119,6 +123,7 @@ public class PatrolMapControlActivity extends BaseActivity implements
     @Override
     public void initData() {
         EventBus.getDefault().register(this);
+        deviceIsMiuiTip();
 
         exeline = new ArrayList<>();
 
@@ -141,6 +146,12 @@ public class PatrolMapControlActivity extends BaseActivity implements
         patrolUpControlView.controlCallback(troutIndex, taskItemBean);
         //刷新滑片数据
         updatePicker(patrolIndex);
+    }
+
+    //提交工单成功
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void submitCallBack(SubmitTaskWrap submitTaskWrap) {
+        finish();
     }
 
     /**
@@ -195,7 +206,7 @@ public class PatrolMapControlActivity extends BaseActivity implements
                 .build());
 
         patrolUpControlView = new PatrolUpControlView(getContext(), isCompleteOfTaskBean, routePositions);
-        patrolUpControlView.setUpdatePatroPickListener(this::updatePicker);
+        patrolUpControlView.setUpdatePatrolPickListener(this::updatePicker);
 
         timer.schedule(new TimerTask() {
             @Override
@@ -383,7 +394,7 @@ public class PatrolMapControlActivity extends BaseActivity implements
         arcgisLayout.removeGraphics();
         arcgisLayout.post(() -> {
             if (!TextUtils.isEmpty(taskBean.getWorkOrderRoute())) {
-                if (taskBean.isHasExecuted()) {
+                if (isCompleteOfTaskBean) {
                     //已完成状态时
                     drawCompleteLine(taskBean.getWorkOrderRoute());
                 } else {
@@ -407,18 +418,16 @@ public class PatrolMapControlActivity extends BaseActivity implements
         String temp = workOrderRoute.replaceAll("\\{", "[").replaceAll("\\}", "]");
         List<Double[]> list = JSON.parseArray(temp, Double[].class);
         if (list != null && list.size() >= 2) {
-            ArrayList<Point> exeline = new ArrayList();
+            exeline.clear();
             for (Double[] bean : list) {
                 Point point1 = new Point(bean[0], bean[1], SpatialReference.create(4326));
                 exeline.add(point1);
             }
             int color = ContextCompat.getColor(getContext(), com.example.guangdong_module.R.color.route_color_two);
             arcgisLayout.addPolyline(exeline, SimpleLineSymbol.Style.SOLID, color, 4);
-            if (exeline != null && exeline.size() > 0) {
-                arcgisLayout.setMapViewVisibleExtent(exeline);
-                arcgisLayout.addPic(com.example.guangdong_module.R.mipmap.ic_me_history_startpoint, exeline.get(0), new HashMap<>());
-                arcgisLayout.addPic(com.example.guangdong_module.R.mipmap.ic_me_history_finishpoint, exeline.get(exeline.size() - 1), new HashMap<>());
-            }
+            arcgisLayout.addPic(com.example.guangdong_module.R.mipmap.ic_me_history_startpoint, exeline.get(0), new HashMap<>());
+            arcgisLayout.addPic(com.example.guangdong_module.R.mipmap.ic_me_history_finishpoint, exeline.get(exeline.size() - 1), new HashMap<>());
+            arcgisLayout.setMapViewVisibleExtent(exeline);
         }
     }
 
@@ -438,7 +447,7 @@ public class PatrolMapControlActivity extends BaseActivity implements
                 int color = ContextCompat.getColor(getContext(), com.example.guangdong_module.R.color.route_color_two);
 
                 arcgisLayout.addPolyline(exeline, SimpleLineSymbol.Style.SOLID, color, 4);
-                if (exeline != null && exeline.size() > 0) {
+                if (!CollectionsUtil.isEmpty(exeline)) {
                     arcgisLayout.addPic(com.example.guangdong_module.R.mipmap.ic_me_history_startpoint, exeline.get(0));
                 }
             } catch (Exception e) {
@@ -555,24 +564,42 @@ public class PatrolMapControlActivity extends BaseActivity implements
     @Override
     public void locationCallback(Point point) {
         searchMinRoutePoint(point);
-        if (!taskBean.isHasExecuted()) {
-            if (exeline != null) {
-                int length = exeline.size();
-                if (length == 1) {
-                    arcgisLayout.addPic(com.example.guangdong_module.R.mipmap.ic_me_history_startpoint, exeline.get(0));
-                }
-                if (length > 0) {
-                    Point beforPoint = exeline.get(length - 1);
-                    if (beforPoint.getX() != point.getX() || beforPoint.getY() != point.getY()) {
-                        arcgisLayout.addPolylineToGraphicsOverlayNew(actualRouteOverlay, beforPoint, point, SimpleLineSymbol.Style.SOLID, R.color.route_color_two, 4);
-                        exeline.add(point);
-                        RoutepointDataManager.getInstance().addPoint(new RoutepointDataBean(workOrderId, point.getX() + "", point.getY() + ""));
-                    }
-                } else {
-                    exeline.add(point);
-                    RoutepointDataManager.getInstance().addPoint(new RoutepointDataBean(workOrderId, point.getX() + "", point.getY() + ""));
-                }
+        int length = exeline.size();
+        if (length > 0) {
+            if (length == 1) {
+                arcgisLayout.addPic(com.example.guangdong_module.R.mipmap.ic_me_history_startpoint, exeline.get(0));
             }
+            Point beforPoint = exeline.get(length - 1);
+            if (beforPoint.getX() != point.getX() || beforPoint.getY() != point.getY()) {
+                arcgisLayout.addPolylineToGraphicsOverlayNew(actualRouteOverlay, beforPoint, point, SimpleLineSymbol.Style.SOLID, R.color.route_color_two, 4);
+                exeline.add(point);
+                RoutepointDataManager.getInstance().addPoint(new RoutepointDataBean(workOrderId, point.getX() + "", point.getY() + ""));
+            }
+        } else {
+            exeline.add(point);
+            RoutepointDataManager.getInstance().addPoint(new RoutepointDataBean(workOrderId, point.getX() + "", point.getY() + ""));
+        }
+        //给操作taskitembean传定位坐标，便于提交给后台
+        patrolUpControlView.setLocationPoint(exeline.get(exeline.size() - 1));
+    }
+
+    private void deviceIsMiuiTip() {
+        boolean is_xiaomi = OSUtils.ROM_TYPE.MIUI.name().equals(OSUtils.getRomType().name());
+
+        boolean hasset = SPUtils.getInstance(ResUtils.getContext()).getBoolean("go_set", false);
+
+        if (is_xiaomi && !hasset) {
+            android.support.v7.app.AlertDialog.Builder builder = new android.support.v7.app.AlertDialog.Builder(this);
+            builder.setTitle(R.string.xiaomiMind);
+            builder.setMessage(R.string.whiteCard);
+            builder.setCancelable(false);
+            builder.setPositiveButton(R.string.go_set, (dialog, which) -> {
+                SPUtils.getInstance(ResUtils.getContext()).putBoolean("go_set", true);
+                XiaomiDeviceUtil.toConfigApp(PatrolMapControlActivity.this, XiaomiDeviceUtil.getAppProcessName(ResUtils.getContext()), getString(R.string.app_name));
+            });
+            builder.setNegativeButton(R.string.cancel, (dialog, which) -> finish());
+            builder.create().show();
         }
     }
+
 }

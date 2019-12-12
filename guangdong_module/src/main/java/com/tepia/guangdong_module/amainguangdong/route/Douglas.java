@@ -40,12 +40,7 @@ public class Douglas {
         latLngPoints.add(mLineInit.get(0));
         latLngPoints.add(mLineInit.get(size - 1));
         //对抽稀之后的点进行排序
-        Collections.sort(latLngPoints, new Comparator<RoutepointDataBean>() {
-            @Override
-            public int compare(RoutepointDataBean o1, RoutepointDataBean o2) {
-                return o1.compareTo(o2);
-            }
-        });
+        Collections.sort(latLngPoints, RoutepointDataBean::compareTo);
         ArrayList<RoutepointDataBean> latLngs = new ArrayList<>();
         for (RoutepointDataBean point : latLngPoints) {
             latLngs.add(point);

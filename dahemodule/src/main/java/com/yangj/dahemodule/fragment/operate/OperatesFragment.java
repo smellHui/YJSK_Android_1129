@@ -5,8 +5,6 @@ import android.text.TextUtils;
 import android.view.View;
 
 import com.chad.library.adapter.base.BaseQuickAdapter;
-import com.lxj.xpopup.XPopup;
-import com.lxj.xpopup.interfaces.OnSelectListener;
 import com.tepia.base.ConfigConsts;
 import com.tepia.base.http.LoadingSubject;
 import com.tepia.base.utils.LogUtil;
@@ -31,7 +29,11 @@ import com.yangj.dahemodule.model.xuncha.ProtalItemBean;
 import com.yangj.dahemodule.model.xuncha.RecordBean;
 import com.yangj.dahemodule.model.xuncha.RecordDataBean;
 import com.yangj.dahemodule.util.UiHelper;
+import com.yangj.dahemodule.wrap.SubmitTaskWrap;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
 import org.litepal.crud.DataSupport;
 
 import java.util.ArrayList;
@@ -64,6 +66,8 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
 
     @Override
     protected void initData() {
+        EventBus.getDefault().register(this);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
             pageType = bundle.getInt("pageType", MINE_OPERATE);
@@ -192,7 +196,7 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
             taskBean.setExecuteStatus("3");
             //工单名字
             taskBean.setRouteName(protalBean.getName());
-            taskBean.setWorkOrderRoute(protalBean.getRoutePath());
+            taskBean.setWorkOrderRoute(protalBean.getOmPath());
             taskBean.save();
 
             List<TaskItemBean> taskItemBeanList = new ArrayList<>();
@@ -263,7 +267,7 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
             RouteListBean routeListBeanNew = new RouteListBean();
             routeListBeanNew.setWorkOrderId(workOrderId);
             routeListBeanNew.setId(protalBean.getOmRouteId());
-            routeListBeanNew.setRouteContent(protalBean.getOmPath());
+            routeListBeanNew.setRouteContent(protalBean.getRoutePath());
             routeListBeanNew.setUserCode(userCode);
             routeListBeanNew.setReservoirId(selectedResrvoir.getReservoirId());
             routeListBeanNew.setItemList(taskItemBeanList);
@@ -280,5 +284,17 @@ public class OperatesFragment extends BaseListFragment<RecordBean> {
                 UiHelper.goToPatrolMapControlView(getBaseActivity(), workOrderId);
             }
         }
+    }
+
+    //提交工单成功
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void submitCallBack(SubmitTaskWrap submitTaskWrap) {
+        refresh();
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        EventBus.getDefault().unregister(this);
     }
 }

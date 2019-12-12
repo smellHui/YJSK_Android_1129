@@ -38,12 +38,19 @@ android {
         }
     }
 
+//    applicationVariants.all { variant ->
+//        variant.outputs.all {
+//            def outputDir = new File("${project.projectDir.absolutePath}/${variant.buildType.name}")
+//            variant.packageApplicationProvider.get().outputDirectory = new File("$outputDir")
+//            outputFileName = "${variant.buildType.name}-v${variant.versionName}-${buildTime()}.apk"
+//        }
+//    }
     applicationVariants.all { variant ->
         variant.outputs.all { output ->
             def outputFile = output.outputFile
             if (outputFile != null && outputFile.name.endsWith('.apk')) {
                 // apk_渠道名-版本号-版本名称-编译时间.apk
-                def fileName = "大河水库_v${defaultConfig.versionName}-${buildTime()}.apk"
+                def fileName = "大河水库_v${defaultConfig.versionName}_${buildTime()}.apk"
                 outputFileName = fileName
             }
         }

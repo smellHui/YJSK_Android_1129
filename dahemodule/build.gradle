@@ -120,8 +120,8 @@ dependencies {
     implementation project(':picktime')
     implementation project(':arcgismap')
     implementation project(':guangdong_module')
-
-    implementation 'com.github.BLiYing:GaodeLiabrary:v2.0.0'
+    implementation project(':gaodelibrary')
+//    implementation 'com.github.BLiYing:GaodeLiabrary:v2.0.0'
 
 
     implementation rootProject.ext.dependencies.TimePickerDialog

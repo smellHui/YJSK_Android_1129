@@ -149,8 +149,8 @@ dependencies {
     annotationProcessor rootProject.ext.dependencies.Arouter_compiler
     implementation project(':photopicker')
     implementation project(':base')
-    implementation 'com.github.BLiYing:GaodeLiabrary:v2.0.0'
-
+    implementation project(':gaodelibrary')
+//    implementation 'com.github.BLiYing:GaodeLiabrary:v2.0.0'
 
     implementation rootProject.ext.dependencies.TimePickerDialog
 
