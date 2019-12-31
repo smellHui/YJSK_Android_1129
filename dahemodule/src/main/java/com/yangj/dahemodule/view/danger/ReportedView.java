@@ -58,7 +58,7 @@ public class ReportedView extends ViewBase {
         tv_resultDes.setVisibility(Strings.isNullOrEmpty(resultDes) ? GONE : VISIBLE);
         tv_report.setText(reporter);
         tv_createdTime.setText(String.format("上报时间：%s", createTime));
-        tv_resultDes.setText(String.format("反馈内容：", resultDes));
+        tv_resultDes.setText(String.format("反馈内容：%s", resultDes));
         view_imgs.addImages(imgs);
     }
 }

@@ -44,7 +44,7 @@ public class GaodeHelper {
     }
 
     private void init() {
-        gaodeEntity = new GaodeEntity(mContext, startClass, R.mipmap.logo);
+        gaodeEntity = new GaodeEntity(mContext, startClass, R.mipmap.launcher);
         gaodeEntity.setLocationListen(aMapLocation -> {
             if (aMapLocation.getErrorCode() == 14) {
 //                    ToastUtils.shortToast("设备当前 GPS 状态差,请持设备到相对开阔的露天场所再次尝试");

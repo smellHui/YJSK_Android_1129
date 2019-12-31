@@ -80,7 +80,7 @@
                 <TextView
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:text="讯限水位："
+                    android:text="汛限水位："
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 
@@ -102,7 +102,7 @@
                 <TextView
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
-                    android:text="超讯限水位："
+                    android:text="超汛限水位："
                     android:textColor="@color/white"
                     android:textSize="12sp" />
 

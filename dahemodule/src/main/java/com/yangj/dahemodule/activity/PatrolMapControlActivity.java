@@ -312,11 +312,11 @@ public class PatrolMapControlActivity extends BaseActivity implements
                 int color = ContextCompat.getColor(getContext(), com.example.guangdong_module.R.color.route_color_one);
                 arcgisLayout.addPolylineToGraphicsOverlay(standardRouteOverlay, result, SimpleLineSymbol.Style.SOLID, color, 4);
 
-                if (!CollectionsUtil.isEmpty(result)) {
-                    Map map = new HashMap();
-                    arcgisLayout.addPicToGraphicsOverlay(standardRouteOverlay, com.example.guangdong_module.R.mipmap.ic_me_history_startpoint, result.get(0), map);
-                    arcgisLayout.addPicToGraphicsOverlay(standardRouteOverlay, com.example.guangdong_module.R.mipmap.ic_me_history_finishpoint, result.get(result.size() - 1), map);
-                }
+//                if (!CollectionsUtil.isEmpty(result)) {
+//                    Map map = new HashMap();
+//                    arcgisLayout.addPicToGraphicsOverlay(standardRouteOverlay, com.example.guangdong_module.R.mipmap.ic_me_history_startpoint, result.get(0), map);
+//                    arcgisLayout.addPicToGraphicsOverlay(standardRouteOverlay, com.example.guangdong_module.R.mipmap.ic_me_history_finishpoint, result.get(result.size() - 1), map);
+//                }
 //                arcgisLayout.setMapViewVisibleExtent(result);
             } catch (Exception e) {
 
